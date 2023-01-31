@@ -1,5 +1,5 @@
 #include <iostream>
-#include "SList.h"
+#include "SList.hpp"
 
 int main()
 {
