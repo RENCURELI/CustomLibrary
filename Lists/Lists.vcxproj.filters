@@ -15,12 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SListNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\SList.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>

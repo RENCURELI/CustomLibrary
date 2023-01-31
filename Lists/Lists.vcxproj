@@ -130,8 +130,6 @@
   <ItemGroup>
     <ClInclude Include="include\SList.hpp" />
     <ClInclude Include="include\SListNode.hpp" />
-    <ClInclude Include="SList.h" />
-    <ClInclude Include="SListNode.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\main.cpp" />
