@@ -1,20 +1,18 @@
 #pragma once
 #include "SListNode.h"
 #include <iostream>
-#include <vector>
 #include <initializer_list>
 
 template<class T>
 class SList
 {
 public:
-	std::vector<T> v;
 	SList() {};
 	SList(std::initializer_list<T> l)
 	{
 		for (const auto& it : l)
 		{
-			AddToFront(it);
+			AddToBack(it);
 		}
 	};
 
@@ -38,23 +36,27 @@ public:
 		return newNode;
 	};
 
-	void AddToBack(SListNode<T>* node)
+	SListNode<T>* AddToBack(T data)
 	{
+		SListNode<T>* newNode = new SListNode<T>(data);
+
 		// We are adding the first node
 		if (m_Head == nullptr)
 		{
-			m_Head = node;
-			m_Tail = node;
+			m_Head = newNode;
+			m_Tail = newNode;
 		}
 		else
 		{
-			m_Tail->SetNext(node);
-			m_Tail = node;
+			m_Tail->SetNext(newNode);
+			m_Tail = newNode;
 		}
+		return newNode;
 	};
 
-	void InsertAt();
-	void Remove();
+	void InsertAt(); // Insert new node at Index position
+	void Remove(); // Remove last node
+	void RemoveAt(); // Remove node at specified Index
 
 	void PrintList()
 	{
