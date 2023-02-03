@@ -2,7 +2,7 @@
 #include "SListNode.hpp"
 #include <iostream>
 #include <initializer_list>
-#include <assert.h>
+#include <cassert>
 
 template<class T>
 class SList
