@@ -70,11 +70,9 @@ public:
 
 	SListNode<T>* InsertAt(T data, int index) // Will want to use an iterator here, similar to standard library ???
 	{
-		assert(index >= 0);
-		auto* newNode = new SListNode<T>(data);
+		assert(index >= 0 && index <= m_Size); // We assert that we pass a valid index
+		SListNode<T>* newNode = new SListNode<T>(data);
 
-		// We will handle out of bound indices by pushing back
-		// Negative indices will return an error
 		// Empty list case handled by creating first element
 		if (m_Head == nullptr)
 		{
@@ -82,7 +80,33 @@ public:
 			m_Tail = newNode;
 			m_IsEmpty = false;
 		}
+		else
+		{
+			// Start by handling Head node case
+			// We insert at index 0, specific behaviour
+			if (index == 0)
+			{
+				newNode->SetNext(m_Head);
+				m_Head = newNode;
+			}
+			else
+			{
+				// Got to start from head and go through each node's next until we reach the proper index
+				SListNode<T>* prevNode = m_Head;
+				int i = 0;
+				// We get the node preceding the target indexs
+				while (i < index - 1)
+				{
+					prevNode = prevNode->GetNext();
+					i++;
+				}
 
+				newNode->SetNext(prevNode->GetNext());
+				prevNode->SetNext(newNode);
+			}
+		}
+
+		m_Size++;
 		return newNode;
 	}
 

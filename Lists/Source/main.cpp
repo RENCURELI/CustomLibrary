@@ -8,7 +8,7 @@ int main()
 	// Ghost scope to cause a destruction
 	{
 		SList<int> intList = { 1, 10, 5, -5 };
-		intList.InsertAt(14, 0);
+		intList.InsertAt(14, 4);
 
 		intList.PrintList();
 
