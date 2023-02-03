@@ -8,6 +8,7 @@ int main()
 	// Ghost scope to cause a destruction
 	{
 		SList<int> intList = { 1, 10, 5, -5 };
+		intList.InsertAt(14, 0);
 
 		intList.PrintList();
 
@@ -15,4 +16,6 @@ int main()
 		std::cout << intList.IsEmpty() << "\n";
 	}
 	std::cout << "I hope this worked";
+
+	return 0;
 }

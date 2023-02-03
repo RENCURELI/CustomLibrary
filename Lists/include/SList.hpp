@@ -2,6 +2,7 @@
 #include "SListNode.hpp"
 #include <iostream>
 #include <initializer_list>
+#include <assert.h>
 
 template<class T>
 class SList
@@ -14,7 +15,7 @@ public:
 		{
 			AddToBack(it);
 		}
-	};
+	}
 
 	~SList() 
 	{
@@ -25,7 +26,7 @@ public:
 			delete m_Head;
 			m_Head = temp;
 		}
-	};
+	}
 
 	SListNode<T>* AddToFront(T data) 
 	{
@@ -45,7 +46,7 @@ public:
 		}
 		m_Size++;
 		return newNode;
-	};
+	}
 
 	SListNode<T>* AddToBack(T data)
 	{
@@ -65,26 +66,37 @@ public:
 		}
 		m_Size++;
 		return newNode;
-	};
+	}
 
 	SListNode<T>* InsertAt(T data, int index) // Will want to use an iterator here, similar to standard library ???
 	{
+		assert(index >= 0);
+		auto* newNode = new SListNode<T>(data);
+
+		// We will handle out of bound indices by pushing back
+		// Negative indices will return an error
+		// Empty list case handled by creating first element
 		if (m_Head == nullptr)
 		{
-
+			m_Head = newNode;
+			m_Tail = newNode;
+			m_IsEmpty = false;
 		}
-	};
+
+		return newNode;
+	}
 
 	// Remove last node
 	void Remove()
 	{
+		// Loop through List content until current node next pointer is tail
+		// Delete data at tail and set tail as current ndoe
+	}
 
-	};
+	void RemoveAt() {} // Remove node at specified Index
 
-	void RemoveAt(); // Remove node at specified Index
-
-	inline bool IsEmpty() { return m_IsEmpty; };
-	inline int GetSize() { return m_Size; };
+	inline bool IsEmpty() { return m_IsEmpty; }
+	inline int GetSize() { return m_Size; }
 
 	void PrintList()
 	{
