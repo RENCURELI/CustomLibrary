@@ -111,25 +111,24 @@ public:
 	{
 		if (m_Size == 0)
 			return;
-
+		
 		if (m_Size == 1)
 		{
 			delete m_Tail;
 			m_Head = nullptr;
 			m_Tail = nullptr;
 			m_IsEmpty = true;
-			m_Size--;
 		}
-
-		if (m_Size > 1)
+		else if (m_Size > 1)
 		{
 			// We go to the second to last element
 			SListNode<T>* newTail = AdvanceTo(m_Size - 2);
 			newTail->SetNext(nullptr);
 			delete m_Tail;
 			m_Tail = newTail;
-			m_Size--;
 		}
+
+		m_Size--;
 	}
 
 	void RemoveAt() {} // Remove node at specified Index
