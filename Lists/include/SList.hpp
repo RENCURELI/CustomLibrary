@@ -89,18 +89,14 @@ public:
 				newNode->SetNext(m_Head);
 				m_Head = newNode;
 			}
+			else if (index == m_Size)
+			{
+				m_Tail->SetNext(newNode);
+				m_Tail = newNode;
+			}
 			else
 			{
-				// Got to start from head and go through each node's next until we reach the proper index
-				SListNode<T>* prevNode = m_Head;
-				int i = 0;
-				// We get the node preceding the target indexs
-				while (i < index - 1)
-				{
-					prevNode = prevNode->GetNext();
-					i++;
-				}
-
+				SListNode<T>* prevNode = AdvanceTo(index - 1);
 				newNode->SetNext(prevNode->GetNext());
 				prevNode->SetNext(newNode);
 			}
@@ -113,8 +109,27 @@ public:
 	// Remove last node
 	void Remove()
 	{
-		// Loop through List content until current node next pointer is tail
-		// Delete data at tail and set tail as current ndoe
+		if (m_Size == 0)
+			return;
+
+		if (m_Size == 1)
+		{
+			delete m_Tail;
+			m_Head = nullptr;
+			m_Tail = nullptr;
+			m_IsEmpty = true;
+			m_Size--;
+		}
+
+		if (m_Size > 1)
+		{
+			// We go to the second to last element
+			SListNode<T>* newTail = AdvanceTo(m_Size - 2);
+			newTail->SetNext(nullptr);
+			delete m_Tail;
+			m_Tail = newTail;
+			m_Size--;
+		}
 	}
 
 	void RemoveAt() {} // Remove node at specified Index
@@ -137,4 +152,27 @@ private:
 	SListNode<T>* m_Tail = nullptr;
 	bool m_IsEmpty = true;
 	int m_Size = 0;
+
+	SListNode<T>* AdvanceTo(int index) const
+	{
+		// If we are accessing already allocated values, return those
+		if (index == 0)
+			return m_Head;
+		else if (index == m_Size - 1)
+			return m_Tail;
+		else
+		{
+			// Loop within the list to find the proper element
+			SListNode<T>* prevNode = m_Head;
+			int i = 0;
+
+			do
+			{
+				prevNode = prevNode->GetNext();
+				++i;
+			} while (i < index);
+			
+			return prevNode;
+		}
+	}
 };
