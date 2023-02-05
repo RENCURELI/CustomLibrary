@@ -10,6 +10,7 @@ int main()
 		SList<int> intList = { 1, 10, 5, -5 };
 		intList.InsertAt(14, 4);
 		intList.Remove();
+		intList.RemoveAt(3);
 
 		intList.PrintList();
 

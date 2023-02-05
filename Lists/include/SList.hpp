@@ -2,7 +2,7 @@
 #include "SListNode.hpp"
 #include <iostream>
 #include <initializer_list>
-#include <cassert>
+#include <stdexcept>
 
 template<class T>
 class SList
@@ -28,6 +28,7 @@ public:
 		}
 	}
 
+	// Keeping for reference when implementing DoublyLinked List and Forward List
 	SListNode<T>* AddToFront(T data) 
 	{
 		SListNode<T>* newNode = new SListNode<T>(data);
@@ -70,7 +71,8 @@ public:
 
 	SListNode<T>* InsertAt(T data, int index) // Will want to use an iterator here, similar to standard library ???
 	{
-		assert(index >= 0 && index <= m_Size); // We assert that we pass a valid index
+		//assert(index >= 0 && index <= m_Size); // We assert that we pass a valid index
+		CheckIndex(index, true);
 		SListNode<T>* newNode = new SListNode<T>(data);
 
 		// Empty list case handled by creating first element
@@ -131,7 +133,35 @@ public:
 		m_Size--;
 	}
 
-	void RemoveAt() {} // Remove node at specified Index
+	// Remove node at specified Index
+	void RemoveAt(int index)
+	{
+		CheckIndex(index);
+		if (index == 0)
+		{
+			SListNode<T>* currHead = m_Head;
+			m_Head = m_Head->GetNext();
+			delete currHead;
+		}
+		else if (index == m_Size - 1)
+		{
+			SListNode<T>* newTail = AdvanceTo(index - 1);
+			m_Tail = newTail;
+			delete m_Tail->GetNext();
+			m_Tail->SetNext(nullptr);
+		}
+		else
+		{
+			SListNode<T>* prevNode = AdvanceTo(index - 1);
+			SListNode<T>* nodeToDel = AdvanceTo(index);
+			prevNode->SetNext(nodeToDel->GetNext());
+			delete nodeToDel;
+		}
+
+		m_Size--;
+		if (m_Size == 0)
+			m_IsEmpty = true;
+	}
 
 	inline bool IsEmpty() { return m_IsEmpty; }
 	inline int GetSize() { return m_Size; }
@@ -173,5 +203,17 @@ private:
 			
 			return prevNode;
 		}
+	}
+
+	// AllowExtra is to allow using InsertAt the same way as AddToBack
+	void CheckIndex(const int index, bool allowExtra = false)
+	{
+		if (allowExtra)
+		{
+			if (index < 0 || index > m_Size)
+				throw std::runtime_error("[ERROR] : Index Out of Bounds.");
+		}
+		else if (index < 0 || index > m_Size - 1)
+			throw std::runtime_error("[ERROR] : Index Out of Bounds.");
 	}
 };
