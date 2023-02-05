@@ -148,6 +148,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\DList.hpp" />
+    <ClInclude Include="include\DListNode.hpp" />
+    <ClInclude Include="include\FList.hpp" />
     <ClInclude Include="include\SList.hpp" />
     <ClInclude Include="include\SListNode.hpp" />
   </ItemGroup>

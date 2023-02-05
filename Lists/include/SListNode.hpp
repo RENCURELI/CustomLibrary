@@ -7,7 +7,6 @@ public:
 	SListNode(T data) : m_Data(data) {}
 	~SListNode() {}
 
-
 	SListNode* GetNext() { return m_Next; }
 	void SetNext(SListNode* nextNode) { m_Next = nextNode; }
 
