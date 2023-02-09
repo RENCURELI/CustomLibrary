@@ -1,6 +1,6 @@
 #include <iostream>
 
-// Currently functionnal Lists -> Singly Linked List && Forward List
+// Currently functionnal Lists -> Doubly Linked List && Forward List
 #include "SList.hpp"
 #include "FList.hpp"
 
@@ -9,8 +9,9 @@ int main()
 	std::cout << "Hello World!";
 	
 	// Ghost scope to cause a destruction
+	try
 	{
-		SList<int> intList = { 1, 10, 5, -5 };
+		List<int> intList = { 1, 10, 5, -5 };
 		intList.InsertAt(14, 4);
 		intList.Remove();
 		intList.RemoveAt(3);
@@ -20,7 +21,10 @@ int main()
 		std::cout << "\n" << intList.GetSize() << "\n";
 		std::cout << intList.IsEmpty() << "\n";
 	}
-	std::cout << "I hope this worked";
+	catch (std::exception& ex)
+	{
+		std::cerr << std::endl << ex.what() << std::endl;
+	}
 
 	return 0;
 }

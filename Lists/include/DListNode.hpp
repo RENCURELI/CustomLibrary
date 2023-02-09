@@ -9,6 +9,8 @@ public:
 
 	DListNode* GetNext() { return m_Next; }
 	void SetNext(DListNode* nextNode) { m_Next = nextNode; }
+	DListNode* GetPrev() { return m_Previous; }
+	void SetPrev(DListNode* prevNode) { m_Previous = prevNode; }
 
 	T GetData() { return m_Data; }
 private:

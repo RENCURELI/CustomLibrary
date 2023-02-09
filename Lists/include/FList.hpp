@@ -165,14 +165,22 @@ private:
 	}
 
 	// AllowExtra is to allow using InsertAt the same way as AddToBack
-	void CheckIndex(const int index, bool allowExtra = false)
+	bool CheckIndex(const int index, bool allowExtra = false)
 	{
 		if (allowExtra)
 		{
 			if (index < 0 || index > m_Size)
+			{
 				throw std::runtime_error("[ERROR] : Index Out of Bounds.");
+				return false;
+			}
 		}
 		else if (index < 0 || index > m_Size - 1)
+		{
 			throw std::runtime_error("[ERROR] : Index Out of Bounds.");
+			return false;
+		}
+
+		return true;
 	}
 };
