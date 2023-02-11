@@ -1,6 +1,6 @@
 #pragma once
 #pragma once
-#include "SListNode.hpp"
+#include "FListNode.hpp"
 #include <iostream>
 #include <initializer_list>
 #include <stdexcept>
@@ -23,15 +23,15 @@ public:
 		// Go from m_Head to tail and free memory
 		while (m_Head != nullptr)
 		{
-			SListNode<T>* temp = m_Head->GetNext();
+			FListNode<T>* temp = m_Head->GetNext();
 			delete m_Head;
 			m_Head = temp;
 		}
 	}
 
-	SListNode<T>* AddToFront(T data)
+	FListNode<T>* AddToFront(T data)
 	{
-		SListNode<T>* newNode = new SListNode<T>(data);
+		FListNode<T>* newNode = new FListNode<T>(data);
 
 		// We are adding the first node
 		if (m_Head == nullptr)
@@ -48,10 +48,10 @@ public:
 		return newNode;
 	}
 
-	SListNode<T>* InsertAt(T data, int index)
+	FListNode<T>* InsertAt(T data, int index)
 	{
 		CheckIndex(index, true);
-		SListNode<T>* newNode = new SListNode<T>(data);
+		FListNode<T>* newNode = new FListNode<T>(data);
 
 		// Empty list case handled by creating first element
 		if (m_Head == nullptr)
@@ -70,7 +70,7 @@ public:
 			}
 			else
 			{
-				SListNode<T>* prevNode = AdvanceTo(index - 1);
+				FListNode<T>* prevNode = AdvanceTo(index - 1);
 				newNode->SetNext(prevNode->GetNext());
 				prevNode->SetNext(newNode);
 			}
@@ -94,7 +94,7 @@ public:
 		}
 		else
 		{
-			SListNode<T>* newHead = m_Head->GetNext();
+			FListNode<T>* newHead = m_Head->GetNext();
 			delete m_Head;
 			m_Head = newHead;
 		}
@@ -108,14 +108,14 @@ public:
 		CheckIndex(index);
 		if (index == 0)
 		{
-			SListNode<T>* currHead = m_Head;
+			FListNode<T>* currHead = m_Head;
 			m_Head = m_Head->GetNext();
 			delete currHead;
 		}
 		else
 		{
-			SListNode<T>* prevNode = AdvanceTo(index - 1);
-			SListNode<T>* nodeToDel = AdvanceTo(index);
+			FListNode<T>* prevNode = AdvanceTo(index - 1);
+			FListNode<T>* nodeToDel = AdvanceTo(index);
 			prevNode->SetNext(nodeToDel->GetNext());
 			delete nodeToDel;
 		}
@@ -130,7 +130,7 @@ public:
 
 	void PrintList()
 	{
-		SListNode<T>* current = m_Head;
+		FListNode<T>* current = m_Head;
 		while (current != nullptr)
 		{
 			std::cout << " -> " << current->GetData();
@@ -139,11 +139,11 @@ public:
 	}
 
 private:
-	SListNode<T>* m_Head = nullptr;
+	FListNode<T>* m_Head = nullptr;
 	bool m_IsEmpty = true;
 	int m_Size = 0;
 
-	SListNode<T>* AdvanceTo(int index) const
+	FListNode<T>* AdvanceTo(int index) const
 	{
 		// If we are accessing already allocated values, return those
 		if (index == 0)
@@ -151,7 +151,7 @@ private:
 		else
 		{
 			// Loop within the list to find the proper element
-			SListNode<T>* prevNode = m_Head;
+			FListNode<T>* prevNode = m_Head;
 			int i = 0;
 
 			do

@@ -1,5 +1,5 @@
 #pragma once
-#include "DListNode.hpp"
+#include "ListNode.hpp"
 #include <iostream>
 #include <initializer_list>
 #include <stdexcept>
@@ -24,16 +24,16 @@ public:
 		// Go from m_Head to m_Tail and free memory
 		while (m_Head != nullptr)
 		{
-			DListNode<T>* temp = m_Head->GetNext();
+			ListNode<T>* temp = m_Head->GetNext();
 			delete m_Head;
 			m_Head = temp;
 		}
 	}
 
 	// Keeping for reference when implementing DoublyLinked List and Forward List
-	DListNode<T>* AddToFront(T data)
+	ListNode<T>* AddToFront(T data)
 	{
-		DListNode<T>* newNode = new DListNode<T>(data);
+		ListNode<T>* newNode = new ListNode<T>(data);
 
 		// We are adding the first node
 		if (m_Head == nullptr)
@@ -51,9 +51,9 @@ public:
 		return newNode;
 	}
 
-	DListNode<T>* push_back(T data)
+	ListNode<T>* push_back(T data)
 	{
-		DListNode<T>* newNode = new DListNode<T>(data);
+		ListNode<T>* newNode = new ListNode<T>(data);
 
 		// We are adding the first node
 		if (m_Head == nullptr)
@@ -72,11 +72,11 @@ public:
 		return newNode;
 	}
 
-	DListNode<T>* InsertAt(T data, int index)
+	ListNode<T>* InsertAt(T data, int index)
 	{
 		//assert(index >= 0 && index <= m_Size); // We assert that we pass a valid index
 		CheckIndex(index, true);
-		DListNode<T>* newNode = new DListNode<T>(data);
+		ListNode<T>* newNode = new ListNode<T>(data);
 
 		// Empty list case handled by creating first element
 		if (m_Head == nullptr)
@@ -101,7 +101,7 @@ public:
 			}
 			else
 			{
-				DListNode<T>* prevNode = AdvanceTo(index - 1);
+				ListNode<T>* prevNode = AdvanceTo(index - 1);
 				newNode->SetNext(prevNode->GetNext());
 				prevNode->SetNext(newNode);
 			}
@@ -126,8 +126,7 @@ public:
 		}
 		else if (m_Size > 1)
 		{
-			//DListNode<T>* newTail = AdvanceTo(m_Size - 2);
-			DListNode<T>* newTail = m_Tail->GetPrev();
+			ListNode<T>* newTail = m_Tail->GetPrev();
 			newTail->SetNext(nullptr);
 			delete m_Tail;
 			m_Tail = newTail;
@@ -142,21 +141,21 @@ public:
 		CheckIndex(index);
 		if (index == 0)
 		{
-			DListNode<T>* currHead = m_Head;
+			ListNode<T>* currHead = m_Head;
 			m_Head = m_Head->GetNext();
 			delete currHead;
 		}
 		else if (index == m_Size - 1)
 		{
-			DListNode<T>* newTail = AdvanceTo(index - 1);
+			ListNode<T>* newTail = AdvanceTo(index - 1);
 			m_Tail = newTail;
 			delete m_Tail->GetNext();
 			m_Tail->SetNext(nullptr);
 		}
 		else
 		{
-			DListNode<T>* prevNode = AdvanceTo(index - 1);
-			DListNode<T>* nodeToDel = AdvanceTo(index);
+			ListNode<T>* prevNode = AdvanceTo(index - 1);
+			ListNode<T>* nodeToDel = AdvanceTo(index);
 			prevNode->SetNext(nodeToDel->GetNext());
 			delete nodeToDel;
 		}
@@ -171,7 +170,7 @@ public:
 
 	void PrintList()
 	{
-		DListNode<T>* current = m_Head;
+		ListNode<T>* current = m_Head;
 		while (current != nullptr)
 		{
 			std::cout << " -> " << current->GetData();
@@ -180,12 +179,12 @@ public:
 	}
 
 private:
-	DListNode<T>* m_Head = nullptr;
-	DListNode<T>* m_Tail = nullptr;
+	ListNode<T>* m_Head = nullptr;
+	ListNode<T>* m_Tail = nullptr;
 	bool m_IsEmpty = true;
 	int m_Size = 0;
 
-	DListNode<T>* AdvanceTo(int index) const
+	ListNode<T>* AdvanceTo(int index) const
 	{
 		// If we are accessing already allocated values, return those
 		if (index == 0)
@@ -195,7 +194,7 @@ private:
 		else
 		{
 			// Loop within the list to find the proper element
-			DListNode<T>* prevNode = m_Head;
+			ListNode<T>* prevNode = m_Head;
 			int i = 0;
 
 			do

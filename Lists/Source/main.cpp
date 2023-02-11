@@ -1,7 +1,6 @@
 #include <iostream>
 
-// Currently functionnal Lists -> Doubly Linked List && Forward List
-#include "SList.hpp"
+#include "List.hpp"
 #include "FList.hpp"
 
 int main()

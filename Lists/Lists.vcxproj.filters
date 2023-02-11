@@ -15,19 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\SList.hpp">
+    <ClInclude Include="include\List.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\SListNode.hpp">
+    <ClInclude Include="include\FListNode.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\FList.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\DList.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\DListNode.hpp">
+    <ClInclude Include="include\ListNode.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
