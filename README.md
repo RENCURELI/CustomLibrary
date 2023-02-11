@@ -2,8 +2,8 @@
 Creating a Data Structure and Algorithm library
 
 In Progress :
-  - Forward List
-  - Doubly Linked List
+  - Forward List ( Have to do operator overloads )
+  - Doubly Linked List ( Have to do operator overloads )
   - Array
   
 TODO Data Structures :
