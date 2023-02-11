@@ -21,17 +21,10 @@ public:
 
 	~List()
 	{
-		// Go from m_Head to m_Tail and free memory
-		while (m_Head != nullptr)
-		{
-			ListNode<T>* temp = m_Head->GetNext();
-			delete m_Head;
-			m_Head = temp;
-		}
+		Clear();
 	}
 
-	// Keeping for reference when implementing DoublyLinked List and Forward List
-	ListNode<T>* AddToFront(T data)
+	ListNode<T>* push_front(T data)
 	{
 		ListNode<T>* newNode = new ListNode<T>(data);
 
@@ -45,6 +38,7 @@ public:
 		else
 		{
 			newNode->SetNext(m_Head);
+			m_Head->SetPrev(newNode);
 			m_Head = newNode;
 		}
 		m_Size++;
@@ -74,7 +68,6 @@ public:
 
 	ListNode<T>* InsertAt(T data, int index)
 	{
-		//assert(index >= 0 && index <= m_Size); // We assert that we pass a valid index
 		CheckIndex(index, true);
 		ListNode<T>* newNode = new ListNode<T>(data);
 
@@ -112,7 +105,7 @@ public:
 	}
 
 	// Remove last node
-	void Remove()
+	void pop_back()
 	{
 		if (m_Size == 0)
 			return;
@@ -135,6 +128,30 @@ public:
 		m_Size--;
 	}
 
+	// Remove first ndoe
+	void pop_front()
+	{
+		if (m_Size == 0)
+			return;
+
+		if (m_Size == 1)
+		{
+			delete m_Head;
+			m_Head = nullptr;
+			m_Tail = nullptr;
+			m_IsEmpty = true;
+		}
+		else if (m_Size > 1)
+		{
+			ListNode<T>* newHead = m_Head->GetNext();
+			newHead->SetPrev(nullptr);
+			delete m_Head;
+			m_Head = newHead;
+		}
+
+		m_Size--;
+	}
+
 	// Remove node at specified Index
 	void RemoveAt(int index)
 	{
@@ -147,16 +164,17 @@ public:
 		}
 		else if (index == m_Size - 1)
 		{
-			ListNode<T>* newTail = AdvanceTo(index - 1);
+			//ListNode<T>* newTail = AdvanceTo(index - 1);
+			ListNode<T>* newTail = m_Tail->GetPrev();
 			m_Tail = newTail;
 			delete m_Tail->GetNext();
 			m_Tail->SetNext(nullptr);
 		}
 		else
 		{
-			ListNode<T>* prevNode = AdvanceTo(index - 1);
 			ListNode<T>* nodeToDel = AdvanceTo(index);
-			prevNode->SetNext(nodeToDel->GetNext());
+			nodeToDel->GetPrev()->SetNext(nodeToDel->GetNext());
+			nodeToDel->GetNext()->SetPrev(nodeToDel->GetPrev());
 			delete nodeToDel;
 		}
 
@@ -165,8 +183,22 @@ public:
 			m_IsEmpty = true;
 	}
 
+	// Clear the content of the List
+	void Clear()
+	{
+		// Go from m_Head to m_Tail and free memory
+		while (m_Head != nullptr)
+		{
+			ListNode<T>* temp = m_Head->GetNext();
+			delete m_Head;
+			m_Head = temp;
+		}
+	}
+
 	inline bool IsEmpty() { return m_IsEmpty; }
 	inline int GetSize() { return m_Size; }
+	inline ListNode<T>* front() { return m_Head; }
+	inline ListNode<T>* back() { return m_Tail; }
 
 	void PrintList()
 	{

@@ -14,22 +14,16 @@ public:
 	{
 		for (const auto& it : l)
 		{
-			AddToFront(it);
+			push_front(it);
 		}
 	}
 
 	~FList()
 	{
-		// Go from m_Head to tail and free memory
-		while (m_Head != nullptr)
-		{
-			FListNode<T>* temp = m_Head->GetNext();
-			delete m_Head;
-			m_Head = temp;
-		}
+		Clear();
 	}
 
-	FListNode<T>* AddToFront(T data)
+	FListNode<T>* push_front(T data)
 	{
 		FListNode<T>* newNode = new FListNode<T>(data);
 
@@ -80,8 +74,7 @@ public:
 		return newNode;
 	}
 
-	// Remove last node
-	void Remove()
+	void pop_front()
 	{
 		if (m_Size == 0)
 			return;
@@ -125,8 +118,21 @@ public:
 			m_IsEmpty = true;
 	}
 
+	// Clear the content of the List
+	void Clear()
+	{
+		// Go from m_Head to m_Tail and free memory
+		while (m_Head != nullptr)
+		{
+			FListNode<T>* temp = m_Head->GetNext();
+			delete m_Head;
+			m_Head = temp;
+		}
+	}
+
 	inline bool IsEmpty() { return m_IsEmpty; }
 	inline int GetSize() { return m_Size; }
+	inline FListNode<T>* front() { return m_Head; }
 
 	void PrintList()
 	{

@@ -12,8 +12,8 @@ int main()
 	{
 		List<int> intList = { 1, 10, 5, -5 };
 		intList.InsertAt(14, 4);
-		intList.Remove();
-		intList.RemoveAt(3);
+		intList.pop_back();
+		intList.RemoveAt(1);
 
 		intList.PrintList();
 
