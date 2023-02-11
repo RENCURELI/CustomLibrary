@@ -149,6 +149,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\Array.hpp" />
     <ClInclude Include="include\ListNode.hpp" />
     <ClInclude Include="include\FList.hpp" />
     <ClInclude Include="include\List.hpp" />

@@ -3,9 +3,13 @@
 #include "List.hpp"
 #include "FList.hpp"
 
+#include "Array.hpp"
+
 int main()
 {
 	std::cout << "Hello World!";
+
+	//Array<int, 5> test;
 	
 	// Ghost scope to cause a destruction
 	try
