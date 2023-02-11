@@ -4,9 +4,9 @@ Creating a Data Structure and Algorithm library
 In Progress :
   - Forward List
   - Doubly Linked List
+  - Array
   
 TODO Data Structures :
-  - Array
   - Vector
   - Stack
   - Set
