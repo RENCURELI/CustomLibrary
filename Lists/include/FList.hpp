@@ -128,6 +128,10 @@ public:
 			delete m_Head;
 			m_Head = temp;
 		}
+
+		m_Size = 0;
+		m_Head = nullptr;
+		m_IsEmpty = true;
 	}
 
 	inline bool IsEmpty() { return m_IsEmpty; }
