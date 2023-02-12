@@ -200,10 +200,10 @@ public:
 		m_IsEmpty = true;
 	}
 
-	inline bool IsEmpty() { return m_IsEmpty; }
-	inline int GetSize() { return m_Size; }
-	inline ListNode<T>* front() { return m_Head; }
-	inline ListNode<T>* back() { return m_Tail; }
+	inline bool IsEmpty() const { return m_IsEmpty; }
+	inline int GetSize() const { return m_Size; }
+	inline ListNode<T>* front() const { return m_Head; }
+	inline ListNode<T>* back() const { return m_Tail; }
 
 	void PrintList()
 	{
@@ -213,6 +213,30 @@ public:
 			std::cout << " -> " << current->GetData();
 			current = current->GetNext();
 		}
+	}
+
+	List<T>& operator=(const List<T>& other)
+	{
+		if (this == &other)
+			return *this;
+
+		ListNode<T>* temp = other.front();
+		while (temp != nullptr)
+		{
+			this->push_back(temp->GetData());
+			temp = temp->GetNext();
+		}
+
+		return *this;
+	}
+
+	List<T>& operator=(std::initializer_list<T> ilist)
+	{
+		for (const auto& it : ilist)
+		{
+			push_back(it);
+		}
+		return *this;
 	}
 
 private:
