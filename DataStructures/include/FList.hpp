@@ -134,9 +134,9 @@ public:
 		m_IsEmpty = true;
 	}
 
-	inline bool IsEmpty() { return m_IsEmpty; }
-	inline int GetSize() { return m_Size; }
-	inline FListNode<T>* front() { return m_Head; }
+	inline bool IsEmpty() const { return m_IsEmpty; }
+	inline int GetSize() const { return m_Size; }
+	inline FListNode<T>* const front() { return m_Head; }
 
 	void PrintList()
 	{
@@ -146,6 +146,30 @@ public:
 			std::cout << " -> " << current->GetData();
 			current = current->GetNext();
 		}
+	}
+
+	FList<T>& operator=(const List<T>& other)
+	{
+		if (this == &other)
+			return *this;
+
+		FListNode<T>* temp = other.front();
+		while (temp != nullptr)
+		{
+			this->push_front(temp->GetData());
+			temp = temp->GetNext();
+		}
+
+		return *this;
+	}
+
+	FList<T>& operator=(std::initializer_list<T> ilist)
+	{
+		for (const auto& it : ilist)
+		{
+			push_front(it);
+		}
+		return *this;
 	}
 
 private:
