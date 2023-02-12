@@ -7,13 +7,13 @@
 
 int main()
 {
-	std::cout << "Hello World!";
+	std::cout << "Hello World! \n";
 
-	//Array<int, 5> test;
-	
-	// Ghost scope to cause a destruction
 	try
 	{
+		Array<int, 5> test{ 51, -12, 0, 48, 3 };
+		int val = test.at(3);
+
 		List<int> intList = { 1, 10, 5, -5 };
 		List<int> newList = { 31, 47 };
 

@@ -1,35 +1,27 @@
 #pragma once
 #include <iostream>
-#include <initializer_list>
+#include <cstddef>
 #include <stdexcept>
 
 // Contiguous static array similar to C style arrays
-template<typename T, int N>
+template<typename T, std::size_t N>
 class Array
 {
 public:
-	Array() {}
-	Array(std::initializer_list<T> l)
+	T values[N];
+
+	T& operator[](std::size_t index)
 	{
-		// Must handle case where too much data is passed
-		for (const auto& it : l)
-		{
-			// Add to array
-		}
+		return values[index];
 	}
 
-	~Array() {}
-
 	/*Required Functions
-	- at()
 	- front()
 	- back()
-	- empty()
-	- size()
 	- fill()
-	- clear() -> maybe
 	*/
 
-
-private:
+	inline T at(int index) const { return values[index]; }
+	inline size_t size() const { return N; }
+	inline bool empty() const { return N == 0; }
 };
