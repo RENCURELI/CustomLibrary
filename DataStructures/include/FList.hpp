@@ -136,7 +136,7 @@ public:
 
 	inline bool IsEmpty() const { return m_IsEmpty; }
 	inline int GetSize() const { return m_Size; }
-	inline FListNode<T>* const front() { return m_Head; }
+	inline FListNode<T>* front() const { return m_Head; }
 
 	void PrintList()
 	{

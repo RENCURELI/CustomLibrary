@@ -5,9 +5,8 @@
 
 // Contiguous static array similar to C style arrays
 template<typename T, std::size_t N>
-class Array
+struct Array
 {
-public:
 	T values[N];
 
 	T& operator[](std::size_t index)
@@ -22,6 +21,6 @@ public:
 	*/
 
 	inline T at(int index) const { return values[index]; }
-	inline size_t size() const { return N; }
+	inline std::size_t size() const { return N; }
 	inline bool empty() const { return N == 0; }
 };
