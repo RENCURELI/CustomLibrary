@@ -3,8 +3,7 @@
 #include <cstddef>
 #include <stdexcept>
 
-// Contiguous static array similar to C style arrays
-template<typename T, std::size_t N>
+template<typename T, const std::size_t N>
 struct Array
 {
 	T values[N];

@@ -31,7 +31,6 @@ public:
 		if (m_Head == nullptr)
 		{
 			m_Head = newNode;
-			m_IsEmpty = false;
 		}
 		else
 		{
@@ -51,7 +50,6 @@ public:
 		if (m_Head == nullptr)
 		{
 			m_Head = newNode;
-			m_IsEmpty = false;
 		}
 		else
 		{
@@ -83,7 +81,6 @@ public:
 		{
 			delete m_Head;
 			m_Head = nullptr;
-			m_IsEmpty = true;
 		}
 		else
 		{
@@ -114,8 +111,6 @@ public:
 		}
 
 		m_Size--;
-		if (m_Size == 0)
-			m_IsEmpty = true;
 	}
 
 	// Clear the content of the List
@@ -131,10 +126,10 @@ public:
 
 		m_Size = 0;
 		m_Head = nullptr;
-		m_IsEmpty = true;
 	}
 
-	inline bool IsEmpty() const { return m_IsEmpty; }
+	//inline bool IsEmpty() const { return m_IsEmpty = m_Size == 0; }
+	inline bool IsEmpty() const { return m_Size == 0; }
 	inline int GetSize() const { return m_Size; }
 	inline FListNode<T>* front() const { return m_Head; }
 
@@ -174,7 +169,7 @@ public:
 
 private:
 	FListNode<T>* m_Head = nullptr;
-	bool m_IsEmpty = true;
+	//bool m_IsEmpty = true;
 	int m_Size = 0;
 
 	FListNode<T>* AdvanceTo(int index) const

@@ -33,7 +33,6 @@ public:
 		{
 			m_Head = newNode;
 			m_Tail = newNode;
-			m_IsEmpty = false;
 		}
 		else
 		{
@@ -54,7 +53,6 @@ public:
 		{
 			m_Head = newNode;
 			m_Tail = newNode;
-			m_IsEmpty = false;
 		}
 		else
 		{
@@ -76,7 +74,6 @@ public:
 		{
 			m_Head = newNode;
 			m_Tail = newNode;
-			m_IsEmpty = false;
 		}
 		else
 		{
@@ -115,7 +112,6 @@ public:
 			delete m_Tail;
 			m_Head = nullptr;
 			m_Tail = nullptr;
-			m_IsEmpty = true;
 		}
 		else if (m_Size > 1)
 		{
@@ -139,7 +135,6 @@ public:
 			delete m_Head;
 			m_Head = nullptr;
 			m_Tail = nullptr;
-			m_IsEmpty = true;
 		}
 		else if (m_Size > 1)
 		{
@@ -179,8 +174,6 @@ public:
 		}
 
 		m_Size--;
-		if (m_Size == 0)
-			m_IsEmpty = true;
 	}
 
 	// Clear the content of the List
@@ -197,10 +190,10 @@ public:
 		m_Size = 0;
 		m_Head = nullptr;
 		m_Tail = nullptr;
-		m_IsEmpty = true;
 	}
 
-	inline bool IsEmpty() const { return m_IsEmpty; }
+	inline bool IsEmpty() const { return m_Size == 0; }
+	//inline bool IsEmpty() const { return m_IsEmpty = m_Size == 0; }
 	inline int GetSize() const { return m_Size; }
 	inline ListNode<T>* front() const { return m_Head; }
 	inline ListNode<T>* back() const { return m_Tail; }
@@ -242,7 +235,7 @@ public:
 private:
 	ListNode<T>* m_Head = nullptr;
 	ListNode<T>* m_Tail = nullptr;
-	bool m_IsEmpty = true;
+	//bool m_IsEmpty = true;
 	int m_Size = 0;
 
 	ListNode<T>* AdvanceTo(int index) const
