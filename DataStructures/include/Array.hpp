@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstddef>
 #include <stdexcept>
+#include <cassert>
 
 template<typename T, const std::size_t N>
 struct Array
@@ -13,13 +14,34 @@ struct Array
 		return values[index];
 	}
 
-	/*Required Functions
-	- front()
-	- back()
-	- fill()
-	*/
+	inline T at(int index) const 
+	{
+		if (index >= N)
+			throw std::runtime_error("[ERROR] Index out of bounds");
 
-	inline T at(int index) const { return values[index]; }
+		return values[index];
+	}
+
 	inline std::size_t size() const { return N; }
 	inline bool empty() const { return N == 0; }
+	inline T* front() const { return values[0]; }
+	inline T* back() const { return values[N - 1]; }
+
+	constexpr void fill(const T& val)
+	{
+		for (int i = 0; i < N; i++)
+		{
+			values[i] = val;
+		}
+	}
+
+	constexpr void swap(Array& other)
+	{
+		if (other.size() != size())
+			throw std::runtime_error("[ERROR] Trying to swap data through arrays of different sizes, this would cause out of bounds errors");
+		
+		Array<T, N> temp = other;
+		other = *this;
+		*this = temp;
+	}
 };

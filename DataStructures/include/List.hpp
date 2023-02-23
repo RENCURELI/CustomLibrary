@@ -4,8 +4,6 @@
 #include <initializer_list>
 #include <stdexcept>
 
-// Update to also set prevNode pointer as this is doubly linked list
-
 template<class T>
 class List
 {
@@ -106,7 +104,7 @@ public:
 	{
 		if (m_Size == 0)
 			return;
-		
+
 		if (m_Size == 1)
 		{
 			delete m_Tail;
@@ -159,7 +157,6 @@ public:
 		}
 		else if (index == m_Size - 1)
 		{
-			//ListNode<T>* newTail = AdvanceTo(index - 1);
 			ListNode<T>* newTail = m_Tail->GetPrev();
 			m_Tail = newTail;
 			delete m_Tail->GetNext();
@@ -193,7 +190,6 @@ public:
 	}
 
 	inline bool IsEmpty() const { return m_Size == 0; }
-	//inline bool IsEmpty() const { return m_IsEmpty = m_Size == 0; }
 	inline int GetSize() const { return m_Size; }
 	inline ListNode<T>* front() const { return m_Head; }
 	inline ListNode<T>* back() const { return m_Tail; }
@@ -208,6 +204,7 @@ public:
 		}
 	}
 
+	// Copy
 	List<T>& operator=(const List<T>& other)
 	{
 		if (this == &other)
@@ -223,6 +220,7 @@ public:
 		return *this;
 	}
 
+	// Assign
 	List<T>& operator=(std::initializer_list<T> ilist)
 	{
 		for (const auto& it : ilist)
@@ -235,7 +233,6 @@ public:
 private:
 	ListNode<T>* m_Head = nullptr;
 	ListNode<T>* m_Tail = nullptr;
-	//bool m_IsEmpty = true;
 	int m_Size = 0;
 
 	ListNode<T>* AdvanceTo(int index) const

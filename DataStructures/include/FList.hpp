@@ -128,7 +128,6 @@ public:
 		m_Head = nullptr;
 	}
 
-	//inline bool IsEmpty() const { return m_IsEmpty = m_Size == 0; }
 	inline bool IsEmpty() const { return m_Size == 0; }
 	inline int GetSize() const { return m_Size; }
 	inline FListNode<T>* front() const { return m_Head; }
@@ -143,6 +142,7 @@ public:
 		}
 	}
 
+	// Copy
 	FList<T>& operator=(const List<T>& other)
 	{
 		if (this == &other)
@@ -158,6 +158,7 @@ public:
 		return *this;
 	}
 
+	// Assign
 	FList<T>& operator=(std::initializer_list<T> ilist)
 	{
 		for (const auto& it : ilist)
@@ -169,7 +170,6 @@ public:
 
 private:
 	FListNode<T>* m_Head = nullptr;
-	//bool m_IsEmpty = true;
 	int m_Size = 0;
 
 	FListNode<T>* AdvanceTo(int index) const
