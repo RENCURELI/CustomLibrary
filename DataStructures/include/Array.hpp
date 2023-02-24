@@ -14,9 +14,9 @@ struct Array
 		return values[index];
 	}
 
-	inline T at(int index) const 
+	inline T at(const int index) const 
 	{
-		if (index >= N)
+		if (index >= N || index < 0)
 			throw std::runtime_error("[ERROR] Index out of bounds");
 
 		return values[index];
@@ -40,8 +40,11 @@ struct Array
 		if (other.size() != size())
 			throw std::runtime_error("[ERROR] Trying to swap data through arrays of different sizes, this would cause out of bounds errors");
 		
-		Array<T, N> temp = other;
-		other = *this;
-		*this = temp;
+		for (int i = 0; i < size(); i++)
+		{
+			T temp = other[i];
+			other[i] = values[i];
+			values[i] = temp;
+		}
 	}
 };
