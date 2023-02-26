@@ -1,13 +1,15 @@
 # Lists
 Creating a Data Structure and Algorithm library
 
+Done :
+  - Forward List
+  - Doubly Linked List
+  - Array ( I guess it's done )
+
 In Progress :
-  - Forward List ( Have to do operator overloads )
-  - Doubly Linked List ( Have to do operator overloads )
-  - Array
+  - Vector
   
 TODO Data Structures :
-  - Vector
   - Stack
   - Set
   - Map
