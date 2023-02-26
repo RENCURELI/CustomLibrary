@@ -78,6 +78,14 @@ public:
 	constexpr void clear() noexcept
 	{
 		std::destroy(m_Buffer, m_Buffer + m_Size);
+		/* ALTERNATIVE
+		int i = 0;
+		do
+		{
+			m_Buffer[i].~T();
+			++i;
+		} while ( i < m_Size );
+		*/
 		m_Size = 0;
 	}
 
