@@ -40,7 +40,10 @@ public:
 	}
 
 
-	~Vector() {}
+	~Vector()
+	{
+		delete[] buffer;
+	}
 
 	// emplace back
 	// push_back
@@ -71,6 +74,16 @@ public:
 		{
 			std::cout << " -> " << m_Buffer[i];
 		}
+	}
+
+	Vector& operator=(const vector& other)
+	{
+
+	}
+
+	Vector& operator=(std::initializer_list<T> l)
+	{
+
 	}
 
 private:
