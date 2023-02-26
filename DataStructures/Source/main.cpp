@@ -59,6 +59,11 @@ int main()
 		}
 		std::cout << "\n" << vec.getCapacity() << "\n";
 
+		vec.assign(3, -12.0f);
+
+		vec.PrintVector();
+		std::cout << "\n" << vec.getCapacity() << "\n";
+
 		return 0;
 	}
 	catch (std::exception& ex)

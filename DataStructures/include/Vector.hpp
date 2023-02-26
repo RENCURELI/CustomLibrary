@@ -63,6 +63,24 @@ public:
 		buffer[pos] = data;
 	}*/
 
+	void assign(int count, T val)
+	{
+		clear();
+		int i = 0;
+		do
+		{
+			m_Buffer[i] = val;
+			++i;
+		} while (i < count);
+		m_Size = count;
+	}
+
+	constexpr void clear() noexcept
+	{
+		std::destroy(m_Buffer, m_Buffer + m_Size);
+		m_Size = 0;
+	}
+
 	inline T* front() const { return this->m_Buffer; }
 	inline T* back() const { return this + sizeof(T) * m_Size; }
 	inline int getSize() const { return m_Size; }
@@ -92,7 +110,7 @@ private:
 
 	T* m_Buffer; // Pointer to the currently allocated array
 
-	// resize
+	// resize and move data from old position to new
 	void resize()
 	{
 		m_Capacity *= 2;
@@ -101,6 +119,7 @@ private:
 		{
 			newBuffer[i] = m_Buffer[i];
 		}
+		delete[] m_Buffer;
 		m_Buffer = newBuffer;
 	}
 };
