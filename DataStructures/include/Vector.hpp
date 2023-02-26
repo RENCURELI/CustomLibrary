@@ -42,7 +42,7 @@ public:
 
 	~Vector()
 	{
-		delete[] buffer;
+		delete[] m_Buffer;
 	}
 
 	// emplace back
@@ -76,7 +76,7 @@ public:
 		}
 	}
 
-	Vector& operator=(const vector& other)
+	Vector& operator=(const Vector& other)
 	{
 
 	}
