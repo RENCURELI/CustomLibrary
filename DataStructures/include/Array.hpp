@@ -2,7 +2,6 @@
 #include <iostream>
 #include <cstddef>
 #include <stdexcept>
-#include <cassert>
 
 template<typename T, const std::size_t N>
 struct Array
