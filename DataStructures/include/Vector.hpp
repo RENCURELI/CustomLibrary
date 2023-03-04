@@ -29,14 +29,14 @@ public:
 		}
 	}
 
-	Vector(Vector& other)
+	Vector(const Vector& other)
 	{
 
 	}
 
-	Vector(int count, T data)
+	Vector(const int count, T data)
 	{
-
+		m_Capacity = count * 2; // We reserve for the amount of data to store and extra buffer
 	}
 
 
@@ -50,7 +50,7 @@ public:
 	void push_back(const T& value)
 	{
 		if (m_Size == m_Capacity)
-			resize();
+			resize(m_Capacity * 2);
 		m_Buffer[m_Size] = value;
 		m_Size++;
 	}
@@ -78,15 +78,25 @@ public:
 	constexpr void clear() noexcept
 	{
 		std::destroy(m_Buffer, m_Buffer + m_Size);
-		/* ALTERNATIVE
-		int i = 0;
+		m_Size = 0;
+	}
+
+	void erase(int pos)
+	{
+		if (pos > m_Size || pos < 0)
+			throw std::runtime_error("[ERROR] Index out of bounds");
+
+		m_Buffer[pos].~T();
+	}
+
+	void erase(int first, int last)
+	{
+		int i = first;
 		do
 		{
 			m_Buffer[i].~T();
 			++i;
-		} while ( i < m_Size );
-		*/
-		m_Size = 0;
+		} while (i < last);
 	}
 
 	inline T* front() const { return this->m_Buffer; }
@@ -112,22 +122,83 @@ public:
 
 	}
 
+	// resize and move data from old position to new
+	void resize(int size)
+	{
+		if (size > m_Capacity)
+		{
+			reserve(size * 2);
+		}
+		else if (size < m_Size)
+		{
+			// We return as we won't replace previous data
+			erase(size - 1, m_Size);
+			return;
+		}
+		
+		int i = 0;
+
+		do
+		{
+			push_back(T());
+			++i;
+		} while (i < size);
+	}
+
+	void resize(int size, const T& value)
+	{
+		if (size > m_Capacity)
+		{
+			reserve(size * 2);
+		}
+		else if (size < m_Size)
+		{
+			// We return as we won't replace previous data
+			erase(size - 1, m_Size);
+			return;
+		}
+
+		int i = 0;
+
+		do
+		{
+			push_back(T);
+			++i;
+		} while (i < size);
+	}
+
+	// If size is greater than the current capacity, new storage is allocated, otherwise the function does nothing. -> cppreference
+	void reserve(int size)
+	{
+		if (size <= m_Capacity)
+			return;
+		else
+		{
+			m_Capacity = size;
+			T* newBuffer = new T[m_Capacity];
+
+			// We handle the case where we resize to a lower size than current size by discarding overflowing elements
+			if (m_Capacity < m_Size)
+				m_Size = m_Capacity;
+
+			for (int i = 0; i < m_Size; i++)
+			{
+				newBuffer[i] = m_Buffer[i];
+			}
+			delete[] m_Buffer;
+			m_Buffer = newBuffer;
+		}
+	}
+
+	// Reduces capacity to size
+	void shrinkToFit()
+	{
+		
+	}
+
 private:
 	int m_Capacity; // The capacity of the vector
 	int m_Size; // The number of elements stored in vector
 
 	T* m_Buffer; // Pointer to the currently allocated array
-
-	// resize and move data from old position to new
-	void resize()
-	{
-		m_Capacity *= 2;
-		T* newBuffer = new T[m_Capacity];
-		for (int i = 0; i < m_Size; i++)
-		{
-			newBuffer[i] = m_Buffer[i];
-		}
-		delete[] m_Buffer;
-		m_Buffer = newBuffer;
-	}
 };
