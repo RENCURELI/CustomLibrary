@@ -22,9 +22,9 @@ public:
 		Clear();
 	}
 
-	ListNode<T>* push_front(T data)
+	ListNode_t<T>* push_front(T data)
 	{
-		ListNode<T>* newNode = new ListNode<T>(data);
+		ListNode_t<T>* newNode = new ListNode_t<T>(data);
 
 		// We are adding the first node
 		if (m_Head == nullptr)
@@ -42,9 +42,9 @@ public:
 		return newNode;
 	}
 
-	ListNode<T>* push_back(T data)
+	ListNode_t<T>* push_back(T data)
 	{
-		ListNode<T>* newNode = new ListNode<T>(data);
+		ListNode_t<T>* newNode = new ListNode_t<T>(data);
 
 		// We are adding the first node
 		if (m_Head == nullptr)
@@ -54,18 +54,18 @@ public:
 		}
 		else
 		{
-			m_Tail->SetNext(newNode);
-			newNode->SetPrev(m_Tail);
+			m_Tail->m_Next = newNode;
+			newNode->m_Previous = m_Tail;
 			m_Tail = newNode;
 		}
 		m_Size++;
 		return newNode;
 	}
 
-	ListNode<T>* InsertAt(T data, int index)
+	ListNode_t<T>* InsertAt(T data, int index)
 	{
 		CheckIndex(index, true);
-		ListNode<T>* newNode = new ListNode<T>(data);
+		ListNode_t<T>* newNode = new ListNode_t<T>(data);
 
 		// Empty list case handled by creating first element
 		if (m_Head == nullptr)
@@ -78,20 +78,20 @@ public:
 			// We insert at index 0, specific behaviour
 			if (index == 0)
 			{
-				newNode->SetNext(m_Head);
+				newNode->m_Next = m_Head;
 				m_Head = newNode;
 			}
 			else if (index == m_Size)
 			{
-				m_Tail->SetNext(newNode);
-				newNode->SetPrev(m_Tail);
+				m_Tail->m_Next = newNode;
+				newNode->m_Previous = m_Tail;
 				m_Tail = newNode;
 			}
 			else
 			{
-				ListNode<T>* prevNode = AdvanceTo(index - 1);
-				newNode->SetNext(prevNode->GetNext());
-				prevNode->SetNext(newNode);
+				ListNode_t<T>* prevNode = AdvanceTo(index - 1);
+				newNode->m_Next = prevNode->m_Next;
+				prevNode->m_Next = newNode;
 			}
 		}
 
@@ -113,8 +113,8 @@ public:
 		}
 		else if (m_Size > 1)
 		{
-			ListNode<T>* newTail = m_Tail->GetPrev();
-			newTail->SetNext(nullptr);
+			ListNode_t<T>* newTail = m_Tail->m_Previous;
+			newTail->m_Next = nullptr;
 			delete m_Tail;
 			m_Tail = newTail;
 		}
@@ -136,7 +136,7 @@ public:
 		}
 		else if (m_Size > 1)
 		{
-			ListNode<T>* newHead = m_Head->GetNext();
+			ListNode_t<T>* newHead = m_Head->GetNext();
 			newHead->SetPrev(nullptr);
 			delete m_Head;
 			m_Head = newHead;
@@ -151,22 +151,24 @@ public:
 		CheckIndex(index);
 		if (index == 0)
 		{
-			ListNode<T>* currHead = m_Head;
-			m_Head = m_Head->GetNext();
+			ListNode_t<T>* currHead = m_Head;
+			m_Head = m_Head->m_Next;
 			delete currHead;
 		}
 		else if (index == m_Size - 1)
 		{
-			ListNode<T>* newTail = m_Tail->GetPrev();
+			ListNode_t<T>* newTail = m_Tail->m_Previous;
 			m_Tail = newTail;
-			delete m_Tail->GetNext();
-			m_Tail->SetNext(nullptr);
+			delete m_Tail->m_Next;
+			m_Tail->m_Next = nullptr;
 		}
 		else
 		{
-			ListNode<T>* nodeToDel = AdvanceTo(index);
-			nodeToDel->GetPrev()->SetNext(nodeToDel->GetNext());
-			nodeToDel->GetNext()->SetPrev(nodeToDel->GetPrev());
+			ListNode_t<T>* nodeToDel = AdvanceTo(index);
+			//nodeToDel->m_Prev->SetNext(nodeToDel->m_Next);
+			nodeToDel->m_Previous->m_Next = nodeToDel->m_Next;
+			//nodeToDel->m_Next->SetPrev(nodeToDel->m_Prev);
+			nodeToDel->m_Next->m_Previous = nodeToDel->m_Previous;
 			delete nodeToDel;
 		}
 
@@ -179,7 +181,7 @@ public:
 		// Go from m_Head to m_Tail and free memory
 		while (m_Head != nullptr)
 		{
-			ListNode<T>* temp = m_Head->GetNext();
+			ListNode_t<T>* temp = m_Head->m_Next;
 			delete m_Head;
 			m_Head = temp;
 		}
@@ -191,30 +193,32 @@ public:
 
 	inline bool IsEmpty() const { return m_Size == 0; }
 	inline int GetSize() const { return m_Size; }
-	inline ListNode<T>* front() const { return m_Head; }
-	inline ListNode<T>* back() const { return m_Tail; }
+	inline T& front() { return m_Head->m_Data; }
+	inline const T& front() const { return m_Head->m_Data; }
+	inline T& back() { return m_Tail->m_Data; }
+	inline const T& back() const { return m_Tail->m_Data; }
 
 	void PrintList()
 	{
-		ListNode<T>* current = m_Head;
+		ListNode_t<T>* current = m_Head;
 		while (current != nullptr)
 		{
-			std::cout << " -> " << current->GetData();
-			current = current->GetNext();
+			std::cout << " -> " << current->m_Data;
+			current = current->m_Next;
 		}
 	}
 
 	// Copy
-	List<T>& operator=(const List<T>& other)
+	List<T>& operator=(List<T>& other)
 	{
 		if (this == &other)
 			return *this;
 
-		ListNode<T>* temp = other.front();
+		ListNode_t<T>* temp = other.m_Head;
 		while (temp != nullptr)
 		{
-			this->push_back(temp->GetData());
-			temp = temp->GetNext();
+			this->push_back(temp->m_Data);
+			temp = temp->m_Next;
 		}
 
 		return *this;
@@ -231,11 +235,11 @@ public:
 	}
 
 private:
-	ListNode<T>* m_Head = nullptr;
-	ListNode<T>* m_Tail = nullptr;
+	ListNode_t<T>* m_Head = nullptr;
+	ListNode_t<T>* m_Tail = nullptr;
 	int m_Size = 0;
 
-	ListNode<T>* AdvanceTo(int index) const
+	ListNode_t<T>* AdvanceTo(int index) const
 	{
 		// If we are accessing already allocated values, return those
 		if (index == 0)
@@ -245,12 +249,12 @@ private:
 		else
 		{
 			// Loop within the list to find the proper element
-			ListNode<T>* prevNode = m_Head;
+			ListNode_t<T>* prevNode = m_Head;
 			int i = 0;
 
 			do
 			{
-				prevNode = prevNode->GetNext();
+				prevNode = prevNode->m_Next;
 				++i;
 			} while (i < index);
 			

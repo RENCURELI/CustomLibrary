@@ -65,6 +65,7 @@ TEST(ArrayTest, ArrayFill)
 // ================================================
 
 
+
 #pragma endregion VectorTests
 
 #pragma region ListTests
@@ -72,6 +73,13 @@ TEST(ArrayTest, ArrayFill)
 // ==============   LIST TESTS   =================
 // ================================================
 
+TEST(ListTest, FrontBack)
+{
+	List<int> testList = { 1, 10, 5, -5 };
+
+	EXPECT_EQ(testList.front(), 1);
+	EXPECT_EQ(testList.back(), -5);
+}
 
 #pragma endregion ListTests
 
