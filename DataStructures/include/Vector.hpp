@@ -20,7 +20,7 @@ public:
 
 	Vector(std::initializer_list<T> l)
 	{
-		m_Capacity = l.size() * 2;
+		m_Capacity = l.size();
 		m_Buffer = new T[m_Capacity]; // Reserve some extra memory for future allocations
 		
 		for (const auto& it : l)
@@ -36,7 +36,14 @@ public:
 
 	Vector(const int count, T data)
 	{
-		m_Capacity = count * 2; // We reserve for the amount of data to store and extra buffer
+		m_Capacity = count; // We reserve for the amount of data to store
+		m_Buffer = new T[count];
+
+		// We insert the specified data in vector
+		for (int i = 0; i < count; i++)
+		{
+			push_back(data);
+		}
 	}
 
 
