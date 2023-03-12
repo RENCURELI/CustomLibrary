@@ -136,8 +136,8 @@ public:
 		}
 		else if (m_Size > 1)
 		{
-			ListNode_t<T>* newHead = m_Head->GetNext();
-			newHead->SetPrev(nullptr);
+			ListNode_t<T>* newHead = m_Head->m_Next;
+			newHead->m_Previous = nullptr;
 			delete m_Head;
 			m_Head = newHead;
 		}

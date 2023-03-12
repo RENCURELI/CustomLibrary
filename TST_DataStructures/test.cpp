@@ -139,6 +139,21 @@ TEST(ListTest, InsertAndRemoveAt)
 	EXPECT_THROW(testList.RemoveAt(12), std::exception);
 }
 
+TEST(ListTest, PopAndClear)
+{
+	List<int> testList = { 1, 2, 3, 4, 5 };
+	
+	testList.pop_back();
+	EXPECT_EQ(testList.back(), 4);
+
+	testList.pop_front();
+	EXPECT_EQ(testList.front(), 2);
+
+	testList.Clear();
+	EXPECT_EQ(testList.GetSize(), 0);
+	EXPECT_EQ(testList.IsEmpty(), true);
+}
+
 #pragma endregion ListTests
 
 #pragma region FListTests
