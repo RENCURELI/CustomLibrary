@@ -16,8 +16,10 @@ TEST(ArrayTest, ArraySwap)
 
 	firstArray.swap(secondArray);
 
+	// We test the first, last and median values
 	EXPECT_EQ(firstArray.back(), 10);
 	EXPECT_EQ(firstArray.front(), 6);
+	EXPECT_EQ(firstArray.at(2), 8);
 }
 
 TEST(ArrayTest, ArrayAt)
@@ -81,6 +83,20 @@ TEST(ListTest, FrontBack)
 	EXPECT_EQ(testList.back(), -5);
 }
 
+TEST(ListTest, PushFrontBack)
+{
+	List<int> testList = { 1, 2, 3 };
+	testList.push_front(0);
+
+	EXPECT_EQ(testList.front(), 0);
+	EXPECT_EQ(testList.GetSize(), 4);
+
+	testList.push_back(4);
+
+	EXPECT_EQ(testList.back(), 4);
+	EXPECT_EQ(testList.GetSize(), 5);
+}
+
 #pragma endregion ListTests
 
 #pragma region FListTests
@@ -88,6 +104,13 @@ TEST(ListTest, FrontBack)
 // ==============   FLIST TESTS   =================
 // ================================================
 
+TEST(FListTest, Front)
+{
+	FList<int> testFrontList = { 1, 2, 3 };
+
+	// Data is filled from the front and thus "inverted"
+	EXPECT_EQ(testFrontList.front(), 3);
+}
 
 #pragma endregion FListTests
 
