@@ -34,8 +34,8 @@ public:
 		}
 		else
 		{
-			newNode->SetNext(m_Head);
-			m_Head->SetPrev(newNode);
+			newNode->m_Next = m_Head;
+			m_Head->m_Previous = newNode;
 			m_Head = newNode;
 		}
 		m_Size++;
@@ -122,7 +122,7 @@ public:
 		m_Size--;
 	}
 
-	// Remove first ndoe
+	// Remove first node
 	void pop_front()
 	{
 		if (m_Size == 0)
@@ -165,9 +165,7 @@ public:
 		else
 		{
 			ListNode_t<T>* nodeToDel = AdvanceTo(index);
-			//nodeToDel->m_Prev->SetNext(nodeToDel->m_Next);
 			nodeToDel->m_Previous->m_Next = nodeToDel->m_Next;
-			//nodeToDel->m_Next->SetPrev(nodeToDel->m_Prev);
 			nodeToDel->m_Next->m_Previous = nodeToDel->m_Previous;
 			delete nodeToDel;
 		}
