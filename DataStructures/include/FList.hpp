@@ -23,9 +23,9 @@ public:
 		Clear();
 	}
 
-	FListNode<T>* push_front(T data)
+	FListNode_t<T>* push_front(T data)
 	{
-		FListNode<T>* newNode = new FListNode<T>(data);
+		FListNode_t<T>* newNode = new FListNode_t<T>(data);
 
 		// We are adding the first node
 		if (m_Head == nullptr)
@@ -34,17 +34,17 @@ public:
 		}
 		else
 		{
-			newNode->SetNext(m_Head);
+			newNode->m_Next = m_Head;
 			m_Head = newNode;
 		}
 		m_Size++;
 		return newNode;
 	}
 
-	FListNode<T>* InsertAt(T data, int index)
+	FListNode_t<T>* InsertAt(T data, int index)
 	{
 		CheckIndex(index, true);
-		FListNode<T>* newNode = new FListNode<T>(data);
+		FListNode_t<T>* newNode = new FListNode_t<T>(data);
 
 		// Empty list case handled by creating first element
 		if (m_Head == nullptr)
@@ -57,14 +57,14 @@ public:
 			// We insert at index 0, specific behaviour
 			if (index == 0)
 			{
-				newNode->SetNext(m_Head);
+				newNode->m_Next = m_Head;
 				m_Head = newNode;
 			}
 			else
 			{
-				FListNode<T>* prevNode = AdvanceTo(index - 1);
-				newNode->SetNext(prevNode->GetNext());
-				prevNode->SetNext(newNode);
+				FListNode_t<T>* prevNode = AdvanceTo(index - 1);
+				newNode->m_Next = prevNode->m_Next;
+				prevNode->m_Next = newNode;
 			}
 		}
 
@@ -84,7 +84,7 @@ public:
 		}
 		else
 		{
-			FListNode<T>* newHead = m_Head->GetNext();
+			FListNode_t<T>* newHead = m_Head->m_Next;
 			delete m_Head;
 			m_Head = newHead;
 		}
@@ -98,15 +98,15 @@ public:
 		CheckIndex(index);
 		if (index == 0)
 		{
-			FListNode<T>* currHead = m_Head;
-			m_Head = m_Head->GetNext();
+			FListNode_t<T>* currHead = m_Head;
+			m_Head = m_Head->m_Next;
 			delete currHead;
 		}
 		else
 		{
-			FListNode<T>* prevNode = AdvanceTo(index - 1);
-			FListNode<T>* nodeToDel = AdvanceTo(index);
-			prevNode->SetNext(nodeToDel->GetNext());
+			FListNode_t<T>* prevNode = AdvanceTo(index - 1);
+			FListNode_t<T>* nodeToDel = AdvanceTo(index);
+			prevNode->m_Next = nodeToDel->m_Next;
 			delete nodeToDel;
 		}
 
@@ -119,7 +119,7 @@ public:
 		// Go from m_Head to m_Tail and free memory
 		while (m_Head != nullptr)
 		{
-			FListNode<T>* temp = m_Head->GetNext();
+			FListNode_t<T>* temp = m_Head->m_Next;
 			delete m_Head;
 			m_Head = temp;
 		}
@@ -130,15 +130,16 @@ public:
 
 	inline bool IsEmpty() const { return m_Size == 0; }
 	inline int GetSize() const { return m_Size; }
-	inline FListNode<T>* front() const { return m_Head; }
+	inline const T& front() const { return m_Head->m_Data; }
+	inline T& front() { return m_Head->m_Data; }
 
 	void PrintList()
 	{
-		FListNode<T>* current = m_Head;
+		FListNode_t<T>* current = m_Head;
 		while (current != nullptr)
 		{
-			std::cout << " -> " << current->GetData();
-			current = current->GetNext();
+			std::cout << " -> " << current->m_Data;
+			current = current->m_Next;
 		}
 	}
 
@@ -148,11 +149,11 @@ public:
 		if (this == &other)
 			return *this;
 
-		FListNode<T>* temp = other.front();
+		FListNode_t<T>* temp = other.front();
 		while (temp != nullptr)
 		{
-			this->push_front(temp->GetData());
-			temp = temp->GetNext();
+			this->push_front(temp->m_Data);
+			temp = temp->m_Next;
 		}
 
 		return *this;
@@ -169,10 +170,10 @@ public:
 	}
 
 private:
-	FListNode<T>* m_Head = nullptr;
+	FListNode_t<T>* m_Head = nullptr;
 	int m_Size = 0;
 
-	FListNode<T>* AdvanceTo(int index) const
+	FListNode_t<T>* AdvanceTo(int index) const
 	{
 		// If we are accessing already allocated values, return those
 		if (index == 0)
@@ -180,12 +181,12 @@ private:
 		else
 		{
 			// Loop within the list to find the proper element
-			FListNode<T>* prevNode = m_Head;
+			FListNode_t<T>* prevNode = m_Head;
 			int i = 0;
 
 			do
 			{
-				prevNode = prevNode->GetNext();
+				prevNode = prevNode->m_Next;
 				++i;
 			} while (i < index);
 
