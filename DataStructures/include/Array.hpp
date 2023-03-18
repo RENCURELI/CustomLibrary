@@ -3,12 +3,12 @@
 #include <cstddef>
 #include <stdexcept>
 
-template<typename T, const std::size_t N>
+template<typename T, const unsigned int N>
 struct Array
 {
 	T values[N];
 
-	T& operator[](std::size_t index)
+	T& operator[](unsigned int index)
 	{
 		return values[index];
 	}
@@ -21,7 +21,7 @@ struct Array
 		return values[index];
 	}
 
-	inline std::size_t size() const { return N; }
+	inline unsigned int size() const { return N; }
 	inline bool empty() const { return N == 0; }
 	inline const T& front() const { return values[0]; }
 	inline const T& back() const { return values[N - 1]; }
@@ -39,7 +39,7 @@ struct Array
 		if (other.size() != size())
 			throw std::runtime_error("[ERROR] Trying to swap data through arrays of different sizes, this would cause out of bounds errors");
 		
-		for (int i = 0; i < size(); i++)
+		for (unsigned int i = 0; i < size(); i++)
 		{
 			T temp = other[i];
 			other[i] = values[i];

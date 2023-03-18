@@ -20,7 +20,7 @@ public:
 
 	Vector(std::initializer_list<T> l)
 	{
-		m_Capacity = l.size();
+		m_Capacity = (unsigned int)l.size();
 		m_Buffer = new T[m_Capacity]; // Reserve some extra memory for future allocations
 		
 		for (const auto& it : l)
@@ -113,7 +113,7 @@ public:
 
 	void PrintVector()
 	{
-		for (int i = 0; i < m_Size; i++)
+		for (unsigned int i = 0; i < m_Size; i++)
 		{
 			std::cout << " -> " << m_Buffer[i];
 		}
@@ -130,7 +130,7 @@ public:
 	}
 
 	// resize and move data from old position to new
-	void resize(int size)
+	void resize(unsigned int size)
 	{
 		if (size > m_Capacity)
 		{
@@ -143,7 +143,7 @@ public:
 			return;
 		}
 		
-		int i = 0;
+		unsigned int i = 0;
 
 		do
 		{
@@ -152,7 +152,7 @@ public:
 		} while (i < size);
 	}
 
-	void resize(int size, const T& value)
+	void resize(unsigned int size, const T& value)
 	{
 		if (size > m_Capacity)
 		{
@@ -165,7 +165,7 @@ public:
 			return;
 		}
 
-		int i = 0;
+		unsigned int i = 0;
 
 		do
 		{
@@ -175,7 +175,7 @@ public:
 	}
 
 	// If size is greater than the current capacity, new storage is allocated, otherwise the function does nothing. -> cppreference
-	void reserve(int size)
+	void reserve(unsigned int size)
 	{
 		if (size <= m_Capacity)
 			return;
@@ -188,7 +188,7 @@ public:
 			if (m_Capacity < m_Size)
 				m_Size = m_Capacity;
 
-			for (int i = 0; i < m_Size; i++)
+			for (unsigned int i = 0; i < m_Size; i++)
 			{
 				newBuffer[i] = m_Buffer[i];
 			}
@@ -204,8 +204,8 @@ public:
 	}
 
 private:
-	int m_Capacity; // The capacity of the vector
-	int m_Size; // The number of elements stored in vector
+	unsigned int m_Capacity; // The capacity of the vector
+	unsigned int m_Size; // The number of elements stored in vector
 
 	T* m_Buffer; // Pointer to the currently allocated array
 };

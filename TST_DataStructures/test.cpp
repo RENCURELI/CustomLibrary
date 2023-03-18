@@ -54,7 +54,7 @@ TEST(ArrayTest, ArrayFill)
 	Array<int, 3> testArray;
 	testArray.fill(12);
 
-	for (int i = 0; i < testArray.size(); i++)
+	for (unsigned int i = 0; i < testArray.size(); i++)
 		EXPECT_EQ(testArray.at(i), 12);
 }
 
@@ -167,6 +167,71 @@ TEST(FListTest, Front)
 
 	// Data is filled from the front and thus "inverted"
 	EXPECT_EQ(testFrontList.front(), 3);
+}
+
+// Here we test Empty, push_back, push_front and size
+TEST(FListTest, PushAndSize)
+{
+	FList<int> testList;
+	EXPECT_EQ(testList.GetSize(), 0);
+	EXPECT_EQ(testList.IsEmpty(), true);
+
+	testList = { 1, 2, 3 };
+	EXPECT_EQ(testList.GetSize(), 3);
+	EXPECT_EQ(testList.IsEmpty(), false);
+
+	testList.push_front(0);
+
+	EXPECT_EQ(testList.front(), 0);
+	EXPECT_EQ(testList.GetSize(), 4);
+}
+
+// Here we test InsertAt and RemoveAt methods
+TEST(FListTest, InsertAndRemoveAt)
+{
+	// InsertAt block
+	FList<int> testList = { 1, 2, 3 };
+
+	testList.InsertAt(0, 0);
+	EXPECT_EQ(testList.front(), 0);
+
+	// We still need to implement the find algorithm for this case
+	testList.InsertAt(4, testList.GetSize());
+	//EXPECT_EQ(testList.back(), 4);
+
+	// We still need to implement the find algorithm for this case
+	//testList.InsertAt(-5, 2);
+
+	// We test error handling
+	EXPECT_THROW(testList.InsertAt(-1, -1), std::exception);
+	EXPECT_THROW(testList.InsertAt(12, 12), std::exception);
+
+	// RemoveAt block
+	testList.RemoveAt(0);
+	EXPECT_EQ(testList.front(), 3);
+
+	// We still need to implement the find algorithm for this case
+	testList.RemoveAt(testList.GetSize() - 1);
+	//EXPECT_EQ(testList.back(), 3);
+
+	// We still need to implement the find algorithm for this case
+	//testList.RemoveAt(2);
+
+	// We test error handling
+	EXPECT_THROW(testList.RemoveAt(-1), std::exception);
+	EXPECT_THROW(testList.RemoveAt(12), std::exception);
+}
+
+TEST(FListTest, PopAndClear)
+{
+	FList<int> testList = { 1, 2, 3, 4, 5 };
+
+	testList.pop_front();
+	EXPECT_EQ(testList.front(), 4);
+
+	testList.Clear();
+	EXPECT_EQ(testList.GetSize(), 0);
+	EXPECT_EQ(testList.IsEmpty(), true);
 }
 
 #pragma endregion FListTests
