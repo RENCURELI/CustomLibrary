@@ -64,6 +64,8 @@ int main()
 		vec.PrintVector();
 		std::cout << "\n" << vec.getCapacity() << "\n";
 
+		//vec.erase(0, 3000);
+
 		return 0;
 	}
 	catch (std::exception& ex)

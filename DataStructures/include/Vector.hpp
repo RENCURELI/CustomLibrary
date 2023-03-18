@@ -4,6 +4,7 @@
 #include <initializer_list>
 #include <cstddef>
 #include <stdexcept>
+#include <format>
 
 // Contiguous dynamic array
 template<typename T>
@@ -96,9 +97,22 @@ public:
 		m_Buffer[pos].~T();
 	}
 
-	void erase(int first, int last)
+	void erase(unsigned int first, unsigned int last)
 	{
-		int i = first;
+		// Error handling
+		if (first < 0 || last > m_Size)
+		{
+			std::string errorMessage = std::string();
+			errorMessage.append("[ERROR] Index out of bound, first = " + std::to_string(first));
+			errorMessage.append(" last = " + std::to_string(last));
+			errorMessage.append(" first must be greater than 0 and last smaller than size, size = " + std::to_string(m_Size));
+			throw std::runtime_error(errorMessage);
+		}
+
+		if (first > last)
+			throw std::runtime_error("[ERROR] First is greater than Last -> infinite loop");
+
+		unsigned int i = first;
 		do
 		{
 			m_Buffer[i].~T();
