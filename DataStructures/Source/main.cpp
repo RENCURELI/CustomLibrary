@@ -19,7 +19,6 @@ int main()
 
 		test.swap(test2);
 
-
 		// LISTS
 		List<int> intList = { 1, 10, 5, -5 };
 		List<int> newList = { 31, 47 };
@@ -64,9 +63,10 @@ int main()
 		vec.PrintVector();
 		std::cout << "\n" << vec.getCapacity() << "\n";
 
-		//vec.erase(0, 3000);
+		vec.insert(1, 3.7f);
+		vec.PrintVector();
 
-		return 0;
+		//vec.erase(0, 3000);
 	}
 	catch (std::exception& ex)
 	{

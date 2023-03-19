@@ -24,7 +24,9 @@ struct Array
 	inline unsigned int size() const { return N; }
 	inline bool empty() const { return N == 0; }
 	inline const T& front() const { return values[0]; }
+	inline T& front() { return values[0]; }
 	inline const T& back() const { return values[N - 1]; }
+	inline T& back() { return values[N - 1]; }
 
 	constexpr void fill(const T& val)
 	{

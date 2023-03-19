@@ -32,7 +32,13 @@ public:
 
 	Vector(const Vector& other)
 	{
+		m_Capacity = other.getCapacity();
+		m_Buffer = new T[m_Capacity];
 
+		for (int i = 0; i < other.m_Size; i++)
+		{
+			push_back(other.at(i));
+		}
 	}
 
 	Vector(const int count, T data)
@@ -63,13 +69,48 @@ public:
 		m_Size++;
 	}
 	
-	// pop back
-	// insert
-
-	/*constexpr std::iterator insert(int pos, T data)
+	void pop_back()
 	{
-		buffer[pos] = data;
-	}*/
+		delete back();
+		m_Size--;
+	}
+
+	// In the STL, this should return an iterator, not sure why I would need to
+	void insert(int pos, const T& data)
+	{
+		if (pos == m_Size)
+		{
+			push_back(data);
+		}
+		else
+		{
+			// We resize if needed
+			if (m_Size + 1 > m_Capacity)
+				resize(m_Capacity * 2);
+
+			// We move the data after pos
+			int i = m_Size;
+			do
+			{
+				m_Buffer[i + 1] = m_Buffer[i];
+				--i;
+			} while (i > pos);
+
+			// We insert the new data
+			m_Buffer[pos] = data;
+			m_Size++;
+		}
+	}
+
+	T& at(int index)
+	{
+		return m_Buffer[index];
+	}
+
+	const T& at(int index) const
+	{
+		return m_Buffer[index];
+	}
 
 	void assign(int count, T val)
 	{
@@ -120,8 +161,10 @@ public:
 		} while (i < last);
 	}
 
-	inline T* front() const { return this->m_Buffer; }
-	inline T* back() const { return this + sizeof(T) * m_Size; }
+	inline const T& front() const { return this->m_Buffer; }
+	inline T& front() { return this->m_Buffer; }
+	inline const T& back() const { return this + sizeof(T) * m_Size; }
+	inline T& back() { return this + sizeof(T) * m_Size; }
 	inline int getSize() const { return m_Size; }
 	inline int getCapacity() const { return m_Capacity; }
 
@@ -133,14 +176,29 @@ public:
 		}
 	}
 
+	// Copy assign
 	Vector& operator=(const Vector& other)
 	{
+		if (this == &other)
+			return *this;
 
+		// We copy the data over from other to this
+		for (int i = 0; i < other.m_Size; i++)
+		{
+			push_back(other.at(i));
+		}
 	}
 
 	Vector& operator=(std::initializer_list<T> l)
 	{
+		// We first clear the vector
+		clear();
 
+		// We then assign the new values from the iterator list
+		for (const auto& it : l)
+		{
+			push_back(it);
+		}
 	}
 
 	// resize and move data from old position to new

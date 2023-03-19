@@ -207,7 +207,7 @@ public:
 	}
 
 	// Copy
-	List<T>& operator=(List<T>& other)
+	List<T>& operator=(const List<T>& other)
 	{
 		if (this == &other)
 			return *this;
