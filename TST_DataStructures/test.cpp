@@ -66,7 +66,12 @@ TEST(ArrayTest, ArrayFill)
 // ==============   VECTOR TESTS   =================
 // ================================================
 
-
+TEST(VectorTest, VectorConstructor)
+{
+	Vector<int> defaultConstructor = Vector<int>();
+	EXPECT_EQ(defaultConstructor.getSize(), 4);
+	EXPECT_EQ(defaultConstructor.getCapacity(), 4);
+}
 
 #pragma endregion VectorTests
 

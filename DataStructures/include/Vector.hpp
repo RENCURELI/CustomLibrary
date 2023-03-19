@@ -17,12 +17,14 @@ public:
 	{
 		m_Buffer = new T[4];
 		m_Capacity = 4;
+		m_Size = m_Capacity;
 	}
 
 	Vector(std::initializer_list<T> l)
 	{
 		m_Capacity = (unsigned int)l.size();
-		m_Buffer = new T[m_Capacity]; // Reserve some extra memory for future allocations
+		m_Size = m_Capacity;
+		m_Buffer = new T[m_Capacity];
 		
 		for (const auto& it : l)
 		{
@@ -44,6 +46,7 @@ public:
 	Vector(const int count, T data)
 	{
 		m_Capacity = count; // We reserve for the amount of data to store
+		m_Size = m_Capacity;
 		m_Buffer = new T[count];
 
 		// We insert the specified data in vector
@@ -199,6 +202,16 @@ public:
 		{
 			push_back(it);
 		}
+	}
+
+	T& operator[](int pos)
+	{
+		return m_Buffer[pos];
+	}
+
+	const T& operator[] (int pos) const
+	{
+		return m_Buffer[pos];
 	}
 
 	// resize and move data from old position to new
