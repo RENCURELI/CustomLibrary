@@ -23,7 +23,7 @@ public:
 	Vector(std::initializer_list<T> l)
 	{
 		m_Capacity = (unsigned int)l.size();
-		m_Size = m_Capacity;
+		m_Size = 0; // Size will grow as we add elements
 		m_Buffer = new T[m_Capacity];
 		
 		for (const auto& it : l)
@@ -35,24 +35,29 @@ public:
 	Vector(const Vector& other)
 	{
 		m_Capacity = other.getCapacity();
+		//m_Size = 0; // Size will grow as we add elements
+		m_Size = m_Capacity;
 		m_Buffer = new T[m_Capacity];
 
 		for (int i = 0; i < other.m_Size; i++)
 		{
-			push_back(other.at(i));
+			m_Buffer[i] = other.at(i);
+			//push_back(other.at(i));
 		}
 	}
 
 	Vector(const int count, T data)
 	{
 		m_Capacity = count; // We reserve for the amount of data to store
+		//m_Size = 0; // Size will grow as we add elements
 		m_Size = m_Capacity;
 		m_Buffer = new T[count];
 
 		// We insert the specified data in vector
 		for (int i = 0; i < count; i++)
 		{
-			push_back(data);
+			//push_back(data);
+			m_Buffer[i] = data;
 		}
 	}
 

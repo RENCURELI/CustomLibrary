@@ -71,6 +71,18 @@ TEST(VectorTest, VectorConstructor)
 	Vector<int> defaultConstructor = Vector<int>();
 	EXPECT_EQ(defaultConstructor.getSize(), 4);
 	EXPECT_EQ(defaultConstructor.getCapacity(), 4);
+
+	Vector<int> initList = { 1, 2, 3, 4 };
+	EXPECT_EQ(initList.getSize(), 4);
+	EXPECT_EQ(initList.getCapacity(), 4);
+
+	Vector<int> copyConstructor = initList;
+	EXPECT_EQ(copyConstructor.getSize(), 4);
+	EXPECT_EQ(copyConstructor.getCapacity(), 4);
+
+	Vector<int> customConstructor = Vector<int>(4, 1);
+	EXPECT_EQ(customConstructor.getSize(), 4);
+	EXPECT_EQ(customConstructor.getCapacity(), 4);
 }
 
 #pragma endregion VectorTests
