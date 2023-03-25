@@ -85,6 +85,34 @@ TEST(VectorTest, VectorConstructor)
 	EXPECT_EQ(customConstructor.getCapacity(), 4);
 }
 
+// These tests are for at, first, last, and [] operator
+TEST(VectorTest, VectorAccessors)
+{
+	Vector<int> testVec = { 1, 2, 3, 4, 5 };
+	EXPECT_EQ(testVec.front(), 1);
+	EXPECT_EQ(testVec.back(), 5);
+	EXPECT_EQ(testVec.at(2), 3);
+	EXPECT_EQ(testVec[3], 4);
+
+	// Error testing
+	EXPECT_THROW(testVec.at(testVec.getSize()), std::exception);
+}
+
+TEST(VectorTest, Resizing)
+{
+
+}
+
+TEST(VectorTest, Insertion)
+{
+
+}
+
+TEST(VectorTest, Deletion)
+{
+
+}
+
 #pragma endregion VectorTests
 
 #pragma region ListTests

@@ -4,7 +4,8 @@
 #include <initializer_list>
 #include <cstddef>
 #include <stdexcept>
-#include <format>
+#include <string>
+#include <memory>
 
 // Contiguous dynamic array
 template<typename T>
@@ -34,29 +35,33 @@ public:
 
 	Vector(const Vector& other)
 	{
-		m_Capacity = other.getCapacity();
-		//m_Size = 0; // Size will grow as we add elements
+		m_Capacity = other.getSize(); // We "shrink to fit" the size
+
+		// Realign capacity to a multiple of 2 for now, would want to realign on proper 4 * 2 ^ n capacity later
+		if (m_Capacity % 2 != 0)
+			m_Capacity++;
+
 		m_Size = m_Capacity;
 		m_Buffer = new T[m_Capacity];
 
-		for (int i = 0; i < other.m_Size; i++)
-		{
-			m_Buffer[i] = other.at(i);
-			//push_back(other.at(i));
-		}
+		memset(m_Buffer, 0, sizeof(T) * m_Capacity);
+		memcpy_s(m_Buffer, sizeof(T) * m_Size, other.m_Buffer, sizeof(T) * other.m_Size);
 	}
 
 	Vector(const int count, T data)
 	{
+		if ( count <= 0 )
+			throw std::runtime_error("[ERROR] Trying to create array of invalid size -> must be greater than 0");
+
 		m_Capacity = count; // We reserve for the amount of data to store
-		//m_Size = 0; // Size will grow as we add elements
 		m_Size = m_Capacity;
 		m_Buffer = new T[count];
+
+		//memset(m_Buffer, 0, sizeof(T) * m_Size);
 
 		// We insert the specified data in vector
 		for (int i = 0; i < count; i++)
 		{
-			//push_back(data);
 			m_Buffer[i] = data;
 		}
 	}
@@ -84,8 +89,11 @@ public:
 	}
 
 	// In the STL, this should return an iterator, not sure why I would need to
-	void insert(int pos, const T& data)
+	void insert(unsigned int pos, const T& data)
 	{
+		if (pos > m_Size + 1)
+			throw std::runtime_error("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
+
 		if (pos == m_Size)
 		{
 			push_back(data);
@@ -97,7 +105,7 @@ public:
 				resize(m_Capacity * 2);
 
 			// We move the data after pos
-			int i = m_Size;
+			unsigned int i = m_Size;
 			do
 			{
 				m_Buffer[i + 1] = m_Buffer[i];
@@ -110,20 +118,24 @@ public:
 		}
 	}
 
-	T& at(int index)
+	T& at(unsigned int index)
 	{
+		if (index >= m_Size)
+			throw std::runtime_error("[ERROR] Index out of bounds");
 		return m_Buffer[index];
 	}
 
-	const T& at(int index) const
+	const T& at(unsigned int index) const
 	{
+		if (index > m_Size)
+			throw std::runtime_error("[ERROR] Index out of bounds");
 		return m_Buffer[index];
 	}
 
-	void assign(int count, T val)
+	void assign(unsigned int count, T val)
 	{
 		clear();
-		int i = 0;
+		unsigned int i = 0;
 		do
 		{
 			m_Buffer[i] = val;
@@ -138,41 +150,44 @@ public:
 		m_Size = 0;
 	}
 
-	void erase(int pos)
+	void erase(unsigned int pos)
 	{
-		if (pos > m_Size || pos < 0)
+		if (pos > m_Size)
 			throw std::runtime_error("[ERROR] Index out of bounds");
 
-		m_Buffer[pos].~T();
+		std::destroy_at(std::addressof(m_Buffer[pos]));
+		//m_Buffer[pos].~T();
 	}
 
 	void erase(unsigned int first, unsigned int last)
 	{
 		// Error handling
-		if (first < 0 || last > m_Size)
-		{
-			std::string errorMessage = std::string();
-			errorMessage.append("[ERROR] Index out of bound, first = " + std::to_string(first));
-			errorMessage.append(" last = " + std::to_string(last));
-			errorMessage.append(" first must be greater than 0 and last smaller than size, size = " + std::to_string(m_Size));
-			throw std::runtime_error(errorMessage);
-		}
-
 		if (first > last)
 			throw std::runtime_error("[ERROR] First is greater than Last -> infinite loop");
 
-		unsigned int i = first;
-		do
+		if (last > m_Size)
 		{
-			m_Buffer[i].~T();
-			++i;
-		} while (i < last);
+			std::string errorMessage = "[ERROR] Index out of bound, first = " + std::to_string(first)
+										+ " last = " + std::to_string(last)
+										+ " first must be greater than 0 and last smaller than size, size = " + std::to_string(m_Size);
+			throw std::runtime_error(errorMessage);
+		}
+
+		//unsigned int i = first;
+		// first is passed by copy and unused, so it will be used as loop index
+		/*do
+		{
+			std::destroy_at(std::addressof(m_Buffer[first]));
+			//m_Buffer[first].~T();
+			++first;
+		} while (first < last);*/
+		std::destroy(m_Buffer + first, m_Buffer + last);
 	}
 
-	inline const T& front() const { return this->m_Buffer; }
-	inline T& front() { return this->m_Buffer; }
-	inline const T& back() const { return this + sizeof(T) * m_Size; }
-	inline T& back() { return this + sizeof(T) * m_Size; }
+	inline const T& front() const { return this->m_Buffer[0]; }
+	inline T& front() { return this->m_Buffer[0]; }
+	inline const T& back() const { return this->m_Buffer[m_Size - 1]; }
+	inline T& back() { return this->m_Buffer[m_Size - 1]; }
 	inline int getSize() const { return m_Size; }
 	inline int getCapacity() const { return m_Capacity; }
 
@@ -190,11 +205,14 @@ public:
 		if (this == &other)
 			return *this;
 
+		memset(m_Buffer, 0, sizeof(T) * m_Capacity);
+		memcpy_s(m_Buffer, sizeof(T) * m_Size, other.m_Buffer, sizeof(T) * other.m_Size);
+
 		// We copy the data over from other to this
-		for (int i = 0; i < other.m_Size; i++)
+		/*for (int i = 0; i < other.m_Size; i++)
 		{
 			push_back(other.at(i));
-		}
+		}*/
 	}
 
 	Vector& operator=(std::initializer_list<T> l)
@@ -222,41 +240,35 @@ public:
 	// resize and move data from old position to new
 	void resize(unsigned int size)
 	{
-		if (size > m_Capacity)
-		{
-			reserve(size * 2);
-		}
-		else if (size < m_Size)
+		if (size < m_Size)
 		{
 			// We return as we won't replace previous data
 			erase(size - 1, m_Size);
 			return;
 		}
 		
-		unsigned int i = 0;
-
+		reserve(size);
+		
+		/*unsigned int i = 0;
 		do
 		{
 			push_back(T());
 			++i;
-		} while (i < size);
+		} while (i < size);*/
 	}
 
 	void resize(unsigned int size, const T& value)
 	{
-		if (size > m_Capacity)
-		{
-			reserve(size * 2);
-		}
-		else if (size < m_Size)
+		if (size < m_Size)
 		{
 			// We return as we won't replace previous data
 			erase(size - 1, m_Size);
 			return;
 		}
+		
+		reserve(size);
 
-		unsigned int i = 0;
-
+		unsigned int i = m_Size; // we append value after the already present elements
 		do
 		{
 			push_back(T);
