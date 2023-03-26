@@ -142,7 +142,22 @@ TEST(VectorTest, Deletion)
 	Vector<int> testVec = { 1, 2, 3, 4, 5 };
 
 	testVec.pop_back();
+	EXPECT_EQ(testVec.back(), 4);
 	EXPECT_EQ(testVec.getSize(), 4);
+	EXPECT_EQ(testVec.getCapacity(), 5);
+
+	testVec.erase(0);
+	EXPECT_EQ(testVec.front(), 2);
+	EXPECT_EQ(testVec.getSize(), 3);
+	EXPECT_EQ(testVec.getCapacity(), 5);
+
+	testVec.erase(0, 1);
+	EXPECT_EQ(testVec.front(), 4);
+	EXPECT_EQ(testVec.getSize(), 1);
+	EXPECT_EQ(testVec.getCapacity(), 5);
+
+	testVec.clear();
+	EXPECT_EQ(testVec.getSize(), 0);
 	EXPECT_EQ(testVec.getCapacity(), 5);
 }
 

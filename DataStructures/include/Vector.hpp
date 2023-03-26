@@ -154,18 +154,17 @@ public:
 			throw std::runtime_error("[ERROR] Index out of bounds");
 
 		std::destroy_at(std::addressof(m_Buffer[pos]));
-		
-		if (pos == m_Size)
-		{
-			m_Size--;
-			return;
-		}
 
-		do 
+		// if the position is the same as size, we don't need to move data
+		if (pos != m_Size)
 		{
-			m_Buffer[pos] = m_Buffer[pos + 1];
-			++pos;
-		} while (pos < m_Size);
+			do
+			{
+				m_Buffer[pos] = m_Buffer[pos + 1];
+				++pos;
+			} while (pos < m_Size);
+		}
+		m_Size--;
 	}
 
 	void erase(unsigned int first, unsigned int last)
@@ -183,19 +182,21 @@ public:
 		}
 		std::destroy(m_Buffer + first, m_Buffer + last);
 
-		if (last == m_Size - 1)
+		// We don't move data if last isn't the last element of the vector
+		if (last != m_Size - 1)
 		{
-			m_Size -= last - first;
-			return;
+			unsigned int i = last + 1;
+			unsigned int pos = first;
+			do
+			{
+				m_Buffer[pos] = m_Buffer[i];
+				++pos;
+				++i;
+			} while (i < m_Size);
 		}
 
-		unsigned int i = last;
-		do
-		{
-			m_Buffer[first] = m_Buffer[i];
-			++first;
-			++i;
-		} while (i < m_Size);
+		// We must handle the case where first is 0, in which case we remove a range : last + 1 -> here last - (-1)
+		m_Size -= (last - (first == 0 ? -1 : first));
 	}
 
 	inline const T& front() const { return this->m_Buffer[0]; }
