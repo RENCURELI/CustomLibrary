@@ -66,7 +66,11 @@ int main()
 		vec.insert(1, 3.7f);
 		vec.PrintVector();
 
-		//vec.erase(0, 3000);
+		Vector<int> testVec = { 1, 2, 3, 4, 5, 6, 7 };
+		testVec.erase(6);
+		testVec.resize(4);
+		std::cout << "Test Vector after resize" << "\n";
+		testVec.PrintVector();
 	}
 	catch (std::exception& ex)
 	{

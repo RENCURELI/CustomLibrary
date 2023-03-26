@@ -107,9 +107,20 @@ TEST(VectorTest, Resizing)
 	EXPECT_EQ(testVec.getCapacity(), 12);
 
 	testVec.resize(10, 10);
+	EXPECT_EQ(testVec.back(), 10);
 	EXPECT_EQ(testVec.getSize(), 10);
 	EXPECT_EQ(testVec.getCapacity(), 12);
 
+	testVec.reserve(25);
+	EXPECT_EQ(testVec.getCapacity(), 25);
+
+	testVec.reserve(10);
+	EXPECT_EQ(testVec.getCapacity(), 25);
+
+	testVec.resize(5);
+	EXPECT_EQ(testVec.back(), 5);
+	EXPECT_EQ(testVec.getSize(), 5);
+	EXPECT_EQ(testVec.getCapacity(), 25);
 }
 
 TEST(VectorTest, Insertion)

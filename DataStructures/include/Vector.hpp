@@ -150,10 +150,22 @@ public:
 
 	void erase(unsigned int pos)
 	{
-		if (pos > m_Size)
+		if (pos >= m_Size)
 			throw std::runtime_error("[ERROR] Index out of bounds");
 
 		std::destroy_at(std::addressof(m_Buffer[pos]));
+		
+		if (pos == m_Size)
+		{
+			m_Size--;
+			return;
+		}
+
+		do 
+		{
+			m_Buffer[pos] = m_Buffer[pos + 1];
+			++pos;
+		} while (pos < m_Size);
 	}
 
 	void erase(unsigned int first, unsigned int last)
@@ -162,7 +174,7 @@ public:
 		if (first > last)
 			throw std::runtime_error("[ERROR] First is greater than Last -> infinite loop");
 
-		if (last > m_Size)
+		if (last >= m_Size)
 		{
 			std::string errorMessage = "[ERROR] Index out of bound, first = " + std::to_string(first)
 										+ " last = " + std::to_string(last)
@@ -170,6 +182,20 @@ public:
 			throw std::runtime_error(errorMessage);
 		}
 		std::destroy(m_Buffer + first, m_Buffer + last);
+
+		if (last == m_Size - 1)
+		{
+			m_Size -= last - first;
+			return;
+		}
+
+		unsigned int i = last;
+		do
+		{
+			m_Buffer[first] = m_Buffer[i];
+			++first;
+			++i;
+		} while (i < m_Size);
 	}
 
 	inline const T& front() const { return this->m_Buffer[0]; }
@@ -225,7 +251,7 @@ public:
 		if (size < m_Size)
 		{
 			// We return as we won't replace previous data
-			erase(size - 1, m_Size);
+			erase(size - 1, m_Size - 1);
 			return;
 		}
 		
@@ -237,7 +263,7 @@ public:
 		if (size < m_Size)
 		{
 			// We return as we won't replace previous data
-			erase(size - 1, m_Size);
+			erase(size, m_Size);
 			return;
 		}
 		
