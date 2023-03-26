@@ -100,17 +100,39 @@ TEST(VectorTest, VectorAccessors)
 
 TEST(VectorTest, Resizing)
 {
+	Vector<int> testVec = { 1, 2, 3, 4, 5 };
+
+	testVec.resize(12);
+	EXPECT_EQ(testVec.getSize(), 5);
+	EXPECT_EQ(testVec.getCapacity(), 12);
+
+	testVec.resize(10, 10);
+	EXPECT_EQ(testVec.getSize(), 10);
+	EXPECT_EQ(testVec.getCapacity(), 12);
 
 }
 
 TEST(VectorTest, Insertion)
 {
+	Vector<int> testVec = { 1, 2, 3, 4, 5 };
 
+	testVec.push_back(6);
+	EXPECT_EQ(testVec.getSize(), 6);
+	EXPECT_EQ(testVec.getCapacity(), 10);
+
+	testVec.insert(3, 12);
+	EXPECT_EQ(testVec.getSize(), 7);
+	EXPECT_EQ(testVec.getCapacity(), 10);
+	EXPECT_EQ(testVec[3], 12);
 }
 
 TEST(VectorTest, Deletion)
 {
+	Vector<int> testVec = { 1, 2, 3, 4, 5 };
 
+	testVec.pop_back();
+	EXPECT_EQ(testVec.getSize(), 4);
+	EXPECT_EQ(testVec.getCapacity(), 5);
 }
 
 #pragma endregion VectorTests

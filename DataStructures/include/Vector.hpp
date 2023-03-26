@@ -66,14 +66,12 @@ public:
 		}
 	}
 
-
 	~Vector()
 	{
 		delete[] m_Buffer;
 	}
 
 	// emplace back
-	// push_back
 	void push_back(const T& value)
 	{
 		if (m_Size == m_Capacity)
@@ -84,7 +82,7 @@ public:
 	
 	void pop_back()
 	{
-		delete back();
+		back().~T();
 		m_Size--;
 	}
 
@@ -156,7 +154,6 @@ public:
 			throw std::runtime_error("[ERROR] Index out of bounds");
 
 		std::destroy_at(std::addressof(m_Buffer[pos]));
-		//m_Buffer[pos].~T();
 	}
 
 	void erase(unsigned int first, unsigned int last)
@@ -172,15 +169,6 @@ public:
 										+ " first must be greater than 0 and last smaller than size, size = " + std::to_string(m_Size);
 			throw std::runtime_error(errorMessage);
 		}
-
-		//unsigned int i = first;
-		// first is passed by copy and unused, so it will be used as loop index
-		/*do
-		{
-			std::destroy_at(std::addressof(m_Buffer[first]));
-			//m_Buffer[first].~T();
-			++first;
-		} while (first < last);*/
 		std::destroy(m_Buffer + first, m_Buffer + last);
 	}
 
@@ -207,12 +195,6 @@ public:
 
 		memset(m_Buffer, 0, sizeof(T) * m_Capacity);
 		memcpy_s(m_Buffer, sizeof(T) * m_Size, other.m_Buffer, sizeof(T) * other.m_Size);
-
-		// We copy the data over from other to this
-		/*for (int i = 0; i < other.m_Size; i++)
-		{
-			push_back(other.at(i));
-		}*/
 	}
 
 	Vector& operator=(std::initializer_list<T> l)
@@ -248,13 +230,6 @@ public:
 		}
 		
 		reserve(size);
-		
-		/*unsigned int i = 0;
-		do
-		{
-			push_back(T());
-			++i;
-		} while (i < size);*/
 	}
 
 	void resize(unsigned int size, const T& value)
@@ -271,7 +246,7 @@ public:
 		unsigned int i = m_Size; // we append value after the already present elements
 		do
 		{
-			push_back(T);
+			push_back(value);
 			++i;
 		} while (i < size);
 	}
