@@ -4,13 +4,13 @@ Creating a Data Structure and Algorithm library
 Done :
   - Forward List
   - Doubly Linked List
-  - Array ( I guess it's done )
+  - Array
+  - Vector
 
 In Progress :
-  - Vector
+  - Stack
   
 TODO Data Structures :
-  - Stack
   - Set
   - Map
   - Tuple
