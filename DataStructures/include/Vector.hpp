@@ -298,7 +298,12 @@ public:
 	// Reduces capacity to size
 	void shrinkToFit()
 	{
-		
+		T* newBuffer = new T[m_Size];
+		memcpy_s(newBuffer, sizeof(T) * m_Size, m_Buffer, sizeof(T) * m_Size);
+
+		delete[] m_Buffer;
+		m_Buffer = newBuffer;
+		m_Capacity = m_Size;
 	}
 
 private:
