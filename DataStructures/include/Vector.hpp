@@ -57,13 +57,7 @@ public:
 		m_Size = m_Capacity;
 		m_Buffer = new T[count];
 
-		//memset(m_Buffer, 0, sizeof(T) * m_Size);
-
-		// We insert the specified data in vector
-		for (int i = 0; i < count; i++)
-		{
-			m_Buffer[i] = data;
-		}
+		memset(m_Buffer, data, sizeof(T) * m_Size);
 	}
 
 	~Vector()
@@ -153,7 +147,7 @@ public:
 		if (pos >= m_Size)
 			throw std::runtime_error("[ERROR] Index out of bounds");
 
-		std::destroy_at(std::addressof(m_Buffer[pos]));
+		std::destroy_at(&m_Buffer[pos]);
 
 		// if the position is the same as size, we don't need to move data
 		if (pos != m_Size)
