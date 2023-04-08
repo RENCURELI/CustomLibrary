@@ -95,7 +95,7 @@ TEST(VectorTest, VectorAccessors)
 	EXPECT_EQ(testVec[3], 4);
 
 	// Error testing
-	EXPECT_THROW(testVec.at(testVec.getSize()), std::exception);
+	EXPECT_THROW(testVec.at(testVec.getSize()), std::out_of_range);
 }
 
 TEST(VectorTest, Resizing)
@@ -146,6 +146,11 @@ TEST(VectorTest, Deletion)
 {
 	Vector<int> testVec = { 1, 2, 3, 4, 5 };
 
+	// Error Testing
+	EXPECT_THROW(testVec.erase(3, 1), std::exception);
+	EXPECT_THROW(testVec.erase(6), std::out_of_range);
+
+	// Functionality
 	testVec.pop_back();
 	EXPECT_EQ(testVec.back(), 4);
 	EXPECT_EQ(testVec.getSize(), 4);
@@ -157,8 +162,8 @@ TEST(VectorTest, Deletion)
 	EXPECT_EQ(testVec.getCapacity(), 5);
 
 	testVec.erase(0, 1);
-	EXPECT_EQ(testVec.front(), 4);
-	EXPECT_EQ(testVec.getSize(), 1);
+	EXPECT_EQ(testVec.front(), 3);
+	EXPECT_EQ(testVec.getSize(), 2);
 	EXPECT_EQ(testVec.getCapacity(), 5);
 
 	testVec.clear();

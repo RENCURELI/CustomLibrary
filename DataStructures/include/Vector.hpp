@@ -113,14 +113,14 @@ public:
 	T& at(unsigned int index)
 	{
 		if (index >= m_Size)
-			throw std::runtime_error("[ERROR] Index out of bounds");
+			throw std::out_of_range("[ERROR] Index out of bounds");
 		return m_Buffer[index];
 	}
 
 	const T& at(unsigned int index) const
 	{
 		if (index > m_Size)
-			throw std::runtime_error("[ERROR] Index out of bounds");
+			throw std::out_of_range("[ERROR] Index out of bounds");
 		return m_Buffer[index];
 	}
 
@@ -145,7 +145,7 @@ public:
 	void erase(unsigned int pos)
 	{
 		if (pos >= m_Size)
-			throw std::runtime_error("[ERROR] Index out of bounds");
+			throw std::out_of_range("[ERROR] Index out of bounds");
 
 		std::destroy_at(&m_Buffer[pos]);
 
@@ -166,31 +166,33 @@ public:
 		// Error handling
 		if (first > last)
 			throw std::runtime_error("[ERROR] First is greater than Last -> infinite loop");
-
-		if (last >= m_Size)
+		else if (last > m_Size)
 		{
 			std::string errorMessage = "[ERROR] Index out of bound, first = " + std::to_string(first)
 										+ " last = " + std::to_string(last)
 										+ " first must be greater than 0 and last smaller than size, size = " + std::to_string(m_Size);
-			throw std::runtime_error(errorMessage);
+			throw std::out_of_range(errorMessage);
 		}
-		std::destroy(m_Buffer + first, m_Buffer + last);
 
-		// We don't move data if last isn't the last element of the vector
+		if (first == last)
+		{
+			return; // STL would return iterator for last, here, just return
+		}
+
+		// We don't destroy last ( same as STL )
+		std::destroy(m_Buffer + first, m_Buffer + last - 1);
+
+		// if last is the last element of the vector we don't move the data
 		if (last != m_Size - 1)
 		{
-			unsigned int i = last + 1;
-			unsigned int pos = first;
-			do
+			int elemsToMove = m_Size - last;
+			for ( int i = 0; i < elemsToMove; i++)
 			{
-				m_Buffer[pos] = m_Buffer[i];
-				++pos;
-				++i;
-			} while (i < m_Size);
+				m_Buffer[first + i] = m_Buffer[last + i];
+			}
 		}
 
-		// We must handle the case where first is 0, in which case we remove a range : last + 1 -> here last - (-1)
-		m_Size -= (last - (first == 0 ? -1 : first));
+		m_Size -= last - first;
 	}
 
 	inline const T& front() const { return this->m_Buffer[0]; }
@@ -246,7 +248,7 @@ public:
 		if (size < m_Size)
 		{
 			// We return as we won't replace previous data
-			erase(size - 1, m_Size - 1);
+			erase(size, m_Size);
 			return;
 		}
 		
