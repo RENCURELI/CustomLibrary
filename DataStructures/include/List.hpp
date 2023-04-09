@@ -32,7 +32,8 @@ public:
 		Clear();
 	}
 
-	ListNode_t<T>* push_front(T data)
+	//ListNode_t<T>* push_front(T data)
+	void push_front(T data)
 	{
 		ListNode_t<T>* newNode = new ListNode_t<T>(data);
 
@@ -49,10 +50,11 @@ public:
 			m_Head = newNode;
 		}
 		m_Size++;
-		return newNode;
+		//return newNode;
 	}
 
-	ListNode_t<T>* push_back(T data)
+	//ListNode_t<T>* push_back(T data)
+	void push_back(T data)
 	{
 		ListNode_t<T>* newNode = new ListNode_t<T>(data);
 
@@ -69,10 +71,11 @@ public:
 			m_Tail = newNode;
 		}
 		m_Size++;
-		return newNode;
+		//return newNode;
 	}
 
-	ListNode_t<T>* InsertAt(T data, int index)
+	//ListNode_t<T>* InsertAt(T data, int index)
+	void InsertAt(T data, int index)
 	{
 		CheckIndex(index, true);
 		ListNode_t<T>* newNode = new ListNode_t<T>(data);
@@ -106,7 +109,7 @@ public:
 		}
 
 		m_Size++;
-		return newNode;
+		//return newNode;
 	}
 
 	// Remove last node
@@ -199,8 +202,8 @@ public:
 		m_Tail = nullptr;
 	}
 
-	inline bool IsEmpty() const { return m_Size == 0; }
-	inline int GetSize() const { return m_Size; }
+	inline bool empty() const { return m_Size == 0; }
+	inline int size() const { return m_Size; }
 	inline T& front() { return m_Head->m_Data; }
 	inline const T& front() const { return m_Head->m_Data; }
 	inline T& back() { return m_Tail->m_Data; }

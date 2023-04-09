@@ -181,16 +181,16 @@ TEST(VectorTest, Deletion)
 TEST(ListTest, Constructor)
 {
 	List<int> emptyList;
-	EXPECT_EQ(emptyList.GetSize(), 0);
-	EXPECT_EQ(emptyList.IsEmpty(), true);
+	EXPECT_EQ(emptyList.size(), 0);
+	EXPECT_EQ(emptyList.empty(), true);
 
 	List<int> initList = { 1, 2, 3 };
-	EXPECT_EQ(initList.GetSize(), 3);
-	EXPECT_EQ(initList.IsEmpty(), false);
+	EXPECT_EQ(initList.size(), 3);
+	EXPECT_EQ(initList.empty(), false);
 
 	List<int> copyConstruct = initList;
-	EXPECT_EQ(copyConstruct.GetSize(), 3);
-	EXPECT_EQ(copyConstruct.IsEmpty(), false);
+	EXPECT_EQ(copyConstruct.size(), 3);
+	EXPECT_EQ(copyConstruct.empty(), false);
 }
 
 TEST(ListTest, FrontBack)
@@ -205,22 +205,22 @@ TEST(ListTest, FrontBack)
 TEST(ListTest, PushAndSize)
 {
 	List<int> testList;
-	EXPECT_EQ(testList.GetSize(), 0);
-	EXPECT_EQ(testList.IsEmpty(), true);
+	EXPECT_EQ(testList.size(), 0);
+	EXPECT_EQ(testList.empty(), true);
 
 	testList = { 1, 2, 3 };
-	EXPECT_EQ(testList.GetSize(), 3);
-	EXPECT_EQ(testList.IsEmpty(), false);
+	EXPECT_EQ(testList.size(), 3);
+	EXPECT_EQ(testList.empty(), false);
 
 	testList.push_front(0);
 
 	EXPECT_EQ(testList.front(), 0);
-	EXPECT_EQ(testList.GetSize(), 4);
+	EXPECT_EQ(testList.size(), 4);
 
 	testList.push_back(4);
 
 	EXPECT_EQ(testList.back(), 4);
-	EXPECT_EQ(testList.GetSize(), 5);
+	EXPECT_EQ(testList.size(), 5);
 }
 
 // Here we test InsertAt and RemoveAt methods
@@ -232,7 +232,7 @@ TEST(ListTest, InsertAndRemoveAt)
 	testList.InsertAt(0, 0);
 	EXPECT_EQ(testList.front(), 0);
 
-	testList.InsertAt(4, testList.GetSize());
+	testList.InsertAt(4, testList.size());
 	EXPECT_EQ(testList.back(), 4);
 
 	// We still need to implement the find algorithm for this case
@@ -246,7 +246,7 @@ TEST(ListTest, InsertAndRemoveAt)
 	testList.RemoveAt(0);
 	EXPECT_EQ(testList.front(), 1);
 
-	testList.RemoveAt(testList.GetSize() - 1);
+	testList.RemoveAt(testList.size() - 1);
 	EXPECT_EQ(testList.back(), 3);
 
 	// We still need to implement the find algorithm for this case
@@ -268,8 +268,8 @@ TEST(ListTest, PopAndClear)
 	EXPECT_EQ(testList.front(), 2);
 
 	testList.Clear();
-	EXPECT_EQ(testList.GetSize(), 0);
-	EXPECT_EQ(testList.IsEmpty(), true);
+	EXPECT_EQ(testList.size(), 0);
+	EXPECT_EQ(testList.empty(), true);
 }
 
 #pragma endregion ListTests
@@ -282,16 +282,16 @@ TEST(ListTest, PopAndClear)
 TEST(FListTest, Constructor)
 {
 	FList<int> emptyList;
-	EXPECT_EQ(emptyList.GetSize(), 0);
-	EXPECT_EQ(emptyList.IsEmpty(), true);
+	EXPECT_EQ(emptyList.size(), 0);
+	EXPECT_EQ(emptyList.empty(), true);
 
 	FList<int> initList = { 1, 2, 3 };
-	EXPECT_EQ(initList.GetSize(), 3);
-	EXPECT_EQ(initList.IsEmpty(), false);
+	EXPECT_EQ(initList.size(), 3);
+	EXPECT_EQ(initList.empty(), false);
 
 	FList<int> copyConstruct = initList;
-	EXPECT_EQ(copyConstruct.GetSize(), 3);
-	EXPECT_EQ(copyConstruct.IsEmpty(), false);
+	EXPECT_EQ(copyConstruct.size(), 3);
+	EXPECT_EQ(copyConstruct.empty(), false);
 }
 
 TEST(FListTest, Front)
@@ -306,17 +306,17 @@ TEST(FListTest, Front)
 TEST(FListTest, PushAndSize)
 {
 	FList<int> testList;
-	EXPECT_EQ(testList.GetSize(), 0);
-	EXPECT_EQ(testList.IsEmpty(), true);
+	EXPECT_EQ(testList.size(), 0);
+	EXPECT_EQ(testList.empty(), true);
 
 	testList = { 1, 2, 3 };
-	EXPECT_EQ(testList.GetSize(), 3);
-	EXPECT_EQ(testList.IsEmpty(), false);
+	EXPECT_EQ(testList.size(), 3);
+	EXPECT_EQ(testList.empty(), false);
 
 	testList.push_front(0);
 
 	EXPECT_EQ(testList.front(), 0);
-	EXPECT_EQ(testList.GetSize(), 4);
+	EXPECT_EQ(testList.size(), 4);
 }
 
 // Here we test InsertAt and RemoveAt methods
@@ -329,7 +329,7 @@ TEST(FListTest, InsertAndRemoveAt)
 	EXPECT_EQ(testList.front(), 0);
 
 	// We still need to implement the find algorithm for this case
-	testList.InsertAt(4, testList.GetSize());
+	testList.InsertAt(4, testList.size());
 	//EXPECT_EQ(testList.back(), 4);
 
 	// We still need to implement the find algorithm for this case
@@ -344,7 +344,7 @@ TEST(FListTest, InsertAndRemoveAt)
 	EXPECT_EQ(testList.front(), 3);
 
 	// We still need to implement the find algorithm for this case
-	testList.RemoveAt(testList.GetSize() - 1);
+	testList.RemoveAt(testList.size() - 1);
 	//EXPECT_EQ(testList.back(), 3);
 
 	// We still need to implement the find algorithm for this case
@@ -363,8 +363,8 @@ TEST(FListTest, PopAndClear)
 	EXPECT_EQ(testList.front(), 4);
 
 	testList.Clear();
-	EXPECT_EQ(testList.GetSize(), 0);
-	EXPECT_EQ(testList.IsEmpty(), true);
+	EXPECT_EQ(testList.size(), 0);
+	EXPECT_EQ(testList.empty(), true);
 }
 
 #pragma endregion FListTests

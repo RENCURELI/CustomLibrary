@@ -65,7 +65,6 @@ public:
 		delete[] m_Buffer;
 	}
 
-	// emplace back
 	void push_back(const T& value)
 	{
 		if (m_Size == m_Capacity)
@@ -201,6 +200,7 @@ public:
 	inline T& back() { return this->m_Buffer[m_Size - 1]; }
 	inline int getSize() const { return m_Size; }
 	inline int getCapacity() const { return m_Capacity; }
+	inline bool empty() const { return m_Size == 0; }
 
 	void PrintVector()
 	{
