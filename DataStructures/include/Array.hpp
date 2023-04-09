@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <stdexcept>
 
+#pragma warning(disable : 4200) // We disable this warning as we assign the value of N on construction -> https://learn.microsoft.com/en-us/cpp/error-messages/compiler-warnings/compiler-warning-levels-2-and-4-c4200?f1url=%3FappId%3DDev16IDEF1%26l%3DEN-US%26k%3Dk(C4200)%26rd%3Dtrue&view=msvc-170
 template<typename T, const unsigned int N>
 struct Array
 {
