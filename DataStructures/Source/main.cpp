@@ -37,6 +37,13 @@ int main()
 		testVec.resize(4);
 		std::cout << "Test Vector after resize" << "\n";
 		testVec.PrintVector();
+
+		// STACK
+		Stack<int> vecStack = Stack<int>(testVec);
+		vecStack.push(12);
+
+		Stack<int, List<int>> listStack;
+		listStack.push(2);
 	}
 	catch (std::exception& ex)
 	{

@@ -4,6 +4,7 @@
 #include "../DataStructures/include/Vector.hpp"
 #include "../DataStructures/include/List.hpp"
 #include "../DataStructures/include/FList.hpp"
+#include "../DataStructures/include/Stack.hpp"
 
 #pragma region ArrayTests
 // ================================================
@@ -60,7 +61,6 @@ TEST(ArrayTest, ArrayFill)
 
 #pragma endregion ArrayTests
 
-
 #pragma region VectorTests
 // ================================================
 // ==============   VECTOR TESTS   =================
@@ -69,19 +69,19 @@ TEST(ArrayTest, ArrayFill)
 TEST(VectorTest, VectorConstructor)
 {
 	Vector<int> defaultConstructor = Vector<int>();
-	EXPECT_EQ(defaultConstructor.getSize(), 4);
+	EXPECT_EQ(defaultConstructor.size(), 0);
 	EXPECT_EQ(defaultConstructor.getCapacity(), 4);
 
 	Vector<int> initList = { 1, 2, 3, 4 };
-	EXPECT_EQ(initList.getSize(), 4);
+	EXPECT_EQ(initList.size(), 4);
 	EXPECT_EQ(initList.getCapacity(), 4);
 
 	Vector<int> copyConstructor = initList;
-	EXPECT_EQ(copyConstructor.getSize(), 4);
+	EXPECT_EQ(copyConstructor.size(), 4);
 	EXPECT_EQ(copyConstructor.getCapacity(), 4);
 
 	Vector<int> customConstructor = Vector<int>(4, 1);
-	EXPECT_EQ(customConstructor.getSize(), 4);
+	EXPECT_EQ(customConstructor.size(), 4);
 	EXPECT_EQ(customConstructor.getCapacity(), 4);
 }
 
@@ -95,7 +95,7 @@ TEST(VectorTest, VectorAccessors)
 	EXPECT_EQ(testVec[3], 4);
 
 	// Error testing
-	EXPECT_THROW(testVec.at(testVec.getSize()), std::out_of_range);
+	EXPECT_THROW(testVec.at(testVec.size()), std::out_of_range);
 }
 
 TEST(VectorTest, Resizing)
@@ -103,12 +103,12 @@ TEST(VectorTest, Resizing)
 	Vector<int> testVec = { 1, 2, 3, 4, 5 };
 
 	testVec.resize(12);
-	EXPECT_EQ(testVec.getSize(), 5);
+	EXPECT_EQ(testVec.size(), 5);
 	EXPECT_EQ(testVec.getCapacity(), 12);
 
 	testVec.resize(10, 10);
 	EXPECT_EQ(testVec.back(), 10);
-	EXPECT_EQ(testVec.getSize(), 10);
+	EXPECT_EQ(testVec.size(), 10);
 	EXPECT_EQ(testVec.getCapacity(), 12);
 
 	testVec.reserve(25);
@@ -119,12 +119,12 @@ TEST(VectorTest, Resizing)
 
 	testVec.resize(5);
 	EXPECT_EQ(testVec.back(), 5);
-	EXPECT_EQ(testVec.getSize(), 5);
+	EXPECT_EQ(testVec.size(), 5);
 	EXPECT_EQ(testVec.getCapacity(), 25);
 
 	testVec.shrinkToFit();
 	EXPECT_EQ(testVec.back(), 5);
-	EXPECT_EQ(testVec.getSize(), 5);
+	EXPECT_EQ(testVec.size(), 5);
 	EXPECT_EQ(testVec.getCapacity(), 5);
 }
 
@@ -133,11 +133,11 @@ TEST(VectorTest, Insertion)
 	Vector<int> testVec = { 1, 2, 3, 4, 5 };
 
 	testVec.push_back(6);
-	EXPECT_EQ(testVec.getSize(), 6);
+	EXPECT_EQ(testVec.size(), 6);
 	EXPECT_EQ(testVec.getCapacity(), 10);
 
 	testVec.insert(3, 12);
-	EXPECT_EQ(testVec.getSize(), 7);
+	EXPECT_EQ(testVec.size(), 7);
 	EXPECT_EQ(testVec.getCapacity(), 10);
 	EXPECT_EQ(testVec[3], 12);
 }
@@ -153,21 +153,21 @@ TEST(VectorTest, Deletion)
 	// Functionality
 	testVec.pop_back();
 	EXPECT_EQ(testVec.back(), 4);
-	EXPECT_EQ(testVec.getSize(), 4);
+	EXPECT_EQ(testVec.size(), 4);
 	EXPECT_EQ(testVec.getCapacity(), 5);
 
 	testVec.erase(0);
 	EXPECT_EQ(testVec.front(), 2);
-	EXPECT_EQ(testVec.getSize(), 3);
+	EXPECT_EQ(testVec.size(), 3);
 	EXPECT_EQ(testVec.getCapacity(), 5);
 
 	testVec.erase(0, 1);
 	EXPECT_EQ(testVec.front(), 3);
-	EXPECT_EQ(testVec.getSize(), 2);
+	EXPECT_EQ(testVec.size(), 2);
 	EXPECT_EQ(testVec.getCapacity(), 5);
 
 	testVec.clear();
-	EXPECT_EQ(testVec.getSize(), 0);
+	EXPECT_EQ(testVec.size(), 0);
 	EXPECT_EQ(testVec.getCapacity(), 5);
 }
 
@@ -369,6 +369,29 @@ TEST(FListTest, PopAndClear)
 
 #pragma endregion FListTests
 
+#pragma region StackTests
+// ================================================
+// ==============   STACK TESTS   =================
+// ================================================
+
+TEST(StackTest, Constructor)
+{
+	Stack<int> emptyStack;
+	EXPECT_EQ(emptyStack.size(), 0);
+	EXPECT_EQ(emptyStack.empty(), true);
+}
+
+TEST(StackTest, PushPop)
+{
+
+}
+
+TEST(StackTest, Accessors)
+{
+
+}
+
+#pragma endregion StackTests
 
 int main(int argc, char** argv)
 {

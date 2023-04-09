@@ -18,7 +18,7 @@ public:
 	{
 		m_Buffer = new T[4];
 		m_Capacity = 4;
-		m_Size = m_Capacity;
+		m_Size = 0;
 	}
 
 	Vector(std::initializer_list<T> l)
@@ -35,7 +35,7 @@ public:
 
 	Vector(const Vector& other)
 	{
-		m_Capacity = other.getSize(); // We "shrink to fit" the size
+		m_Capacity = other.size(); // We "shrink to fit" the size
 
 		// Realign capacity to a multiple of 2 for now, would want to realign on proper 4 * 2 ^ n capacity later
 		if (m_Capacity % 2 != 0)
@@ -198,7 +198,7 @@ public:
 	inline T& front() { return this->m_Buffer[0]; }
 	inline const T& back() const { return this->m_Buffer[m_Size - 1]; }
 	inline T& back() { return this->m_Buffer[m_Size - 1]; }
-	inline int getSize() const { return m_Size; }
+	inline int size() const { return m_Size; }
 	inline int getCapacity() const { return m_Capacity; }
 	inline bool empty() const { return m_Size == 0; }
 
