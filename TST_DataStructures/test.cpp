@@ -178,6 +178,21 @@ TEST(VectorTest, Deletion)
 // ==============   LIST TESTS   =================
 // ================================================
 
+TEST(ListTest, Constructor)
+{
+	List<int> emptyList;
+	EXPECT_EQ(emptyList.GetSize(), 0);
+	EXPECT_EQ(emptyList.IsEmpty(), true);
+
+	List<int> initList = { 1, 2, 3 };
+	EXPECT_EQ(initList.GetSize(), 3);
+	EXPECT_EQ(initList.IsEmpty(), false);
+
+	List<int> copyConstruct = initList;
+	EXPECT_EQ(copyConstruct.GetSize(), 3);
+	EXPECT_EQ(copyConstruct.IsEmpty(), false);
+}
+
 TEST(ListTest, FrontBack)
 {
 	List<int> testList = { 1, 10, 5, -5 };
@@ -263,6 +278,21 @@ TEST(ListTest, PopAndClear)
 // ================================================
 // ==============   FLIST TESTS   =================
 // ================================================
+
+TEST(FListTest, Constructor)
+{
+	FList<int> emptyList;
+	EXPECT_EQ(emptyList.GetSize(), 0);
+	EXPECT_EQ(emptyList.IsEmpty(), true);
+
+	FList<int> initList = { 1, 2, 3 };
+	EXPECT_EQ(initList.GetSize(), 3);
+	EXPECT_EQ(initList.IsEmpty(), false);
+
+	FList<int> copyConstruct = initList;
+	EXPECT_EQ(copyConstruct.GetSize(), 3);
+	EXPECT_EQ(copyConstruct.IsEmpty(), false);
+}
 
 TEST(FListTest, Front)
 {

@@ -18,6 +18,16 @@ public:
 		}
 	}
 
+	FList(const FList& other)
+	{
+		FListNode_t<T>* temp = other.m_Head;
+		while (temp != nullptr)
+		{
+			this->push_front(temp->m_Data);
+			temp = temp->m_Next;
+		}
+	}
+
 	~FList()
 	{
 		Clear();

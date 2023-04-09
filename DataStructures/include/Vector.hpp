@@ -186,7 +186,7 @@ public:
 		if (last != m_Size - 1)
 		{
 			int elemsToMove = m_Size - last;
-			for ( int i = 0; i < elemsToMove; i++)
+			for (int i = 0; i < elemsToMove; i++)
 			{
 				m_Buffer[first + i] = m_Buffer[last + i];
 			}

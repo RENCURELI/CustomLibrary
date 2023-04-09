@@ -17,6 +17,16 @@ public:
 		}
 	}
 
+	List(const List& other)
+	{
+		ListNode_t<T>* temp = other.m_Head;
+		while (temp != nullptr)
+		{
+			this->push_back(temp->m_Data);
+			temp = temp->m_Next;
+		}
+	}
+
 	~List()
 	{
 		Clear();
