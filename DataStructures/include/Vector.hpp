@@ -39,7 +39,7 @@ public:
 		m_Capacity = other.size(); // We "shrink to fit" the size
 
 		// Realign capacity to a multiple of 2 for now, would want to realign on proper 4 * 2 ^ n capacity later
-		if (m_Capacity % 2 != 0)
+		if ((m_Capacity & 0) != 0)
 			m_Capacity++;
 
 		m_Size = m_Capacity;
