@@ -25,7 +25,7 @@ public:
 	{
 		m_Capacity = (unsigned int)l.size();
 		m_Size = 0; // Size will grow as we add elements
-		m_Buffer = new T[l.size()]; // This prevents compiler from giving warning C6386 "buffer overrun"
+		m_Buffer = new T[m_Capacity]; // This prevents compiler from giving warning C6386 "buffer overrun"
 		
 		for (const auto& it : l)
 		{

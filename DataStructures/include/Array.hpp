@@ -12,7 +12,7 @@ struct Array
 	T& operator[](unsigned int index)
 	{
 		if (index >= N)
-			throw std::runtime_error("[ERROR] Index out of bounds");
+			throw std::out_of_range("[ERROR] Index out of bounds");
 
 		return values[index];
 	}
@@ -20,7 +20,7 @@ struct Array
 	inline T at(const unsigned int index) const 
 	{
 		if (index >= N)
-			throw std::runtime_error("[ERROR] Index out of bounds");
+			throw std::out_of_range("[ERROR] Index out of bounds");
 
 		return values[index];
 	}
