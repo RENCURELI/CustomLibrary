@@ -79,6 +79,9 @@ public:
 	
 	void pop_back()
 	{
+		if (m_Size == 0)
+			return;
+
 		back().~T();
 		m_Size--;
 	}

@@ -181,6 +181,10 @@ TEST(VectorTest, Deletion)
 	EXPECT_THROW(testVec.front(), std::exception);
 	EXPECT_THROW(testVec.back(), std::exception);
 	EXPECT_THROW(testVec[0], std::exception);
+
+	for ( int i = 0; i < 100; i++)
+		testVec.pop_back();
+	EXPECT_EQ(testVec.size(), 0);
 }
 
 TEST(VectorTest, AssignMethods)
@@ -423,19 +427,45 @@ TEST(FListTest, PopAndClear)
 
 TEST(StackTest, Constructor)
 {
-	Stack<int> emptyStack;
-	EXPECT_EQ(emptyStack.size(), 0);
-	EXPECT_EQ(emptyStack.empty(), true);
+	// Container = Vector
+	Stack<int> vecStack;
+	EXPECT_EQ(vecStack.size(), 0);
+	EXPECT_EQ(vecStack.empty(), true);
+
+	// Container = List
+	Stack<int, List<int>> listStack;
+	EXPECT_EQ(listStack.size(), 0);
+	EXPECT_EQ(listStack.empty(), true);
 }
 
 TEST(StackTest, PushPop)
 {
+	// Container = Vector
+	Stack<int> vecStack;
+	vecStack.push(3);
+	EXPECT_EQ(vecStack.size(), 1);
+	EXPECT_EQ(vecStack.empty(), false);
+	EXPECT_EQ(vecStack.top(), 3);
 
+	// Container = List
+	Stack<int, List<int>> listStack;
+	listStack.push(2);
+	EXPECT_EQ(listStack.size(), 1);
+	EXPECT_EQ(listStack.empty(), false);
+	EXPECT_EQ(listStack.top(), 2);
 }
 
 TEST(StackTest, Accessors)
 {
+	// Container = Vector
+	Stack<int> vecStack;
+	EXPECT_THROW(vecStack.top(), std::runtime_error);
+	EXPECT_EQ(vecStack.empty(), true);
 
+	// Container = List
+	Stack<int, List<int>> listStack;
+	EXPECT_THROW(listStack.top(), std::runtime_error);
+	EXPECT_EQ(listStack.empty(), true);
 }
 
 #pragma endregion StackTests

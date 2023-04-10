@@ -140,8 +140,8 @@ public:
 
 	inline bool empty() const { return m_Size == 0; }
 	inline int size() const { return m_Size; }
-	inline const T& front() const { return m_Head->m_Data; }
-	inline T& front() { return m_Head->m_Data; }
+	inline const T& front() const { return m_Size > 0 ? m_Head->m_Data : throw std::runtime_error("[ERROR] Trying to access and empty list"); }
+	inline T& front() { return m_Size > 0 ? m_Head->m_Data : throw std::runtime_error("[ERROR] Trying to access and empty list"); }
 
 	void PrintList()
 	{
