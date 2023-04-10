@@ -70,19 +70,26 @@ TEST(VectorTest, VectorConstructor)
 {
 	Vector<int> defaultConstructor = Vector<int>();
 	EXPECT_EQ(defaultConstructor.size(), 0);
-	EXPECT_EQ(defaultConstructor.getCapacity(), 4);
+	EXPECT_EQ(defaultConstructor.capacity(), 4);
 
 	Vector<int> initList = { 1, 2, 3, 4 };
 	EXPECT_EQ(initList.size(), 4);
-	EXPECT_EQ(initList.getCapacity(), 4);
+	EXPECT_EQ(initList.capacity(), 4);
+	EXPECT_EQ(initList.front(), 1);
+	EXPECT_EQ(initList.back(), 4);
 
 	Vector<int> copyConstructor = initList;
 	EXPECT_EQ(copyConstructor.size(), 4);
-	EXPECT_EQ(copyConstructor.getCapacity(), 4);
+	EXPECT_EQ(copyConstructor.capacity(), 4);
+	EXPECT_EQ(copyConstructor.front(), 1);
+	EXPECT_EQ(copyConstructor.back(), 4);
+	EXPECT_EQ(initList.size(), 4);
 
 	Vector<int> customConstructor = Vector<int>(4, 1);
 	EXPECT_EQ(customConstructor.size(), 4);
-	EXPECT_EQ(customConstructor.getCapacity(), 4);
+	EXPECT_EQ(customConstructor.capacity(), 4);
+	EXPECT_EQ(customConstructor.front(), 1);
+	EXPECT_EQ(customConstructor.back(), 1);
 }
 
 // These tests are for at, first, last, and [] operator
@@ -104,28 +111,28 @@ TEST(VectorTest, Resizing)
 
 	testVec.resize(12);
 	EXPECT_EQ(testVec.size(), 5);
-	EXPECT_EQ(testVec.getCapacity(), 12);
+	EXPECT_EQ(testVec.capacity(), 12);
 
 	testVec.resize(10, 10);
 	EXPECT_EQ(testVec.back(), 10);
 	EXPECT_EQ(testVec.size(), 10);
-	EXPECT_EQ(testVec.getCapacity(), 12);
+	EXPECT_EQ(testVec.capacity(), 12);
 
 	testVec.reserve(25);
-	EXPECT_EQ(testVec.getCapacity(), 25);
+	EXPECT_EQ(testVec.capacity(), 25);
 
 	testVec.reserve(10);
-	EXPECT_EQ(testVec.getCapacity(), 25);
+	EXPECT_EQ(testVec.capacity(), 25);
 
 	testVec.resize(5);
 	EXPECT_EQ(testVec.back(), 5);
 	EXPECT_EQ(testVec.size(), 5);
-	EXPECT_EQ(testVec.getCapacity(), 25);
+	EXPECT_EQ(testVec.capacity(), 25);
 
 	testVec.shrinkToFit();
 	EXPECT_EQ(testVec.back(), 5);
 	EXPECT_EQ(testVec.size(), 5);
-	EXPECT_EQ(testVec.getCapacity(), 5);
+	EXPECT_EQ(testVec.capacity(), 5);
 }
 
 TEST(VectorTest, Insertion)
@@ -134,11 +141,11 @@ TEST(VectorTest, Insertion)
 
 	testVec.push_back(6);
 	EXPECT_EQ(testVec.size(), 6);
-	EXPECT_EQ(testVec.getCapacity(), 10);
+	EXPECT_EQ(testVec.capacity(), 10);
 
 	testVec.insert(3, 12);
 	EXPECT_EQ(testVec.size(), 7);
-	EXPECT_EQ(testVec.getCapacity(), 10);
+	EXPECT_EQ(testVec.capacity(), 10);
 	EXPECT_EQ(testVec[3], 12);
 }
 
@@ -149,26 +156,28 @@ TEST(VectorTest, Deletion)
 	// Error Testing
 	EXPECT_THROW(testVec.erase(3, 1), std::exception);
 	EXPECT_THROW(testVec.erase(6), std::out_of_range);
+	EXPECT_EQ(testVec.back(), 5);
 
 	// Functionality
 	testVec.pop_back();
 	EXPECT_EQ(testVec.back(), 4);
 	EXPECT_EQ(testVec.size(), 4);
-	EXPECT_EQ(testVec.getCapacity(), 5);
+	EXPECT_EQ(testVec.capacity(), 5);
 
 	testVec.erase(0);
 	EXPECT_EQ(testVec.front(), 2);
 	EXPECT_EQ(testVec.size(), 3);
-	EXPECT_EQ(testVec.getCapacity(), 5);
+	EXPECT_EQ(testVec.capacity(), 5);
 
 	testVec.erase(0, 1);
 	EXPECT_EQ(testVec.front(), 3);
 	EXPECT_EQ(testVec.size(), 2);
-	EXPECT_EQ(testVec.getCapacity(), 5);
+	EXPECT_EQ(testVec.capacity(), 5);
 
 	testVec.clear();
 	EXPECT_EQ(testVec.size(), 0);
-	EXPECT_EQ(testVec.getCapacity(), 5);
+	EXPECT_EQ(testVec.capacity(), 5);
+	//EXPECT_EQ(testVec.front(), 3);
 }
 
 #pragma endregion VectorTests

@@ -57,7 +57,10 @@ public:
 		m_Size = m_Capacity;
 		m_Buffer = new T[count];
 
-		memset(m_Buffer, data, sizeof(T) * m_Size);
+		for (int i = 0; i < count; i++)
+		{
+			m_Buffer[i] = data;
+		}
 	}
 
 	~Vector()
@@ -199,7 +202,7 @@ public:
 	inline const T& back() const { return this->m_Buffer[m_Size - 1]; }
 	inline T& back() { return this->m_Buffer[m_Size - 1]; }
 	inline int size() const { return m_Size; }
-	inline int getCapacity() const { return m_Capacity; }
+	inline int capacity() const { return m_Capacity; }
 	inline bool empty() const { return m_Size == 0; }
 
 	void PrintVector()
@@ -218,6 +221,8 @@ public:
 
 		memset(m_Buffer, 0, sizeof(T) * m_Capacity);
 		memcpy_s(m_Buffer, sizeof(T) * m_Size, other.m_Buffer, sizeof(T) * other.m_Size);
+
+		return *this;
 	}
 
 	Vector& operator=(std::initializer_list<T> l)
@@ -230,6 +235,8 @@ public:
 		{
 			push_back(it);
 		}
+
+		return *this;
 	}
 
 	T& operator[](int pos)
