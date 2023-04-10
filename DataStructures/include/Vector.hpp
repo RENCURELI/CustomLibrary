@@ -87,7 +87,7 @@ public:
 	void insert(unsigned int pos, const T& data)
 	{
 		if (pos > m_Size + 1)
-			throw std::runtime_error("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
+			throw std::out_of_range("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
 
 		if (pos == m_Size)
 		{
@@ -137,10 +137,9 @@ public:
 		unsigned int i = 0;
 		do
 		{
-			m_Buffer[i] = val;
+			push_back(val);
 			++i;
 		} while (i < count);
-		m_Size = count;
 	}
 
 	constexpr void clear() noexcept

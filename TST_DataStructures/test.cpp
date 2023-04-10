@@ -147,6 +147,7 @@ TEST(VectorTest, Insertion)
 	EXPECT_EQ(testVec.size(), 7);
 	EXPECT_EQ(testVec.capacity(), 10);
 	EXPECT_EQ(testVec[3], 12);
+	EXPECT_THROW(testVec.insert(testVec.capacity() + 2, 51), std::out_of_range);
 }
 
 TEST(VectorTest, Deletion)
@@ -180,6 +181,41 @@ TEST(VectorTest, Deletion)
 	EXPECT_THROW(testVec.front(), std::exception);
 	EXPECT_THROW(testVec.back(), std::exception);
 	EXPECT_THROW(testVec[0], std::exception);
+}
+
+TEST(VectorTest, AssignMethods)
+{
+	Vector<int> testVec = { 1, 2, 3, 4, 5 };
+	testVec.assign(5, 10);
+	EXPECT_EQ(testVec.size(), 5);
+	EXPECT_EQ(testVec.capacity(), 5);
+	EXPECT_EQ(testVec.front(), 10);
+	EXPECT_EQ(testVec.back(), 10);
+
+	testVec = { 2, 2, 2, 2, 2 };
+	EXPECT_EQ(testVec.size(), 5);
+	EXPECT_EQ(testVec.capacity(), 5);
+	EXPECT_EQ(testVec.front(), 2);
+	EXPECT_EQ(testVec.back(), 2);
+
+	Vector<int> newVec = Vector(5, 5);
+	testVec = newVec;
+	EXPECT_EQ(testVec.size(), 5);
+	EXPECT_EQ(testVec.capacity(), 5);
+	EXPECT_EQ(testVec.front(), 5);
+	EXPECT_EQ(testVec.back(), 5);
+
+	testVec.assign(2, 15);
+	EXPECT_EQ(testVec.size(), 2);
+	EXPECT_EQ(testVec.capacity(), 5);
+	EXPECT_EQ(testVec.front(), 15);
+	EXPECT_EQ(testVec.back(), 15);
+
+	testVec = { 10, 10, 10, 10, 10, 10, 10 };
+	EXPECT_EQ(testVec.size(), 7);
+	EXPECT_EQ(testVec.capacity(), 10);
+	EXPECT_EQ(testVec.front(), 10);
+	EXPECT_EQ(testVec.back(), 10);
 }
 
 #pragma endregion VectorTests
