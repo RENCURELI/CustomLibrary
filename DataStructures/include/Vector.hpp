@@ -29,7 +29,8 @@ public:
 		
 		for (const auto& it : l)
 		{
-			push_back(it);
+			m_Buffer[m_Size] = it;
+			++m_Size;
 		}
 	}
 
@@ -114,14 +115,18 @@ public:
 
 	T& at(unsigned int index)
 	{
-		if (index >= m_Size)
+		if (m_Size <= 0)
+			throw std::runtime_error("[ERROR] Trying to access empty container");
+		else if (index >= m_Size)
 			throw std::out_of_range("[ERROR] Index out of bounds");
 		return m_Buffer[index];
 	}
 
 	const T& at(unsigned int index) const
 	{
-		if (index > m_Size)
+		if (m_Size <= 0)
+			throw std::runtime_error("[ERROR] Trying to access empty container");
+		else if (index > m_Size)
 			throw std::out_of_range("[ERROR] Index out of bounds");
 		return m_Buffer[index];
 	}
@@ -197,10 +202,10 @@ public:
 		m_Size -= last - first;
 	}
 
-	inline const T& front() const { return this->m_Buffer[0]; }
-	inline T& front() { return this->m_Buffer[0]; }
-	inline const T& back() const { return this->m_Buffer[m_Size - 1]; }
-	inline T& back() { return this->m_Buffer[m_Size - 1]; }
+	inline const T& front() const { return m_Size > 0 ? this->m_Buffer[0] : throw std::runtime_error("[ERROR] Trying to access empty container"); }
+	inline T& front() { return m_Size > 0 ? this->m_Buffer[0] : throw std::runtime_error("[ERROR] Trying to access empty container"); }
+	inline const T& back() const { return m_Size > 0 ? this->m_Buffer[m_Size - 1] : throw std::runtime_error("[ERROR] Trying to access empty container"); }
+	inline T& back() { return m_Size > 0 ? this->m_Buffer[m_Size - 1] : throw std::runtime_error("[ERROR] Trying to access empty container"); }
 	inline int size() const { return m_Size; }
 	inline int capacity() const { return m_Capacity; }
 	inline bool empty() const { return m_Size == 0; }
@@ -241,12 +246,12 @@ public:
 
 	T& operator[](int pos)
 	{
-		return m_Buffer[pos];
+		return m_Size > 0 ? m_Buffer[pos] : throw std::runtime_error("[ERROR] Trying to access empty container");
 	}
 
 	const T& operator[] (int pos) const
 	{
-		return m_Buffer[pos];
+		return m_Size > 0 ? m_Buffer[pos] : throw std::runtime_error("[ERROR] Trying to access empty container");
 	}
 
 	// resize and move data from old position to new

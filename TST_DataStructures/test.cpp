@@ -177,7 +177,9 @@ TEST(VectorTest, Deletion)
 	testVec.clear();
 	EXPECT_EQ(testVec.size(), 0);
 	EXPECT_EQ(testVec.capacity(), 5);
-	//EXPECT_EQ(testVec.front(), 3);
+	EXPECT_THROW(testVec.front(), std::exception);
+	EXPECT_THROW(testVec.back(), std::exception);
+	EXPECT_THROW(testVec[0], std::exception);
 }
 
 #pragma endregion VectorTests
