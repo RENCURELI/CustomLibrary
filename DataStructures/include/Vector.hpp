@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <string>
 #include <memory>
+//#include <iterator> // Will maybe try to use iterators as in STL
 
 // Contiguous dynamic array
 template<typename T>
@@ -23,9 +24,9 @@ public:
 
 	Vector(std::initializer_list<T> l)
 	{
-		m_Capacity = (unsigned int)l.size();
+		m_Capacity = l.size();
 		m_Size = 0; // Size will grow as we add elements
-		m_Buffer = new T[m_Capacity]; // This prevents compiler from giving warning C6386 "buffer overrun"
+		m_Buffer = new T[m_Capacity];
 		
 		for (const auto& it : l)
 		{
@@ -49,16 +50,16 @@ public:
 		memcpy_s(m_Buffer, sizeof(T) * m_Size, other.m_Buffer, sizeof(T) * other.m_Size);
 	}
 
-	Vector(const int count, T data)
+	Vector(size_t count, T data)
 	{
-		if ( count <= 0 )
+		if (count <= 0)
 			throw std::runtime_error("[ERROR] Trying to create array of invalid size -> must be greater than 0");
 
 		m_Capacity = count; // We reserve for the amount of data to store
 		m_Size = m_Capacity;
 		m_Buffer = new T[count];
 
-		for (int i = 0; i < count; i++)
+		for (size_t i = 0; i < count; i++)
 		{
 			m_Buffer[i] = data;
 		}
@@ -86,8 +87,8 @@ public:
 		m_Size--;
 	}
 
-	// In the STL, this should return an iterator, not sure why I would need to
-	void insert(unsigned int pos, const T& data)
+	// Will update for iterator later
+	void insert(const size_t pos, const T& data)
 	{
 		if (pos > m_Size + 1)
 			throw std::out_of_range("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
@@ -103,7 +104,7 @@ public:
 				resize(m_Capacity * 2);
 
 			// We move the data after pos
-			unsigned int i = m_Size;
+			size_t i = m_Size;
 			do
 			{
 				m_Buffer[i + 1] = m_Buffer[i];
@@ -116,7 +117,7 @@ public:
 		}
 	}
 
-	T& at(unsigned int index)
+	T& at(const size_t index)
 	{
 		if (m_Size <= 0)
 			throw std::runtime_error("[ERROR] Trying to access empty container");
@@ -125,7 +126,7 @@ public:
 		return m_Buffer[index];
 	}
 
-	const T& at(unsigned int index) const
+	const T& at(const size_t index) const
 	{
 		if (m_Size <= 0)
 			throw std::runtime_error("[ERROR] Trying to access empty container");
@@ -134,10 +135,10 @@ public:
 		return m_Buffer[index];
 	}
 
-	void assign(unsigned int count, T val)
+	void assign(size_t count, T val)
 	{
 		clear();
-		unsigned int i = 0;
+		size_t i = 0;
 		do
 		{
 			push_back(val);
@@ -151,7 +152,8 @@ public:
 		m_Size = 0;
 	}
 
-	void erase(unsigned int pos)
+	// Will update to use iterators later
+	void erase(size_t pos)
 	{
 		if (pos >= m_Size)
 			throw std::out_of_range("[ERROR] Index out of bounds");
@@ -170,7 +172,8 @@ public:
 		m_Size--;
 	}
 
-	void erase(unsigned int first, unsigned int last)
+	// Will update to use iterators later
+	void erase(const size_t first, const size_t last)
 	{
 		// Error handling
 		if (first > last)
@@ -214,7 +217,7 @@ public:
 
 	void PrintVector()
 	{
-		for (unsigned int i = 0; i < m_Size; i++)
+		for (size_t i = 0; i < m_Size; i++)
 		{
 			std::cout << " -> " << m_Buffer[i];
 		}
@@ -246,63 +249,63 @@ public:
 		return *this;
 	}
 
-	T& operator[](int pos)
+	T& operator[](size_t pos)
 	{
 		return m_Size > 0 ? m_Buffer[pos] : throw std::runtime_error("[ERROR] Trying to access empty container");
 	}
 
-	const T& operator[] (int pos) const
+	const T& operator[](size_t pos) const
 	{
 		return m_Size > 0 ? m_Buffer[pos] : throw std::runtime_error("[ERROR] Trying to access empty container");
 	}
 
 	// resize and move data from old position to new
-	void resize(unsigned int size)
+	void resize(size_t count)
 	{
-		if (size < m_Size)
+		if (count < m_Size)
 		{
 			// We return as we won't replace previous data
-			erase(size, m_Size);
+			erase(count, m_Size);
 			return;
 		}
 		
-		reserve(size);
+		reserve(count);
 	}
 
-	void resize(unsigned int size, const T& value)
+	void resize(size_t count, const T& value)
 	{
-		if (size < m_Size)
+		if (count < m_Size)
 		{
 			// We return as we won't replace previous data
-			erase(size, m_Size);
+			erase(count, m_Size);
 			return;
 		}
 		
-		reserve(size);
+		reserve(count);
 
-		unsigned int i = m_Size; // we append value after the already present elements
+		size_t i = m_Size; // we append value after the already present elements
 		do
 		{
 			push_back(value);
 			++i;
-		} while (i < size);
+		} while (i < count);
 	}
 
 	// If size is greater than the current capacity, new storage is allocated, otherwise the function does nothing. -> cppreference
-	void reserve(unsigned int size)
+	void reserve(size_t count)
 	{
-		if (size <= m_Capacity)
+		if (count <= m_Capacity)
 			return;
 		else
 		{
-			m_Capacity = size;
+			m_Capacity = count;
 			T* newBuffer = new T[m_Capacity];
 
 			// We handle the case where we resize to a lower size than current size by discarding overflowing elements
 			if (m_Capacity < m_Size)
 				m_Size = m_Capacity;
 
-			for (unsigned int i = 0; i < m_Size; i++)
+			for (size_t i = 0; i < m_Size; i++)
 			{
 				newBuffer[i] = m_Buffer[i];
 			}
@@ -323,8 +326,8 @@ public:
 	}
 
 private:
-	unsigned int m_Capacity; // The capacity of the vector
-	unsigned int m_Size; // The number of elements stored in vector
+	size_t m_Capacity; // The capacity of the vector
+	size_t m_Size; // The number of elements stored in vector
 
 	T* m_Buffer; // Pointer to the currently allocated array
 };
