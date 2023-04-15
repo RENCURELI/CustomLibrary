@@ -6,14 +6,85 @@
 #include <stdexcept>
 #include <string>
 #include <memory>
-//#include <iterator> // Will maybe try to use iterators as in STL
+
+// Custom iterator ( still have to do a bunch of operator overloads and proper testing )
+template<typename Vector>
+class VectorIterator
+{
+public:
+	using ValueType = typename Vector::ValueType;
+	using PointerType = ValueType*;
+	using ReferenceType = ValueType&;
+public:
+	VectorIterator(PointerType ptr) : m_Ptr(ptr) {}
+
+	// preincrement
+	VectorIterator& operator++()
+	{
+		m_Ptr++;
+		return *this;
+	}
+
+	// postincrement
+	VectorIterator operator++(int)
+	{
+		VectorIterator it(*this);
+		++(*this);
+		return it;
+	}
+
+	// preincrement
+	VectorIterator& operator--()
+	{
+		m_Ptr--;
+		return *this;
+	}
+
+	// postincrement
+	VectorIterator operator--(int)
+	{
+		VectorIterator it(*this);
+		--(*this);
+		return it;
+	}
+
+	ReferenceType operator*()
+	{
+		return *m_Ptr;
+	}
+
+	ReferenceType operator[](int index)
+	{
+		return *(m_Ptr + index);
+	}
+
+	PointerType operator->()
+	{
+		return m_Ptr;
+	}
+
+	bool operator==(const VectorIterator& other) const
+	{
+		return m_Ptr == other.m_Ptr;
+	}
+
+	bool operator!=(const VectorIterator& other) const
+	{
+		return !(*this == other);
+	}
+
+private:
+	PointerType m_Ptr;
+};
 
 // Contiguous dynamic array
 template<typename T>
 class Vector
 {
 public:
-
+	using ValueType = T;
+	using Iterator = VectorIterator<Vector<T>>;
+public:
 	// Default constructor creating a 4 item vector
 	Vector() 
 	{
@@ -214,6 +285,16 @@ public:
 	inline int size() const { return m_Size; }
 	inline int capacity() const { return m_Capacity; }
 	inline bool empty() const { return m_Size == 0; }
+
+	Iterator begin()
+	{
+		return Iterator(m_Buffer);
+	}
+
+	Iterator end()
+	{
+		return Iterator(m_Buffer + m_Size);
+	}
 
 	void PrintVector()
 	{

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include <gtest/gtest.h>
+#include <string>
 #include "../DataStructures/include/Array.hpp"
 #include "../DataStructures/include/Vector.hpp"
 #include "../DataStructures/include/List.hpp"
@@ -149,6 +150,28 @@ TEST(VectorTest, Insertion)
 	EXPECT_EQ(testVec[3], 12);
 	EXPECT_THROW(testVec.insert(testVec.capacity() + 2, 51), std::out_of_range);
 }
+
+// For more complex types such as std::string -> Will have to update for this
+/*TEST(VectorTest, InsertComplex)
+{
+	Vector<std::string> stringVec;
+	stringVec.push_back("Hello");
+	stringVec.push_back("World");
+	EXPECT_EQ(stringVec.front(), "Hello");
+	EXPECT_EQ(stringVec.back(), "World");
+	EXPECT_EQ(stringVec.size(), 2);
+	EXPECT_EQ(stringVec.capacity(), 4);
+
+	for (int i = 0; i < 5; i++)
+	{
+		stringVec.push_back("Reallocating");
+	}
+	EXPECT_EQ(stringVec.back(), "Reallocating");
+	EXPECT_EQ(stringVec.size(), 7);
+	EXPECT_EQ(stringVec.capacity(), 8);
+
+	stringVec.insert(2, "Inserting...");
+}*/
 
 TEST(VectorTest, Deletion)
 {
