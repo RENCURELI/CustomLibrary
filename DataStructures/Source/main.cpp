@@ -29,6 +29,8 @@ int main()
 		vec.PrintVector();
 		std::cout << "\n" << vec.capacity() << "\n";
 
+		auto it = vec.begin();
+		//vec.insert(it + 1, 3.7f);
 		vec.insert(1, 3.7f);
 		vec.PrintVector();
 
@@ -37,6 +39,13 @@ int main()
 		testVec.resize(4);
 		std::cout << "Test Vector after resize" << "\n";
 		testVec.PrintVector();
+
+		// Range based for loop using iterators
+		std::cout << "\n Test Vector Ranged based for loop" << "\n";
+		for (int value : testVec)
+		{
+			std::cout << value << std::endl;
+		}
 
 		// STACK
 		Stack<int> vecStack = Stack<int>(testVec);

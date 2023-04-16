@@ -15,6 +15,7 @@ public:
 	using ValueType = typename Vector::ValueType;
 	using PointerType = ValueType*;
 	using ReferenceType = ValueType&;
+	using DifferenceType = std::ptrdiff_t;
 public:
 	VectorIterator(PointerType ptr) : m_Ptr(ptr) {}
 
@@ -48,6 +49,32 @@ public:
 		return it;
 	}
 
+	VectorIterator& operator+=(const DifferenceType offset)
+	{
+		m_Ptr += offset;
+		return *this;
+	}
+
+	VectorIterator operator+(const DifferenceType offset)
+	{
+		VectorIterator tmp = m_Ptr;
+		tmp += offset;
+		return tmp;
+	}
+
+	VectorIterator& operator-=(const DifferenceType offset)
+	{
+		m_Ptr -= offset;
+		return *this;
+	}
+
+	VectorIterator operator-(const DifferenceType offset)
+	{
+		VectorIterator tmp = m_Ptr;
+		tmp -= offset;
+		return tmp;
+	}
+
 	ReferenceType operator*()
 	{
 		return *m_Ptr;
@@ -73,7 +100,26 @@ public:
 		return !(*this == other);
 	}
 
-private:
+	bool operator<(const VectorIterator& right) const
+	{
+		return m_Ptr < right.m_Ptr;
+	}
+
+	bool operator>(const VectorIterator& right) const
+	{
+		return right.m_Ptr < *this;
+	}
+
+	bool operator<=(const VectorIterator& right) const
+	{
+		return !(right < *this);
+	}
+
+	bool operator>=(const VectorIterator& right) const
+	{
+		return !(*this < right);
+	}
+
 	PointerType m_Ptr;
 };
 
@@ -188,6 +234,44 @@ public:
 		}
 	}
 
+	// Will be a ConstIterator later
+	/*void insert(const Iterator pos, const T& data)
+	{
+		if (pos > end())
+			throw std::out_of_range("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
+
+		// End points to the block of memory just after the last value
+		if (pos == end())
+		{
+			push_back(data);
+		}
+		else
+		{
+			// We resize if needed
+			if (m_Size + 1 > m_Capacity)
+				resize(m_Capacity * 2);
+
+			// We move the data after pos
+			//size_t i = m_Size;
+			auto it = end();
+			do
+			{
+				++it[] = it[i];
+				--it;
+			} while (it > pos);
+
+			// We insert the new data
+			*pos.m_Ptr = data;
+			m_Size++;
+		}
+	}*/
+
+	// This will be added to the insert method
+// 	void emplace(const Iterator pos, T data)
+// 	{
+// 		*pos.m_Ptr = std::move(data);
+// 	}
+
 	T& at(const size_t index)
 	{
 		if (m_Size <= 0)
@@ -268,7 +352,7 @@ public:
 		// if last is the last element of the vector we don't move the data
 		if (last != m_Size - 1)
 		{
-			int elemsToMove = m_Size - last;
+			size_t elemsToMove = m_Size - last;
 			for (int i = 0; i < elemsToMove; i++)
 			{
 				m_Buffer[first + i] = m_Buffer[last + i];
@@ -282,8 +366,8 @@ public:
 	inline T& front() { return m_Size > 0 ? this->m_Buffer[0] : throw std::runtime_error("[ERROR] Trying to access empty container"); }
 	inline const T& back() const { return m_Size > 0 ? this->m_Buffer[m_Size - 1] : throw std::runtime_error("[ERROR] Trying to access empty container"); }
 	inline T& back() { return m_Size > 0 ? this->m_Buffer[m_Size - 1] : throw std::runtime_error("[ERROR] Trying to access empty container"); }
-	inline int size() const { return m_Size; }
-	inline int capacity() const { return m_Capacity; }
+	inline size_t size() const { return m_Size; }
+	inline size_t capacity() const { return m_Capacity; }
 	inline bool empty() const { return m_Size == 0; }
 
 	Iterator begin()

@@ -20,7 +20,7 @@ public:
 
 	inline T& top() { return m_Container.back(); }
 	inline const T& top() const { return m_Container.back(); }
-	inline int size() const { return m_Container.size(); }
+	inline size_t size() const { return m_Container.size(); }
 	inline bool empty() const { return m_Container.empty(); }
 	
 	void push(const T& value)
