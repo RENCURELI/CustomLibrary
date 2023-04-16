@@ -107,7 +107,7 @@ public:
 
 	bool operator>(const VectorIterator& right) const
 	{
-		return right.m_Ptr < *this;
+		return right < *this;
 	}
 
 	bool operator<=(const VectorIterator& right) const
@@ -205,37 +205,37 @@ public:
 	}
 
 	// Will update for iterator later
-	void insert(const size_t pos, const T& data)
-	{
-		if (pos > m_Size + 1)
-			throw std::out_of_range("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
-
-		if (pos == m_Size)
-		{
-			push_back(data);
-		}
-		else
-		{
-			// We resize if needed
-			if (m_Size + 1 > m_Capacity)
-				resize(m_Capacity * 2);
-
-			// We move the data after pos
-			size_t i = m_Size;
-			do
-			{
-				m_Buffer[i + 1] = m_Buffer[i];
-				--i;
-			} while (i > pos);
-
-			// We insert the new data
-			m_Buffer[pos] = data;
-			m_Size++;
-		}
-	}
+// 	void insert(const size_t pos, const T& data)
+// 	{
+// 		if (pos > m_Size + 1)
+// 			throw std::out_of_range("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
+// 
+// 		if (pos == m_Size)
+// 		{
+// 			push_back(data);
+// 		}
+// 		else
+// 		{
+// 			// We resize if needed
+// 			if (m_Size + 1 > m_Capacity)
+// 				resize(m_Capacity * 2);
+// 
+// 			// We move the data after pos
+// 			size_t i = m_Size;
+// 			do
+// 			{
+// 				m_Buffer[i + 1] = m_Buffer[i];
+// 				--i;
+// 			} while (i > pos);
+// 
+// 			// We insert the new data
+// 			m_Buffer[pos] = data;
+// 			m_Size++;
+// 		}
+// 	}
 
 	// Will be a ConstIterator later
-	/*void insert(const Iterator pos, const T& data)
+	void insert(const Iterator pos, const T& data)
 	{
 		if (pos > end())
 			throw std::out_of_range("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
@@ -256,7 +256,7 @@ public:
 			auto it = end();
 			do
 			{
-				++it[] = it[i];
+				it = it--;
 				--it;
 			} while (it > pos);
 
@@ -264,7 +264,7 @@ public:
 			*pos.m_Ptr = data;
 			m_Size++;
 		}
-	}*/
+	}
 
 	// This will be added to the insert method
 // 	void emplace(const Iterator pos, T data)

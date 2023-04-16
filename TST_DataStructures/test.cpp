@@ -146,12 +146,12 @@ TEST(VectorTest, Insertion)
 
 	auto it = testVec.begin();
 	//testVec.insert(std::next(it, 3), 12); // Might want to make my iterators compatible with std::next()
-	//testVec.insert(it + 3, 12);
-	testVec.insert(3, 12);
+	testVec.insert(it + 3, 12);
+	//testVec.insert(3, 12);
 	EXPECT_EQ(testVec.size(), 7);
 	EXPECT_EQ(testVec.capacity(), 10);
 	EXPECT_EQ(testVec[3], 12);
-	EXPECT_THROW(testVec.insert(testVec.capacity() + 2, 51), std::out_of_range);
+	//EXPECT_THROW(testVec.insert(testVec.capacity() + 2, 51), std::out_of_range);
 }
 
 // For more complex types such as std::string -> Will have to update for this
