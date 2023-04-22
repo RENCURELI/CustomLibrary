@@ -9,16 +9,26 @@ Done :
   - Stack
 
 In Progress :
-  - Queue
+Not sure yet ( Iterators kind of burned me on this one )
 
 TODO Data Structures :
   - Set
   - Map
   - Tuple
+  - Queue
   - DeQueue
   - Graphs ( Binary tree, Heap, etc... )
 
 TODO Algorithms :
   - Find
   - Sort
-  - To Be Determined ( also got to do a maths library at one point )
+  - Dijkstra
+  - A*
+  - To Be Determined ( Not sure what algorithms could be useful )
+  
+TODO Maths :
+  - Vector ( 2, 3 and 4 )
+  - Matrices
+  - Euler Angles
+  - Quaternions
+  - To Be Determined ( not really sure what is needed for a good math library )
