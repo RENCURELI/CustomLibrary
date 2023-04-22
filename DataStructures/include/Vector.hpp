@@ -7,7 +7,8 @@
 #include <string>
 #include <memory>
 
-// Custom iterator ( still have to do a bunch of operator overloads and proper testing )
+#pragma region Iterator
+// Will not do other iterators, too much of a hassle
 template<typename Vector>
 class VectorIterator
 {
@@ -122,6 +123,7 @@ public:
 
 	PointerType m_Ptr;
 };
+#pragma endregion Iterator
 
 // Contiguous dynamic array
 template<typename T>
@@ -204,37 +206,6 @@ public:
 		m_Size--;
 	}
 
-	// Will update for iterator later
-// 	void insert(const size_t pos, const T& data)
-// 	{
-// 		if (pos > m_Size + 1)
-// 			throw std::out_of_range("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
-// 
-// 		if (pos == m_Size)
-// 		{
-// 			push_back(data);
-// 		}
-// 		else
-// 		{
-// 			// We resize if needed
-// 			if (m_Size + 1 > m_Capacity)
-// 				resize(m_Capacity * 2);
-// 
-// 			// We move the data after pos
-// 			size_t i = m_Size;
-// 			do
-// 			{
-// 				m_Buffer[i + 1] = m_Buffer[i];
-// 				--i;
-// 			} while (i > pos);
-// 
-// 			// We insert the new data
-// 			m_Buffer[pos] = data;
-// 			m_Size++;
-// 		}
-// 	}
-
-	// Will be a ConstIterator later
 	void insert(const Iterator pos, const T& data)
 	{
 		if (pos > end())
@@ -265,12 +236,6 @@ public:
 			m_Size++;
 		}
 	}
-
-	// This will be added to the insert method
-// 	void emplace(const Iterator pos, T data)
-// 	{
-// 		*pos.m_Ptr = std::move(data);
-// 	}
 
 	T& at(const size_t index)
 	{
