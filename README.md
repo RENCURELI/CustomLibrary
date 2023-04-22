@@ -6,18 +6,18 @@ Done :
   - Doubly Linked List
   - Array
   - Vector
+  - Stack
 
 In Progress :
-  - Stack
-  
+  - Queue
+
 TODO Data Structures :
   - Set
   - Map
   - Tuple
-  - Queue
   - DeQueue
   - Graphs ( Binary tree, Heap, etc... )
-  
+
 TODO Algorithms :
   - Find
   - Sort
