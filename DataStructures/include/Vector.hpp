@@ -6,24 +6,109 @@
 #include <stdexcept>
 #include <string>
 #include <memory>
+#include <iterator>
 
-#pragma region Iterator
-// Will not do other iterators, too much of a hassle
+#pragma region ConstIterator
 template<typename Vector>
-class VectorIterator
+class VectorConstIterator
 {
 public:
-	using ValueType = typename Vector::ValueType;
-	using PointerType = ValueType*;
-	using ReferenceType = ValueType&;
-	using DifferenceType = std::ptrdiff_t;
-public:
-	VectorIterator(PointerType ptr) : m_Ptr(ptr) {}
+	using iterator_concept = std::contiguous_iterator_tag;
+	using value_type = typename Vector::value_type;
+	using pointer = Vector::const_pointer;
+	using reference = const value_type&;
+	using difference_type = std::ptrdiff_t;
 
+	using PtrType = typename Vector::pointer;
+
+	VectorConstIterator(PtrType ptr) : m_Ptr(ptr) {}
+
+	// preincrement
+	VectorConstIterator& operator++()
+	{
+		this->m_Ptr++;
+		return *this;
+	}
+
+	// postincrement
+	VectorConstIterator operator++(int)
+	{
+		VectorConstIterator it(*this);
+		++(*this);
+		return it;
+	}
+
+	// preincrement
+	VectorConstIterator& operator--()
+	{
+		this->m_Ptr--;
+		return *this;
+	}
+
+	// postincrement
+	VectorConstIterator operator--(int)
+	{
+		VectorConstIterator it(*this);
+		--(*this);
+		return it;
+	}
+
+	VectorConstIterator& operator+=(const difference_type offset)
+	{
+		this->m_Ptr += offset;
+		return *this;
+	}
+
+	VectorConstIterator operator+(const difference_type offset)
+	{
+		VectorConstIterator tmp = this->m_Ptr;
+		tmp += offset;
+		return tmp;
+	}
+
+	VectorConstIterator& operator-=(const difference_type offset)
+	{
+		this->m_Ptr -= offset;
+		return *this;
+	}
+
+	VectorConstIterator operator-(const difference_type offset)
+	{
+		VectorConstIterator tmp = this->m_Ptr;
+		tmp -= offset;
+		return tmp;
+	}
+
+	reference operator*() { return *m_Ptr; }
+	reference operator[](int index) { return *(m_Ptr + index); }
+	pointer operator->() { return m_Ptr; }
+	bool operator==(const VectorConstIterator& other) const { return m_Ptr == other.m_Ptr; }
+	bool operator!=(const VectorConstIterator& other) const { return !(*this == other); }
+	bool operator<(const VectorConstIterator& right) const { return m_Ptr < right.m_Ptr; }
+	bool operator>(const VectorConstIterator& right) const { return right < *this; }
+	bool operator<=(const VectorConstIterator& right) const { return !(right < *this); }
+	bool operator>=(const VectorConstIterator& right) const { return !(*this < right); }
+
+	PtrType m_Ptr;
+};
+
+#pragma endregion ConstIterator
+
+#pragma region Iterator
+template<typename Vector>
+class VectorIterator : public VectorConstIterator<Vector>
+{
+public:
+	using value_type = typename Vector::value_type;
+	using pointer = Vector::pointer;
+	using reference = value_type&;
+	using difference_type = std::ptrdiff_t;
+	using BaseIt = VectorConstIterator<Vector>;
+public:
 	// preincrement
 	VectorIterator& operator++()
 	{
-		m_Ptr++;
+		BaseIt::operator++();
 		return *this;
 	}
 
@@ -38,7 +123,7 @@ public:
 	// preincrement
 	VectorIterator& operator--()
 	{
-		m_Ptr--;
+		BaseIt::operator--();
 		return *this;
 	}
 
@@ -50,78 +135,41 @@ public:
 		return it;
 	}
 
-	VectorIterator& operator+=(const DifferenceType offset)
+	VectorIterator& operator+=(const difference_type offset)
 	{
-		m_Ptr += offset;
+		BaseIt::operator+=(offset);
 		return *this;
 	}
 
-	VectorIterator operator+(const DifferenceType offset)
+	VectorIterator operator+(const difference_type offset) const
 	{
-		VectorIterator tmp = m_Ptr;
+		VectorIterator tmp = *this;
 		tmp += offset;
 		return tmp;
 	}
 
-	VectorIterator& operator-=(const DifferenceType offset)
+	VectorIterator& operator-=(const difference_type offset)
 	{
-		m_Ptr -= offset;
+		BaseIt::operator-=(offset);
 		return *this;
 	}
 
-	VectorIterator operator-(const DifferenceType offset)
+	VectorIterator operator-(const difference_type offset) const
 	{
-		VectorIterator tmp = m_Ptr;
+		VectorIterator tmp = *this;
 		tmp -= offset;
 		return tmp;
 	}
 
-	ReferenceType operator*()
-	{
-		return *m_Ptr;
-	}
-
-	ReferenceType operator[](int index)
-	{
-		return *(m_Ptr + index);
-	}
-
-	PointerType operator->()
-	{
-		return m_Ptr;
-	}
-
-	bool operator==(const VectorIterator& other) const
-	{
-		return m_Ptr == other.m_Ptr;
-	}
-
-	bool operator!=(const VectorIterator& other) const
-	{
-		return !(*this == other);
-	}
-
-	bool operator<(const VectorIterator& right) const
-	{
-		return m_Ptr < right.m_Ptr;
-	}
-
-	bool operator>(const VectorIterator& right) const
-	{
-		return right < *this;
-	}
-
-	bool operator<=(const VectorIterator& right) const
-	{
-		return !(right < *this);
-	}
-
-	bool operator>=(const VectorIterator& right) const
-	{
-		return !(*this < right);
-	}
-
-	PointerType m_Ptr;
+	reference operator*() { return const_cast<reference>(BaseIt::operator*()); }
+	reference operator[](int index) { return *(this->m_Ptr + index); }
+	pointer operator->() { return this->m_Ptr; }
+	bool operator==(const VectorIterator& other) const { return this->m_Ptr == other.m_Ptr; }
+	bool operator!=(const VectorIterator& other) const { return !(*this == other); }
+	bool operator<(const VectorIterator& right) const { return this->m_Ptr < right.m_Ptr; }
+	bool operator>(const VectorIterator& right) const { return right < *this; }
+	bool operator<=(const VectorIterator& right) const { return !(right < *this); }
+	bool operator>=(const VectorIterator& right) const { return !(*this < right); }
 };
 #pragma endregion Iterator
 
@@ -130,8 +178,11 @@ template<typename T>
 class Vector
 {
 public:
-	using ValueType = T;
+	using value_type = T;
+	using pointer = T*;
+	using const_pointer = const T*;
 	using Iterator = VectorIterator<Vector<T>>;
+	using ConstIterator = VectorConstIterator<Vector<T>>;
 public:
 	// Default constructor creating a 4 item vector
 	Vector() 
@@ -206,7 +257,7 @@ public:
 		m_Size--;
 	}
 
-	void insert(const Iterator pos, const T& data)
+	void insert(ConstIterator pos, const T& data)
 	{
 		if (pos > end())
 			throw std::out_of_range("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
@@ -223,8 +274,7 @@ public:
 				resize(m_Capacity * 2);
 
 			// We move the data after pos
-			//size_t i = m_Size;
-			auto it = end();
+			ConstIterator it = end();
 			do
 			{
 				it = it--;
@@ -340,9 +390,19 @@ public:
 		return Iterator(m_Buffer);
 	}
 
+	ConstIterator begin() const
+	{
+		return ConstIterator(m_Buffer);
+	}
+
 	Iterator end()
 	{
 		return Iterator(m_Buffer + m_Size);
+	}
+
+	ConstIterator end() const
+	{
+		return ConstIterator(m_Buffer + m_Size);
 	}
 
 	void PrintVector()
@@ -459,5 +519,5 @@ private:
 	size_t m_Capacity; // The capacity of the vector
 	size_t m_Size; // The number of elements stored in vector
 
-	T* m_Buffer; // Pointer to the currently allocated array
+	T* m_Buffer; // pointer to the currently allocated array
 };
