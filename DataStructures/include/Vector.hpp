@@ -79,9 +79,9 @@ public:
 		return tmp;
 	}
 
-	reference operator*() { return *m_Ptr; }
+	const reference operator*() const { return *m_Ptr; }
 	reference operator[](int index) { return *(m_Ptr + index); }
-	pointer operator->() { return m_Ptr; }
+	const pointer operator->() const { return m_Ptr; }
 	bool operator==(const VectorConstIterator& other) const { return m_Ptr == other.m_Ptr; }
 	bool operator!=(const VectorConstIterator& other) const { return !(*this == other); }
 	bool operator<(const VectorConstIterator& right) const { return m_Ptr < right.m_Ptr; }
@@ -161,9 +161,9 @@ public:
 		return tmp;
 	}
 
-	reference operator*() { return const_cast<reference>(BaseIt::operator*()); }
+	reference operator*() const { return const_cast<reference>(BaseIt::operator*()); }
 	reference operator[](int index) { return *(this->m_Ptr + index); }
-	pointer operator->() { return this->m_Ptr; }
+	pointer operator->() const { return this->m_Ptr; }
 	bool operator==(const VectorIterator& other) const { return this->m_Ptr == other.m_Ptr; }
 	bool operator!=(const VectorIterator& other) const { return !(*this == other); }
 	bool operator<(const VectorIterator& right) const { return this->m_Ptr < right.m_Ptr; }

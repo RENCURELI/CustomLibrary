@@ -8,6 +8,8 @@
 
 #include "Stack.hpp"
 
+#include <algorithm>
+
 int main()
 {
 	std::cout << "Hello World! \n";
@@ -42,10 +44,23 @@ int main()
 
 		// Range based for loop using iterators
 		std::cout << "\n Test Vector Ranged based for loop" << "\n";
-		for (int value : testVec)
+		for (auto value : testVec)
 		{
 			std::cout << value << std::endl;
 		}
+
+		if (std::find(testVec.begin(), testVec.end(), 3) != testVec.end())
+		{
+			std::cout << "We found 3" << std::endl;
+		}
+
+		std::fill(testVec.begin(), testVec.end(), 1);
+
+		if (!(std::find(testVec.begin(), testVec.end(), 3) != testVec.end()))
+		{
+			std::cout << "We didn't find 3" << std::endl;
+		}
+		testVec.PrintVector();
 
 		// STACK
 		Stack<int> vecStack = Stack<int>(testVec);

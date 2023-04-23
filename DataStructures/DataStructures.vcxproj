@@ -150,10 +150,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\Array.hpp" />
+    <ClInclude Include="include\DeQue.h" />
     <ClInclude Include="include\ListNode.hpp" />
     <ClInclude Include="include\FList.hpp" />
     <ClInclude Include="include\List.hpp" />
     <ClInclude Include="include\FListNode.hpp" />
+    <ClInclude Include="include\Queue.h" />
     <ClInclude Include="include\Stack.hpp" />
     <ClInclude Include="include\Vector.hpp" />
   </ItemGroup>
