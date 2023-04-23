@@ -144,7 +144,7 @@ TEST(VectorTest, Insertion)
 	EXPECT_EQ(testVec.size(), 6);
 	EXPECT_EQ(testVec.capacity(), 10);
 
-	auto it = testVec.begin();
+	auto it = testVec.cbegin();
 	//testVec.insert(std::next(it, 3), 12); // Might want to make my iterators compatible with std::next()
 	testVec.insert(it + 3, 12);
 	//testVec.insert(3, 12);

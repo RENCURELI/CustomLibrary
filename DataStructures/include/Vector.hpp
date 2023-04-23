@@ -259,11 +259,11 @@ public:
 
 	void insert(ConstIterator pos, const T& data)
 	{
-		if (pos > end())
+		if (pos > cend())
 			throw std::out_of_range("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
 
 		// End points to the block of memory just after the last value
-		if (pos == end())
+		if (pos == cend())
 		{
 			push_back(data);
 		}
@@ -274,7 +274,7 @@ public:
 				resize(m_Capacity * 2);
 
 			// We move the data after pos
-			ConstIterator it = end();
+			ConstIterator it = cend();
 			do
 			{
 				it = it--;
@@ -384,26 +384,10 @@ public:
 	inline size_t size() const { return m_Size; }
 	inline size_t capacity() const { return m_Capacity; }
 	inline bool empty() const { return m_Size == 0; }
-
-	Iterator begin()
-	{
-		return Iterator(m_Buffer);
-	}
-
-	ConstIterator begin() const
-	{
-		return ConstIterator(m_Buffer);
-	}
-
-	Iterator end()
-	{
-		return Iterator(m_Buffer + m_Size);
-	}
-
-	ConstIterator end() const
-	{
-		return ConstIterator(m_Buffer + m_Size);
-	}
+	inline Iterator begin() { return Iterator(m_Buffer); }
+	inline ConstIterator cbegin() const { return ConstIterator(m_Buffer); }
+	inline Iterator end() { return Iterator(m_Buffer + m_Size); }
+	inline ConstIterator cend() const { return ConstIterator(m_Buffer + m_Size); }
 
 	void PrintVector()
 	{
