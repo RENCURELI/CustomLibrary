@@ -79,6 +79,11 @@ public:
 		return tmp;
 	}
 
+	difference_type operator-(const VectorConstIterator& other)
+	{
+		return m_Ptr - other.m_Ptr;
+	}
+
 	const reference operator*() const { return *m_Ptr; }
 	reference operator[](int index) { return *(m_Ptr + index); }
 	const pointer operator->() const { return m_Ptr; }
@@ -159,6 +164,11 @@ public:
 		VectorIterator tmp = *this;
 		tmp -= offset;
 		return tmp;
+	}
+
+	difference_type operator-(const VectorIterator& other)
+	{
+		return BaseIt::operator-(other);
 	}
 
 	reference operator*() const { return const_cast<reference>(BaseIt::operator*()); }
@@ -259,7 +269,7 @@ public:
 		m_Size--;
 	}
 
-	void insert(const_iterator pos, const T& data)
+	iterator insert(const_iterator pos, const T& data)
 	{
 		if (pos > cend())
 			throw std::out_of_range("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
@@ -287,6 +297,7 @@ public:
 			*pos.m_Ptr = data;
 			m_Size++;
 		}
+		return makeIterator(pos.m_Ptr);
 	}
 
 	T& at(const size_t index)
@@ -325,35 +336,35 @@ public:
 	}
 
 	// Will update to use iterators later
-	void erase(size_t pos)
+	void erase(iterator pos)
 	{
-		if (pos >= m_Size)
+		if (pos > end())
 			throw std::out_of_range("[ERROR] Index out of bounds");
 
-		std::destroy_at(&m_Buffer[pos]);
+		std::destroy_at(&pos);
 
 		// if the position is the same as size, we don't need to move data
-		if (pos != m_Size)
+		if (pos <= end() - 1)
 		{
 			do
 			{
-				m_Buffer[pos] = m_Buffer[pos + 1];
+				*pos = std::move(*pos + 1);
 				++pos;
-			} while (pos < m_Size);
+			} while (pos < end());
 		}
 		m_Size--;
 	}
 
 	// Will update to use iterators later
-	void erase(const size_t first, const size_t last)
+	void erase(iterator first, iterator last)
 	{
 		// Error handling
 		if (first > last)
 			throw std::runtime_error("[ERROR] First is greater than Last -> infinite loop");
-		else if (last > m_Size)
+		else if (last > end())
 		{
-			std::string errorMessage = "[ERROR] Index out of bound, first = " + std::to_string(first)
-										+ " last = " + std::to_string(last)
+			std::string errorMessage = "[ERROR] Index out of bound, first = " + std::to_string(*first)
+										+ " last = " + std::to_string(*last)
 										+ " first must be greater than 0 and last smaller than size, size = " + std::to_string(m_Size);
 			throw std::out_of_range(errorMessage);
 		}
@@ -363,17 +374,16 @@ public:
 			return; // STL would return iterator for last, here, just return
 		}
 
-		// We don't destroy last ( same as STL )
-		std::destroy(m_Buffer + first, m_Buffer + last - 1);
+		std::destroy(&first, &last);
 
 		// if last is the last element of the vector we don't move the data
-		if (last != m_Size - 1)
+		if (last <= end() - 1)
 		{
-			size_t elemsToMove = m_Size - last;
-			for (int i = 0; i < elemsToMove; i++)
-			{
-				m_Buffer[first + i] = m_Buffer[last + i];
-			}
+ 			size_t elemsToMove = end() - last;
+ 			for (int i = 0; i < elemsToMove; i++)
+ 			{
+				*(first + i) = std::move(*(last + i));
+ 			}
 		}
 
 		m_Size -= last - first;
@@ -389,11 +399,11 @@ public:
 	inline iterator begin() { return iterator(m_Buffer); }
 	inline const_iterator cbegin() const { return const_iterator(m_Buffer); }
 	inline reverse_iterator rbegin() { return reverse_iterator(end()); }
-	inline const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
+	inline const_reverse_iterator crbegin() const { return const_reverse_iterator(cend()); }
 	inline iterator end() { return iterator(m_Buffer + m_Size); }
 	inline const_iterator cend() const { return const_iterator(m_Buffer + m_Size); }
 	inline reverse_iterator rend() { return reverse_iterator(begin()); }
-	inline const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
+	inline const_reverse_iterator crend() const { return const_reverse_iterator(cbegin()); }
 
 	void PrintVector()
 	{
@@ -445,7 +455,7 @@ public:
 		if (count < m_Size)
 		{
 			// We return as we won't replace previous data
-			erase(count, m_Size);
+			erase(begin() + count, end());
 			return;
 		}
 		
@@ -457,7 +467,7 @@ public:
 		if (count < m_Size)
 		{
 			// We return as we won't replace previous data
-			erase(count, m_Size);
+			erase(begin() + count, end());
 			return;
 		}
 		
@@ -503,6 +513,12 @@ public:
 		delete[] m_Buffer;
 		m_Buffer = newBuffer;
 		m_Capacity = m_Size;
+	}
+
+private:
+	iterator makeIterator(const pointer ptr)
+	{
+		return iterator(ptr);
 	}
 
 private:

@@ -116,6 +116,13 @@ TEST(VectorTest, VectorIterators)
 
 	testVec.clear();
 	EXPECT_TRUE(testVec.begin() == testVec.end());
+
+	testVec = { 1, 2, 3, 4, 5 };
+	EXPECT_FALSE(testVec.begin() == testVec.end());
+	EXPECT_EQ(testVec.end() - testVec.begin(), testVec.size());
+
+	testVec.pop_back();
+	EXPECT_EQ(*testVec.rbegin(), 4);
 }
 
 TEST(VectorTest, Resizing)
@@ -158,11 +165,17 @@ TEST(VectorTest, Insertion)
 
 	auto it = testVec.cbegin();
 	testVec.insert(std::next(it, 3), 12);
-	//testVec.insert(it + 3, 12); // Might still want to test this syntax
 	EXPECT_EQ(testVec.size(), 7);
 	EXPECT_EQ(testVec.capacity(), 10);
 	EXPECT_EQ(testVec[3], 12);
-	//EXPECT_THROW(testVec.insert(testVec.capacity() + 2, 51), std::out_of_range);
+	EXPECT_THROW(testVec.insert(testVec.end() + testVec.capacity(), 51), std::out_of_range);
+
+	testVec.insert(it + 6, 14);
+	EXPECT_EQ(testVec[6], 14);
+	
+	auto returnedIt = testVec.insert(testVec.end(), -12);
+	EXPECT_TRUE(returnedIt == (testVec.end() - 1));
+	EXPECT_EQ(*testVec.rbegin(), -12);
 }
 
 // For more complex types such as std::string -> Will have to update for this
@@ -192,8 +205,8 @@ TEST(VectorTest, Deletion)
 	Vector<int> testVec = { 1, 2, 3, 4, 5 };
 
 	// Error Testing
-	EXPECT_THROW(testVec.erase(3, 1), std::exception);
-	EXPECT_THROW(testVec.erase(6), std::out_of_range);
+	EXPECT_THROW(testVec.erase(testVec.begin() + 3, testVec.begin()), std::exception);
+	EXPECT_THROW(testVec.erase(testVec.end() + 1), std::out_of_range);
 	EXPECT_EQ(testVec.back(), 5);
 
 	// Functionality
@@ -202,12 +215,12 @@ TEST(VectorTest, Deletion)
 	EXPECT_EQ(testVec.size(), 4);
 	EXPECT_EQ(testVec.capacity(), 5);
 
-	testVec.erase(0);
+	testVec.erase(testVec.begin());
 	EXPECT_EQ(testVec.front(), 2);
 	EXPECT_EQ(testVec.size(), 3);
 	EXPECT_EQ(testVec.capacity(), 5);
 
-	testVec.erase(0, 1);
+	testVec.erase(testVec.begin(), testVec.begin() + 1);
 	EXPECT_EQ(testVec.front(), 3);
 	EXPECT_EQ(testVec.size(), 2);
 	EXPECT_EQ(testVec.capacity(), 5);
