@@ -181,8 +181,10 @@ public:
 	using value_type = T;
 	using pointer = T*;
 	using const_pointer = const T*;
-	using Iterator = VectorIterator<Vector<T>>;
-	using ConstIterator = VectorConstIterator<Vector<T>>;
+	using iterator = VectorIterator<Vector<T>>;
+	using const_iterator = VectorConstIterator<Vector<T>>;
+	using reverse_iterator = std::reverse_iterator<iterator>;
+	using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 public:
 	// Default constructor creating a 4 item vector
 	Vector() 
@@ -257,7 +259,7 @@ public:
 		m_Size--;
 	}
 
-	void insert(ConstIterator pos, const T& data)
+	void insert(const_iterator pos, const T& data)
 	{
 		if (pos > cend())
 			throw std::out_of_range("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
@@ -274,7 +276,7 @@ public:
 				resize(m_Capacity * 2);
 
 			// We move the data after pos
-			ConstIterator it = cend();
+			const_iterator it = cend();
 			do
 			{
 				it = it--;
@@ -384,10 +386,14 @@ public:
 	inline size_t size() const { return m_Size; }
 	inline size_t capacity() const { return m_Capacity; }
 	inline bool empty() const { return m_Size == 0; }
-	inline Iterator begin() { return Iterator(m_Buffer); }
-	inline ConstIterator cbegin() const { return ConstIterator(m_Buffer); }
-	inline Iterator end() { return Iterator(m_Buffer + m_Size); }
-	inline ConstIterator cend() const { return ConstIterator(m_Buffer + m_Size); }
+	inline iterator begin() { return iterator(m_Buffer); }
+	inline const_iterator cbegin() const { return const_iterator(m_Buffer); }
+	inline reverse_iterator rbegin() { return reverse_iterator(end()); }
+	inline const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
+	inline iterator end() { return iterator(m_Buffer + m_Size); }
+	inline const_iterator cend() const { return const_iterator(m_Buffer + m_Size); }
+	inline reverse_iterator rend() { return reverse_iterator(begin()); }
+	inline const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
 
 	void PrintVector()
 	{

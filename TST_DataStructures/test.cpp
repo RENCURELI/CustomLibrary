@@ -106,6 +106,18 @@ TEST(VectorTest, VectorAccessors)
 	EXPECT_THROW(testVec.at(testVec.size()), std::out_of_range);
 }
 
+TEST(VectorTest, VectorIterators)
+{
+	Vector<int> testVec = { 1, 2, 3, 4, 5 };
+	EXPECT_EQ(*testVec.begin(), 1);
+	EXPECT_FALSE(std::find(testVec.begin(), testVec.end(), 3) == testVec.end());
+	EXPECT_TRUE(testVec.end() == testVec.rbegin().base());
+	EXPECT_EQ(*testVec.rbegin(), 5);
+
+	testVec.clear();
+	EXPECT_TRUE(testVec.begin() == testVec.end());
+}
+
 TEST(VectorTest, Resizing)
 {
 	Vector<int> testVec = { 1, 2, 3, 4, 5 };

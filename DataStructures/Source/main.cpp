@@ -37,6 +37,7 @@ int main()
 		vec.PrintVector();
 
 		Vector<int> testVec = { 1, 2, 3, 4, 5, 6, 7 };
+
 		testVec.erase(6);
 		testVec.resize(4);
 		std::cout << "Test Vector after resize" << "\n";
