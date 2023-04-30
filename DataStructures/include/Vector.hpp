@@ -195,6 +195,8 @@ public:
 	using const_iterator = VectorConstIterator<Vector<T>>;
 	using reverse_iterator = std::reverse_iterator<iterator>;
 	using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+	// size_type would be the unsigned version of the allocator_traits::difference_type ( I currently don't have an allocator or allocator_traits )
+	using size_type = std::make_unsigned<const_iterator::difference_type>;
 public:
 	// Default constructor creating a 4 item vector
 	Vector() 
@@ -300,6 +302,65 @@ public:
 		return makeIterator(pos.m_Ptr);
 	}
 
+	iterator insert(const_iterator pos, size_type count, const T& value)
+	{
+		if (pos > cend())
+			throw std::out_of_range("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
+
+		if (count == 0)
+			return pos;
+
+		iterator returnedIt;
+		if (pos == cend())
+		{
+			returnedIt = end();
+
+			for (int i = 0; i < count; i++)
+				push_back(data);
+		}
+
+		return returnedIt;
+	}
+
+	iterator insert(const_iterator pos, iterator first, iterator last)
+	{
+		if (pos > cend())
+			throw std::out_of_range("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
+
+		iterator returnedIt;
+		if (pos == cend())
+		{
+			for (; first != last; ++first)
+				push_back(*first);
+		}
+
+		// would this insert anything?
+		if (first == last)
+			return pos;
+
+		return returnedIt;
+	}
+
+	iterator insert(const_iterator pos, std::initializer_list<T> ilist)
+	{
+		if (pos > cend())
+			throw std::out_of_range("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
+
+		if (ilist.size() == 0)
+			return pos;
+
+		iterator returnedIt;
+		if (pos == cend())
+		{
+			returnedIt = end();
+
+			for (auto it : ilist)
+				push_back(*it);
+		}
+
+		return returnedIt;
+	}
+
 	T& at(const size_t index)
 	{
 		if (m_Size <= 0)
@@ -358,7 +419,6 @@ public:
 		return makeIterator(ptr);
 	}
 
-	// Will update to use iterators later
 	iterator erase(iterator first, iterator last)
 	{
 		// Error handling
