@@ -5,13 +5,14 @@ Done :
   - Forward List
   - Doubly Linked List
   - Array
-  - Vector
   - Stack
 
 In Progress :
-Not sure yet ( Iterators kind of burned me on this one )
+  - Vector ( a few overloads for insert and maybe emplace )
+  - Vector Iterators
 
 TODO Data Structures :
+  - Allocators ( yes, I'm starting to get sidetracked, but I'm curious )
   - Set
   - Map
   - Tuple
