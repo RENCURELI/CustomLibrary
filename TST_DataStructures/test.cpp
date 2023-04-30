@@ -176,6 +176,10 @@ TEST(VectorTest, Insertion)
 	auto returnedIt = testVec.insert(testVec.end(), -12);
 	EXPECT_TRUE(returnedIt == (testVec.end() - 1));
 	EXPECT_EQ(*testVec.rbegin(), -12);
+
+	returnedIt = testVec.insert(testVec.begin() + 4, 0);
+	EXPECT_TRUE(returnedIt == testVec.begin() + 4);
+	EXPECT_EQ(*(testVec.begin() + 4), 0);
 }
 
 // For more complex types such as std::string -> Will have to update for this
@@ -206,6 +210,7 @@ TEST(VectorTest, Deletion)
 
 	// Error Testing
 	EXPECT_THROW(testVec.erase(testVec.begin() + 3, testVec.begin()), std::exception);
+	EXPECT_THROW(testVec.erase(testVec.begin(), testVec.end() + 5), std::out_of_range);
 	EXPECT_THROW(testVec.erase(testVec.end() + 1), std::out_of_range);
 	EXPECT_EQ(testVec.back(), 5);
 
@@ -215,12 +220,14 @@ TEST(VectorTest, Deletion)
 	EXPECT_EQ(testVec.size(), 4);
 	EXPECT_EQ(testVec.capacity(), 5);
 
-	testVec.erase(testVec.begin());
+	auto returnedIt = testVec.erase(testVec.begin());
+	EXPECT_TRUE(returnedIt == testVec.begin());
 	EXPECT_EQ(testVec.front(), 2);
 	EXPECT_EQ(testVec.size(), 3);
 	EXPECT_EQ(testVec.capacity(), 5);
 
-	testVec.erase(testVec.begin(), testVec.begin() + 1);
+	returnedIt = testVec.erase(testVec.begin(), testVec.begin() + 1);
+	EXPECT_TRUE(returnedIt == testVec.begin());
 	EXPECT_EQ(testVec.front(), 3);
 	EXPECT_EQ(testVec.size(), 2);
 	EXPECT_EQ(testVec.capacity(), 5);
@@ -235,6 +242,13 @@ TEST(VectorTest, Deletion)
 	for (int i = 0; i < 100; i++)
 		testVec.pop_back();
 	EXPECT_EQ(testVec.size(), 0);
+
+	testVec = { 1, 2, 3, 4, 5 };
+	returnedIt = testVec.erase(testVec.begin() + 2);
+	EXPECT_EQ(*returnedIt, 4);
+
+	returnedIt = testVec.erase(testVec.begin() + 1, testVec.end());
+	EXPECT_TRUE(returnedIt == testVec.end());
 }
 
 TEST(VectorTest, AssignMethods)

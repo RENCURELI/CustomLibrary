@@ -335,11 +335,12 @@ public:
 		m_Size = 0;
 	}
 
-	// Will update to use iterators later
-	void erase(iterator pos)
+	iterator erase(iterator pos)
 	{
 		if (pos > end())
 			throw std::out_of_range("[ERROR] Index out of bounds");
+
+		const pointer ptr = pos.m_Ptr;
 
 		std::destroy_at(&pos);
 
@@ -353,10 +354,12 @@ public:
 			} while (pos < end());
 		}
 		m_Size--;
+
+		return makeIterator(ptr);
 	}
 
 	// Will update to use iterators later
-	void erase(iterator first, iterator last)
+	iterator erase(iterator first, iterator last)
 	{
 		// Error handling
 		if (first > last)
@@ -371,22 +374,25 @@ public:
 
 		if (first == last)
 		{
-			return; // STL would return iterator for last, here, just return
+			return last;
 		}
+
+		const pointer ptr = first.m_Ptr;
 
 		std::destroy(&first, &last);
 
 		// if last is the last element of the vector we don't move the data
 		if (last <= end() - 1)
 		{
- 			size_t elemsToMove = end() - last;
- 			for (int i = 0; i < elemsToMove; i++)
- 			{
+			size_t elemsToMove = end() - last;
+			for (int i = 0; i < elemsToMove; i++)
+			{
 				*(first + i) = std::move(*(last + i));
- 			}
+			}
 		}
 
 		m_Size -= last - first;
+		return makeIterator(ptr);
 	}
 
 	inline const T& front() const { return m_Size > 0 ? this->m_Buffer[0] : throw std::runtime_error("[ERROR] Trying to access empty container"); }
