@@ -196,7 +196,7 @@ public:
 	using reverse_iterator = std::reverse_iterator<iterator>;
 	using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 	// size_type would be the unsigned version of the allocator_traits::difference_type ( I currently don't have an allocator or allocator_traits )
-	using size_type = std::make_unsigned<const_iterator::difference_type>;
+	//using size_type = std::make_unsigned<const_iterator::difference_type>; // doesn't seem to work yet
 public:
 	// Default constructor creating a 4 item vector
 	Vector() 
@@ -302,7 +302,8 @@ public:
 		return makeIterator(pos.m_Ptr);
 	}
 
-	iterator insert(const_iterator pos, size_type count, const T& value)
+	// would replace size_t with the hypothetical size_type
+	iterator insert(const_iterator pos, size_t count, const T& value)
 	{
 		if (pos > cend())
 			throw std::out_of_range("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
@@ -316,7 +317,7 @@ public:
 			returnedIt = end();
 
 			for (int i = 0; i < count; i++)
-				push_back(data);
+				push_back(value);
 		}
 
 		return returnedIt;
