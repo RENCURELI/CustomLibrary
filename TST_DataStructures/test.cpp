@@ -180,6 +180,11 @@ TEST(VectorTest, Insertion)
 	returnedIt = testVec.insert(testVec.begin() + 4, 0);
 	EXPECT_TRUE(returnedIt == testVec.begin() + 4);
 	EXPECT_EQ(*(testVec.begin() + 4), 0);
+
+	returnedIt = testVec.insert(testVec.begin(), 5, 100);
+	EXPECT_TRUE(returnedIt == testVec.begin());
+	EXPECT_EQ(testVec.size(), 15);
+	EXPECT_EQ(testVec.capacity(), 15);
 }
 
 // For more complex types such as std::string -> Will have to update for this

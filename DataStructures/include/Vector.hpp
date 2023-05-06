@@ -291,7 +291,7 @@ public:
 			const_iterator it = cend();
 			do
 			{
-				it = it--;
+				*it.m_Ptr = *(it - 1).m_Ptr;
 				--it;
 			} while (it > pos);
 
@@ -305,22 +305,49 @@ public:
 	// would replace size_t with the hypothetical size_type
 	iterator insert(const_iterator pos, size_t count, const T& value)
 	{
+		size_t posOffset = pos - begin();
 		if (pos > cend())
 			throw std::out_of_range("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
 
 		if (count == 0)
-			return pos;
+			return makeIterator(pos.m_Ptr);
 
-		iterator returnedIt;
 		if (pos == cend())
 		{
-			returnedIt = end();
+			iterator returnIt = end();
 
 			for (int i = 0; i < count; i++)
 				push_back(value);
-		}
 
-		return returnedIt;
+			return returnIt;
+		}
+		else
+		{
+			size_t newSize = m_Size + count;
+			if (newSize > m_Capacity)
+			{
+				reserve(newSize);
+				pos = begin() + posOffset;
+			}
+
+			const_iterator it = cend();
+			do
+			{
+				*(it + (count - 1)).m_Ptr = *(it - 1).m_Ptr;
+				--it;
+			} while (it > pos);
+
+			iterator temp = makeIterator(pos.m_Ptr);
+			iterator upperBound = makeIterator((temp + (count - 1)).m_Ptr);
+			for (; temp != upperBound; ++temp)
+			{
+				*temp.m_Ptr = value;
+			}
+
+			m_Size = newSize;
+
+			return makeIterator(pos.m_Ptr);
+		}
 	}
 
 	iterator insert(const_iterator pos, iterator first, iterator last)
