@@ -185,6 +185,9 @@ TEST(VectorTest, Insertion)
 	EXPECT_TRUE(returnedIt == testVec.begin());
 	EXPECT_EQ(testVec.size(), 15);
 	EXPECT_EQ(testVec.capacity(), 15);
+
+	Vector<int> secondVec = { 10, 20, 30, 40, 50 };
+	returnedIt = testVec.insert(testVec.begin() + 5, secondVec.begin() + 1, secondVec.end() - 1);
 }
 
 // For more complex types such as std::string -> Will have to update for this

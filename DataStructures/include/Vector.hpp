@@ -303,9 +303,9 @@ public:
 	}
 
 	// would replace size_t with the hypothetical size_type
+	// Must make sure insertion takes place before POS
 	iterator insert(const_iterator pos, size_t count, const T& value)
 	{
-		size_t posOffset = pos - begin();
 		if (pos > cend())
 			throw std::out_of_range("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
 
@@ -323,13 +323,17 @@ public:
 		}
 		else
 		{
+			size_t posOffset = pos - begin();
 			size_t newSize = m_Size + count;
 			if (newSize > m_Capacity)
 			{
 				reserve(newSize);
+
+				// After reserve, "pos" is invalidated
 				pos = begin() + posOffset;
 			}
 
+			// We move all data from after the last "to be inserted" position
 			const_iterator it = cend();
 			do
 			{
@@ -338,7 +342,7 @@ public:
 			} while (it > pos);
 
 			iterator temp = makeIterator(pos.m_Ptr);
-			iterator upperBound = makeIterator((temp + (count - 1)).m_Ptr);
+			iterator upperBound = makeIterator((temp + count).m_Ptr);
 			for (; temp != upperBound; ++temp)
 			{
 				*temp.m_Ptr = value;
@@ -355,20 +359,52 @@ public:
 		if (pos > cend())
 			throw std::out_of_range("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
 
-		iterator returnedIt;
+		if (first == last)
+			return makeIterator(pos.m_Ptr);
+
+		iterator returnedIt = makeIterator(pos.m_Ptr);
 		if (pos == cend())
 		{
 			for (; first != last; ++first)
 				push_back(*first);
 		}
+		else
+		{
+			size_t posOffset = pos - begin();
+			size_t count = last - first;
+			size_t newSize = m_Size + count;
+			if (newSize > m_Capacity)
+			{
+				reserve(newSize);
 
-		// would this insert anything?
-		if (first == last)
-			return pos;
+				// After reserve, "pos" is invalidated
+				pos = begin() + posOffset;
+			}
+
+			// We move all data from after the last "to be inserted" position
+			const_iterator it = cend();
+			do
+			{
+				*(it + (count - 1)).m_Ptr = *(it - 1).m_Ptr;
+				--it;
+			} while (it > pos);
+
+			iterator temp = makeIterator(pos.m_Ptr);
+			for (; first != last; ++first)
+			{
+				*temp.m_Ptr = *first.m_Ptr;
+				++temp;
+			}
+
+			m_Size = newSize;
+
+			return makeIterator(pos.m_Ptr);
+		}
 
 		return returnedIt;
 	}
 
+	// TODO
 	iterator insert(const_iterator pos, std::initializer_list<T> ilist)
 	{
 		if (pos > cend())
