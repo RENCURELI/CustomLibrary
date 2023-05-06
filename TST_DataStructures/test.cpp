@@ -183,11 +183,20 @@ TEST(VectorTest, Insertion)
 
 	returnedIt = testVec.insert(testVec.begin(), 5, 100);
 	EXPECT_TRUE(returnedIt == testVec.begin());
+	EXPECT_EQ(*testVec.begin(), 100);
+	EXPECT_EQ(*(testVec.begin() + 4), 100);
+	EXPECT_EQ(*(testVec.begin() + 5), 1);
 	EXPECT_EQ(testVec.size(), 15);
 	EXPECT_EQ(testVec.capacity(), 15);
 
 	Vector<int> secondVec = { 10, 20, 30, 40, 50 };
 	returnedIt = testVec.insert(testVec.begin() + 5, secondVec.begin() + 1, secondVec.end() - 1);
+	EXPECT_TRUE(returnedIt == (testVec.begin() + 5));
+	EXPECT_EQ(*(testVec.begin() + 5), 20);
+	EXPECT_EQ(*(testVec.begin() + 7), 40);
+	EXPECT_EQ(*(testVec.begin() + 8), 1);
+	EXPECT_EQ(testVec.size(), 18);
+	EXPECT_EQ(testVec.capacity(), 18);
 }
 
 // For more complex types such as std::string -> Will have to update for this

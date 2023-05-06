@@ -354,6 +354,7 @@ public:
 		}
 	}
 
+	// inserts [first last)
 	iterator insert(const_iterator pos, iterator first, iterator last)
 	{
 		if (pos > cend())
