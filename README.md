@@ -8,8 +8,9 @@ Done :
   - Stack
 
 In Progress :
-  - Vector ( a few overloads for insert and maybe emplace )
-  - Vector Iterators
+  - Vector ( maybe emplace )
+  - List Iterators
+  - Deque
 
 TODO Data Structures :
   - Allocators ( yes, I'm starting to get sidetracked, but I'm curious )
@@ -17,7 +18,6 @@ TODO Data Structures :
   - Map
   - Tuple
   - Queue
-  - DeQueue
   - Graphs ( Binary tree, Heap, etc... )
 
 TODO Algorithms :
