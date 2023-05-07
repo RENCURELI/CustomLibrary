@@ -257,7 +257,7 @@ public:
 	void push_back(const T& value)
 	{
 		if (m_Size == m_Capacity)
-			resize(m_Capacity * 2);
+			reserve(m_Capacity * 2);
 		m_Buffer[m_Size] = value;
 		m_Size++;
 	}
@@ -285,7 +285,7 @@ public:
 		{
 			// We resize if needed
 			if (m_Size + 1 > m_Capacity)
-				resize(m_Capacity * 2);
+				reserve(m_Capacity * 2);
 
 			// We move the data after pos
 			const_iterator it = cend();
@@ -303,7 +303,6 @@ public:
 	}
 
 	// would replace size_t with the hypothetical size_type
-	// Must make sure insertion takes place before POS
 	iterator insert(const_iterator pos, size_t count, const T& value)
 	{
 		if (pos > cend())
@@ -376,7 +375,7 @@ public:
 			size_t newSize = m_Size + count;
 			if (newSize > m_Capacity)
 			{
-				reserve(newSize);
+				reserve(newSize * 2);
 
 				// After reserve, "pos" is invalidated
 				pos = begin() + posOffset;
@@ -405,22 +404,53 @@ public:
 		return returnedIt;
 	}
 
-	// TODO
 	iterator insert(const_iterator pos, std::initializer_list<T> ilist)
 	{
 		if (pos > cend())
 			throw std::out_of_range("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
 
 		if (ilist.size() == 0)
-			return pos;
+			return makeIterator(pos.m_Ptr);;
 
-		iterator returnedIt;
+		iterator returnedIt = makeIterator(pos.m_Ptr);
 		if (pos == cend())
 		{
 			returnedIt = end();
 
-			for (auto it : ilist)
-				push_back(*it);
+			for (const auto& it : ilist)
+				push_back(it);
+		}
+		else
+		{
+			size_t posOffset = pos - begin();
+			size_t count = ilist.size();
+			size_t newSize = m_Size + count;
+			if (newSize > m_Capacity)
+			{
+				reserve(newSize * 2);
+
+				// After reserve, "pos" is invalidated
+				pos = begin() + posOffset;
+			}
+
+			// We move all data from after the last "to be inserted" position
+			const_iterator it = cend();
+			do
+			{
+				*(it + (count - 1)).m_Ptr = *(it - 1).m_Ptr;
+				--it;
+			} while (it > pos);
+
+			iterator temp = makeIterator(pos.m_Ptr);
+			for (const auto& it : ilist)
+			{
+				*temp.m_Ptr = it;
+				++temp;
+			}
+
+			m_Size = newSize;
+
+			return makeIterator(pos.m_Ptr);
 		}
 
 		return returnedIt;
