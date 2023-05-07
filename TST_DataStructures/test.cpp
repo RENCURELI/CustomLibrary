@@ -367,38 +367,38 @@ TEST(ListTest, PushAndSize)
 	EXPECT_EQ(testList.size(), 5);
 }
 
-// Here we test InsertAt and RemoveAt methods
-TEST(ListTest, InsertAndRemoveAt)
+// Here we test insert and remove methods
+TEST(ListTest, InsertAndremove)
 {
-	// InsertAt block
+	// insert block
 	List<int> testList = { 1, 2, 3 };
 
-	testList.InsertAt(0, 0);
+	testList.insert(0, 0);
 	EXPECT_EQ(testList.front(), 0);
 
-	testList.InsertAt(4, testList.size());
+	testList.insert(4, testList.size());
 	EXPECT_EQ(testList.back(), 4);
 
 	// We still need to implement the find algorithm for this case
-	//testList.InsertAt(-5, 2);
+	//testList.insert(-5, 2);
 
 	// We test error handling
-	EXPECT_THROW(testList.InsertAt(-1, -1), std::exception);
-	EXPECT_THROW(testList.InsertAt(12, 12), std::exception);
+	EXPECT_THROW(testList.insert(-1, -1), std::exception);
+	EXPECT_THROW(testList.insert(12, 12), std::exception);
 
-	// RemoveAt block
-	testList.RemoveAt(0);
+	// remove block
+	testList.remove(0);
 	EXPECT_EQ(testList.front(), 1);
 
-	testList.RemoveAt(testList.size() - 1);
+	testList.remove(testList.size() - 1);
 	EXPECT_EQ(testList.back(), 3);
 
 	// We still need to implement the find algorithm for this case
-	//testList.RemoveAt(2);
+	//testList.remove(2);
 
 	// We test error handling
-	EXPECT_THROW(testList.RemoveAt(-1), std::exception);
-	EXPECT_THROW(testList.RemoveAt(12), std::exception);
+	EXPECT_THROW(testList.remove(-1), std::exception);
+	EXPECT_THROW(testList.remove(12), std::exception);
 }
 
 TEST(ListTest, PopAndClear)
@@ -463,40 +463,40 @@ TEST(FListTest, PushAndSize)
 	EXPECT_EQ(testList.size(), 4);
 }
 
-// Here we test InsertAt and RemoveAt methods
-TEST(FListTest, InsertAndRemoveAt)
+// Here we test insert and remove methods
+TEST(FListTest, InsertAndremove)
 {
-	// InsertAt block
+	// insert block
 	FList<int> testList = { 1, 2, 3 };
 
-	testList.InsertAt(0, 0);
+	testList.insert(0, 0);
 	EXPECT_EQ(testList.front(), 0);
 
 	// We still need to implement the find algorithm for this case
-	testList.InsertAt(4, testList.size());
+	testList.insert(4, testList.size());
 	//EXPECT_EQ(testList.back(), 4);
 
 	// We still need to implement the find algorithm for this case
-	//testList.InsertAt(-5, 2);
+	//testList.insert(-5, 2);
 
 	// We test error handling
-	EXPECT_THROW(testList.InsertAt(-1, -1), std::exception);
-	EXPECT_THROW(testList.InsertAt(12, 12), std::exception);
+	EXPECT_THROW(testList.insert(-1, -1), std::exception);
+	EXPECT_THROW(testList.insert(12, 12), std::exception);
 
-	// RemoveAt block
-	testList.RemoveAt(0);
+	// remove block
+	testList.remove(0);
 	EXPECT_EQ(testList.front(), 3);
 
 	// We still need to implement the find algorithm for this case
-	testList.RemoveAt(testList.size() - 1);
+	testList.remove(testList.size() - 1);
 	//EXPECT_EQ(testList.back(), 3);
 
 	// We still need to implement the find algorithm for this case
-	//testList.RemoveAt(2);
+	//testList.remove(2);
 
 	// We test error handling
-	EXPECT_THROW(testList.RemoveAt(-1), std::exception);
-	EXPECT_THROW(testList.RemoveAt(12), std::exception);
+	EXPECT_THROW(testList.remove(-1), std::exception);
+	EXPECT_THROW(testList.remove(12), std::exception);
 }
 
 TEST(FListTest, PopAndClear)

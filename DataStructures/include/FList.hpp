@@ -51,7 +51,7 @@ public:
 		return newNode;
 	}
 
-	FListNode_t<T>* InsertAt(T data, int index)
+	FListNode_t<T>* insert(T data, int index)
 	{
 		CheckIndex(index, true);
 		FListNode_t<T>* newNode = new FListNode_t<T>(data);
@@ -103,7 +103,7 @@ public:
 	}
 
 	// Remove node at specified Index
-	void RemoveAt(int index)
+	void remove(int index)
 	{
 		CheckIndex(index);
 		if (index == 0)

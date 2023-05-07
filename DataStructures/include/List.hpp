@@ -32,7 +32,6 @@ public:
 		Clear();
 	}
 
-	//ListNode_t<T>* push_front(T data)
 	void push_front(T data)
 	{
 		ListNode_t<T>* newNode = new ListNode_t<T>(data);
@@ -50,10 +49,8 @@ public:
 			m_Head = newNode;
 		}
 		m_Size++;
-		//return newNode;
 	}
 
-	//ListNode_t<T>* push_back(T data)
 	void push_back(T data)
 	{
 		ListNode_t<T>* newNode = new ListNode_t<T>(data);
@@ -71,11 +68,9 @@ public:
 			m_Tail = newNode;
 		}
 		m_Size++;
-		//return newNode;
 	}
 
-	//ListNode_t<T>* InsertAt(T data, int index)
-	void InsertAt(T data, int index)
+	void insert(T data, int index)
 	{
 		CheckIndex(index, true);
 		ListNode_t<T>* newNode = new ListNode_t<T>(data);
@@ -109,7 +104,6 @@ public:
 		}
 
 		m_Size++;
-		//return newNode;
 	}
 
 	// Remove last node
@@ -159,7 +153,7 @@ public:
 	}
 
 	// Remove node at specified Index
-	void RemoveAt(int index)
+	void remove(int index)
 	{
 		CheckIndex(index);
 		if (index == 0)
