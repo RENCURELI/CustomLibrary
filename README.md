@@ -1,4 +1,4 @@
-# Lists
+# CustomLibrary
 Creating a Data Structure and Algorithm library
 
 Done :
