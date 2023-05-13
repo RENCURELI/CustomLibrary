@@ -64,6 +64,13 @@ int main()
 		}
 		testVec.PrintVector();
 
+		// Range base for loop using array iterators
+		Array<int, 5> testArray{ 1, 2, 3, 4, 5 };
+		for (auto val : testArray)
+		{
+			std::cout << val << std::endl;
+		}
+
 		// STACK
 		Stack<int> vecStack = Stack<int>(testVec);
 		vecStack.push(12);

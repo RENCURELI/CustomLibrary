@@ -1,11 +1,13 @@
 #include "pch.h"
 #include <gtest/gtest.h>
+#include <algorithm> // To test on STL algorithms that iterators work
 #include <string>
 #include "../DataStructures/include/Array.hpp"
 #include "../DataStructures/include/Vector.hpp"
 #include "../DataStructures/include/List.hpp"
 #include "../DataStructures/include/FList.hpp"
 #include "../DataStructures/include/Stack.hpp"
+#include <vector>
 
 #pragma region ArrayTests
 // ================================================
@@ -36,6 +38,8 @@ TEST(ArrayTest, ArrayAt)
 
 	// Test for negative overflowing index
 	EXPECT_THROW(testArray.at(testArray.size()), std::exception);
+
+	EXPECT_TRUE(std::is_sorted(testArray.begin(), testArray.end()) == true);
 }
 
 TEST(ArrayTest, ArraySize)
@@ -123,6 +127,13 @@ TEST(VectorTest, VectorIterators)
 
 	testVec.pop_back();
 	EXPECT_EQ(*testVec.rbegin(), 4);
+
+	//auto temp = testVec.begin() - testVec.end();
+
+	//std::vector<int> vec = { 1, 2, 3, 4, 5 };
+	//std::sort(testVec.begin(), testVec.end()); // No idea why this doesn't work
+	//std::sort(vec.cbegin(), vec.cend());
+	//EXPECT_TRUE(std::is_sorted(testVec.begin(), testVec.end()) == true);
 }
 
 TEST(VectorTest, Resizing)
@@ -210,28 +221,6 @@ TEST(VectorTest, Insertion)
 	EXPECT_EQ(testVec.size(), 22);
 	EXPECT_EQ(testVec.capacity(), 36);
 }
-
-// For more complex types such as std::string -> Will have to update for this
-/*TEST(VectorTest, InsertComplex)
-{
-	Vector<std::string> stringVec;
-	stringVec.push_back("Hello");
-	stringVec.push_back("World");
-	EXPECT_EQ(stringVec.front(), "Hello");
-	EXPECT_EQ(stringVec.back(), "World");
-	EXPECT_EQ(stringVec.size(), 2);
-	EXPECT_EQ(stringVec.capacity(), 4);
-
-	for (int i = 0; i < 5; i++)
-	{
-		stringVec.push_back("Reallocating");
-	}
-	EXPECT_EQ(stringVec.back(), "Reallocating");
-	EXPECT_EQ(stringVec.size(), 7);
-	EXPECT_EQ(stringVec.capacity(), 8);
-
-	stringVec.insert(2, "Inserting...");
-}*/
 
 TEST(VectorTest, Deletion)
 {

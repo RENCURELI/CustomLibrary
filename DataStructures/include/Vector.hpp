@@ -7,6 +7,7 @@
 #include <string>
 #include <memory>
 #include <iterator>
+#include <limits>
 
 #pragma region ConstIterator
 template<typename Vector>
@@ -555,6 +556,7 @@ public:
 	inline const T& back() const { return m_Size > 0 ? this->m_Buffer[m_Size - 1] : throw std::runtime_error("[ERROR] Trying to access empty container"); }
 	inline T& back() { return m_Size > 0 ? this->m_Buffer[m_Size - 1] : throw std::runtime_error("[ERROR] Trying to access empty container"); }
 	inline size_t size() const { return m_Size; }
+	inline size_t max_size() const { return std::numeric_limits<size_t>::max(); }
 	inline size_t capacity() const { return m_Capacity; }
 	inline bool empty() const { return m_Size == 0; }
 	inline iterator begin() { return iterator(m_Buffer); }
