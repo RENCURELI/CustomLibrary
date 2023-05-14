@@ -131,7 +131,7 @@ TEST(VectorTest, VectorIterators)
 	EXPECT_TRUE(std::is_sorted(testVec.begin(), testVec.end()) == true);
 
 	auto it = std::find(testVec.begin(), testVec.end(), 2);
-	EXPECT_TRUE(it == testVec.begin() + 1, true);
+	EXPECT_TRUE(it == testVec.begin() + 1);
 }
 
 TEST(VectorTest, Resizing)
@@ -360,32 +360,28 @@ TEST(ListTest, InsertAndremove)
 	// insert block
 	List<int> testList = { 1, 2, 3 };
 
-	testList.insert(0, 0);
+	testList.insert(testList.begin(), 0);
 	EXPECT_EQ(testList.front(), 0);
 
-	testList.insert(4, testList.size());
+	testList.insert(testList.end(), 4);
 	EXPECT_EQ(testList.back(), 4);
 
 	// We still need to implement the find algorithm for this case
-	//testList.insert(-5, 2);
-
-	// We test error handling
-	EXPECT_THROW(testList.insert(-1, -1), std::exception);
-	EXPECT_THROW(testList.insert(12, 12), std::exception);
+	auto it = testList.begin();
+	std::advance(it, 3);
+	testList.insert(it, -5);
 
 	// remove block
-	testList.remove(0);
+	testList.erase(testList.begin());
 	EXPECT_EQ(testList.front(), 1);
 
-	testList.remove(testList.size() - 1);
+	testList.erase(--testList.end());
 	EXPECT_EQ(testList.back(), 3);
 
 	// We still need to implement the find algorithm for this case
-	//testList.remove(2);
-
-	// We test error handling
-	EXPECT_THROW(testList.remove(-1), std::exception);
-	EXPECT_THROW(testList.remove(12), std::exception);
+	it = testList.begin();
+	std::advance(it, 2);
+	testList.erase(it);
 }
 
 TEST(ListTest, PopAndClear)
@@ -398,7 +394,7 @@ TEST(ListTest, PopAndClear)
 	testList.pop_front();
 	EXPECT_EQ(testList.front(), 2);
 
-	testList.Clear();
+	testList.clear();
 	EXPECT_EQ(testList.size(), 0);
 	EXPECT_EQ(testList.empty(), true);
 }

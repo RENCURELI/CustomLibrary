@@ -3,10 +3,123 @@
 #include <iostream>
 #include <initializer_list>
 #include <stdexcept>
+#include <iterator>
+
+#pragma region ConstIterator
+template<typename List>
+class ListConstIterator
+{
+public:
+	using iterator_concept = std::bidirectional_iterator_tag;
+	using value_type = typename List::value_type;
+	using pointer = List::const_pointer;
+	using reference = const value_type&;
+	using difference_type = std::ptrdiff_t;
+
+	using PtrType = typename List::pointer;
+
+	ListConstIterator(PtrType ptr) : m_Ptr(ptr) {}
+
+	// preincrement
+	ListConstIterator& operator++()
+	{
+		m_Ptr = m_Ptr->m_Next;
+		return *this;
+	}
+
+	// postincrement
+	ListConstIterator operator++(int)
+	{
+		ListConstIterator tmp = *this;
+		m_Ptr = m_Ptr.m_Next;
+		return tmp;
+	}
+
+	// preincrement
+	ListConstIterator& operator--()
+	{
+		m_Ptr = m_Ptr->m_Previous;
+		return *this;
+	}
+
+	// postincrement
+	ListConstIterator operator--(int)
+	{
+		ListConstIterator tmp = *this;
+		m_Ptr = m_Ptr.m_Previous;
+		return tmp;
+	}
+
+	const reference operator*() const { return m_Ptr->m_Data; }
+	const pointer operator->() const { return this->m_Ptr; }
+	bool operator==(const ListConstIterator& other) const { return m_Ptr == other.m_Ptr; }
+	bool operator!=(const ListConstIterator& other) const { return !(*this == other); }
+
+	PtrType m_Ptr;
+};
+
+#pragma endregion ConstIterator
+
+#pragma region Iterator
+template<typename List>
+class ListIterator : public ListConstIterator<List>
+{
+public:
+	using value_type = typename List::value_type;
+	using pointer = List::pointer;
+	using reference = value_type&;
+	using difference_type = std::ptrdiff_t;
+	using BaseIt = ListConstIterator<List>;
+public:
+	// preincrement
+	ListIterator& operator++()
+	{
+		BaseIt::operator++();
+		return *this;
+	}
+
+	// postincrement
+	ListIterator operator++(int)
+	{
+		ListConstIterator tmp = *this;
+		BaseIt::operator++();
+		return tmp;
+	}
+
+	// preincrement
+	ListIterator& operator--()
+	{
+		BaseIt::operator--();
+		return *this;
+	}
+
+	// postincrement
+	ListIterator operator--(int)
+	{
+		ListConstIterator tmp = *this;
+		BaseIt::operator--();
+		return tmp;
+	}
+
+	reference operator*() const { return const_cast<reference>(BaseIt::operator*()); }
+	pointer operator->() const { return this->m_Ptr; }
+	bool operator==(const ListIterator& other) const { return this->m_Ptr == other.m_Ptr; }
+	bool operator!=(const ListIterator& other) const { return !(*this == other); }
+};
+#pragma endregion Iterator
 
 template<class T>
 class List
 {
+public:
+	using value_type = T;
+	using pointer = ListNode_t<T>*;
+	using const_pointer = const T*;
+	using iterator = ListIterator<List<T>>;
+	using const_iterator = ListConstIterator<List<T>>;
+	using reverse_iterator = std::reverse_iterator<iterator>;
+	using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+
 public:
 	List() {};
 	List(std::initializer_list<T> l)
@@ -29,7 +142,7 @@ public:
 
 	~List()
 	{
-		Clear();
+		clear();
 	}
 
 	void push_front(T data)
@@ -70,9 +183,9 @@ public:
 		m_Size++;
 	}
 
-	void insert(T data, int index)
+	iterator insert(const_iterator pos, T data)
 	{
-		CheckIndex(index, true);
+		//CheckIndex(pos, true);
 		ListNode_t<T>* newNode = new ListNode_t<T>(data);
 
 		// Empty list case handled by creating first element
@@ -84,12 +197,13 @@ public:
 		else
 		{
 			// We insert at index 0, specific behaviour
-			if (index == 0)
+			if (pos == cbegin())
 			{
 				newNode->m_Next = m_Head;
+				m_Head->m_Previous = newNode;
 				m_Head = newNode;
 			}
-			else if (index == m_Size)
+			else if (pos == cend())
 			{
 				m_Tail->m_Next = newNode;
 				newNode->m_Previous = m_Tail;
@@ -97,13 +211,15 @@ public:
 			}
 			else
 			{
-				ListNode_t<T>* prevNode = AdvanceTo(index - 1);
+				ListNode_t<T>* prevNode = pos.m_Ptr->m_Previous;
 				newNode->m_Next = prevNode->m_Next;
+				newNode->m_Previous = prevNode;
 				prevNode->m_Next = newNode;
 			}
 		}
 
 		m_Size++;
+		return makeIterator(pos.m_Ptr);
 	}
 
 	// Remove last node
@@ -153,16 +269,16 @@ public:
 	}
 
 	// Remove node at specified Index
-	void remove(int index)
+	iterator erase(iterator pos)
 	{
-		CheckIndex(index);
-		if (index == 0)
+		iterator returnedIt = makeIterator(pos.m_Ptr->m_Next);
+		if (pos == begin())
 		{
 			ListNode_t<T>* currHead = m_Head;
 			m_Head = m_Head->m_Next;
 			delete currHead;
 		}
-		else if (index == m_Size - 1)
+		else if (pos == --end())
 		{
 			ListNode_t<T>* newTail = m_Tail->m_Previous;
 			m_Tail = newTail;
@@ -171,17 +287,18 @@ public:
 		}
 		else
 		{
-			ListNode_t<T>* nodeToDel = AdvanceTo(index);
+			ListNode_t<T>* nodeToDel = pos.m_Ptr;
 			nodeToDel->m_Previous->m_Next = nodeToDel->m_Next;
 			nodeToDel->m_Next->m_Previous = nodeToDel->m_Previous;
 			delete nodeToDel;
 		}
 
 		m_Size--;
+		return returnedIt;
 	}
 
 	// Clear the content of the List
-	void Clear()
+	void clear()
 	{
 		// Go from m_Head to m_Tail and free memory
 		while (m_Head != nullptr)
@@ -202,6 +319,14 @@ public:
 	inline const T& front() const { return m_Size > 0 ? m_Head->m_Data : throw std::runtime_error("[ERROR] Trying to access and empty list"); }
 	inline T& back() { return m_Size > 0 ? m_Tail->m_Data : throw std::runtime_error("[ERROR] Trying to access and empty list"); }
 	inline const T& back() const { return m_Size > 0 ? m_Tail->m_Data : throw std::runtime_error("[ERROR] Trying to access and empty list"); }
+	inline iterator begin() { return iterator(m_Head); }
+	inline const_iterator cbegin() const { return const_iterator(m_Head); }
+	inline reverse_iterator rbegin() { return reverse_iterator(end()); }
+	inline const_reverse_iterator crbegin() const { return const_reverse_iterator(cend()); }
+	inline iterator end() { return iterator(m_Tail); }
+	inline const_iterator cend() const { return const_iterator(m_Tail); }
+	inline reverse_iterator rend() { return reverse_iterator(begin()); }
+	inline const_reverse_iterator crend() const { return const_reverse_iterator(cbegin()); }
 
 	void PrintList()
 	{
@@ -240,6 +365,12 @@ public:
 	}
 
 private:
+		iterator makeIterator(const pointer ptr)
+		{
+			return iterator(ptr);
+		}
+
+private:
 	ListNode_t<T>* m_Head = nullptr;
 	ListNode_t<T>* m_Tail = nullptr;
 	int m_Size = 0;
@@ -274,13 +405,13 @@ private:
 		{
 			if (index < 0 || index > m_Size)
 			{
-				throw std::runtime_error("[ERROR] : Index Out of Bounds.");
+				throw std::out_of_range("[ERROR] : Index Out of Bounds.");
 				return false;
 			}
 		}
 		else if (index < 0 || index > m_Size - 1)
 		{
-			throw std::runtime_error("[ERROR] : Index Out of Bounds.");
+			throw std::out_of_range("[ERROR] : Index Out of Bounds.");
 			return false;
 		}
 

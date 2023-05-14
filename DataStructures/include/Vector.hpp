@@ -87,7 +87,7 @@ public:
 
 	const reference operator*() const { return *m_Ptr; }
 	reference operator[](int index) { return *(m_Ptr + index); }
-	const pointer operator->() const { return m_Ptr; }
+	const pointer operator->() const { return this->m_Ptr; }
 	bool operator==(const VectorConstIterator& other) const { return m_Ptr == other.m_Ptr; }
 	bool operator!=(const VectorConstIterator& other) const { return !(*this == other); }
 	bool operator<(const VectorConstIterator& right) const { return m_Ptr < right.m_Ptr; }
