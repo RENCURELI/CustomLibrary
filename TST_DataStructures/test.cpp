@@ -129,6 +129,9 @@ TEST(VectorTest, VectorIterators)
 
 	std::sort(testVec.begin(), testVec.end());
 	EXPECT_TRUE(std::is_sorted(testVec.begin(), testVec.end()) == true);
+
+	auto it = std::find(testVec.begin(), testVec.end(), 2);
+	EXPECT_TRUE(it == testVec.begin() + 1, true);
 }
 
 TEST(VectorTest, Resizing)
