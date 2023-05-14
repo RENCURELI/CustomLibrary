@@ -75,9 +75,9 @@ public:
 		return tmp;
 	}
 
-	difference_type operator-(const ArrayConstIterator& other)
+	friend difference_type operator-(const ArrayConstIterator& lhs, const ArrayConstIterator& rhs)
 	{
-		return m_Ptr - other.m_Ptr;
+		return lhs.m_Ptr - rhs.m_Ptr;
 	}
 
 	const reference operator*() const { return *m_Ptr; }
@@ -162,9 +162,9 @@ public:
 		return tmp;
 	}
 
-	difference_type operator-(const ArrayIterator& other)
+	friend difference_type operator-(const ArrayIterator& lhs, const ArrayIterator& rhs)
 	{
-		return BaseIt::operator-(other);
+		return lhs.m_Ptr - rhs.m_Ptr;
 	}
 
 	reference operator*() const { return const_cast<reference>(BaseIt::operator*()); }

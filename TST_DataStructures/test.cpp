@@ -7,7 +7,6 @@
 #include "../DataStructures/include/List.hpp"
 #include "../DataStructures/include/FList.hpp"
 #include "../DataStructures/include/Stack.hpp"
-#include <vector>
 
 #pragma region ArrayTests
 // ================================================
@@ -128,12 +127,8 @@ TEST(VectorTest, VectorIterators)
 	testVec.pop_back();
 	EXPECT_EQ(*testVec.rbegin(), 4);
 
-	//auto temp = testVec.begin() - testVec.end();
-
-	//std::vector<int> vec = { 1, 2, 3, 4, 5 };
-	//std::sort(testVec.begin(), testVec.end()); // No idea why this doesn't work
-	//std::sort(vec.cbegin(), vec.cend());
-	//EXPECT_TRUE(std::is_sorted(testVec.begin(), testVec.end()) == true);
+	std::sort(testVec.begin(), testVec.end());
+	EXPECT_TRUE(std::is_sorted(testVec.begin(), testVec.end()) == true);
 }
 
 TEST(VectorTest, Resizing)
