@@ -223,53 +223,56 @@ public:
 
 	iterator insert(const_iterator pos, size_t count, const T& data)
 	{
+		iterator returnVal = makeIterator(pos.m_Ptr);
+
 		// No insertion
 		if (count == 0)
 		{
-			return makeIterator(pos.m_Ptr);
+			return returnVal;
 		}
-
-		if (m_Head == nullptr || pos == cend())
+		
+		if (m_Head == nullptr)
 		{
 			for (; count > 0; --count)
 			{
 				push_back(data);
 			}
-			return makeIterator(pos.m_Ptr);
+			return begin();
 		}
 		else
 		{
-			if (pos == cbegin())
-			{
-				for (; count > 0; --count)
-				{
-					push_front(data);
-				}
-				return begin();
-			}
-			else
-			{
-				iterator returnVal = makeIterator(pos.m_Ptr);
-				for (int i = 0; i < count; ++i)
-				{
-					ListNode_t<T>* newNode = new ListNode_t<T>(data);
+			ListNode_t<T>* newNode = new ListNode_t<T>(data);
+			returnVal = makeIterator(newNode);
 
+			for (int i = 0; i <= count; ++i)
+			{
+				if (pos == cbegin())
+				{
+					newNode->m_Next = m_Head;
+					m_Head->m_Previous = newNode;
+					m_Head = newNode;
+				}
+				else if (pos == cend())
+				{
+					m_Tail->m_Next = newNode;
+					newNode->m_Previous = m_Tail;
+					m_Tail = newNode;
+				}
+				else
+				{
 					ListNode_t<T>* prevNode = pos.m_Ptr->m_Previous;
 					newNode->m_Next = prevNode->m_Next;
 					newNode->m_Previous = prevNode;
 					prevNode->m_Next = newNode;
-					++pos;
-
-					if (i == 0)
-					{
-						returnVal = makeIterator(newNode);
-					}
 				}
 
-				m_Size += count;
-				return returnVal;
+				newNode = new ListNode_t<T>(data);
+				++pos;
 			}
 		}
+
+		m_Size += count;
+		return returnVal;
 	}
 
 	// inserts [first last)

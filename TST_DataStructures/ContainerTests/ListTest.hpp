@@ -93,21 +93,22 @@ TEST(ListTest, InsertAndremove)
 	// iterator insert( const_iterator pos, size_type count, const T& data );
 	// ======================================================================
 
-	testList.insert(testList.cbegin(), 45, -1);
+	it = testList.insert(testList.cbegin(), 45, -1);
 	EXPECT_TRUE(testList.empty() == false);
 	EXPECT_EQ(testList.size(), 45);
+	EXPECT_TRUE(it == testList.cbegin());
 
-	testList.insert(testList.cbegin(), 5, -2);
+	it = testList.insert(testList.cbegin(), 5, -2);
 	EXPECT_EQ(testList.front(), -2);
 	EXPECT_EQ(testList.size(), 50);
 
-	testList.insert(testList.cend(), 10, 0);
+	it = testList.insert(testList.cend(), 10, 0);
 	EXPECT_EQ(testList.back(), 0);
 	EXPECT_EQ(testList.size(), 60);
 
 	it = testList.begin();
 	std::advance(it, 25);
-	testList.insert(it, 15, -15);
+	it = testList.insert(it, 15, -15);
 	EXPECT_EQ(testList.front(), -2);
 	EXPECT_EQ(testList.back(), 0);
 	EXPECT_EQ(testList.size(), 75);

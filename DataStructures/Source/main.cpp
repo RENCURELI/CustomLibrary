@@ -16,6 +16,15 @@ int main()
 
 	try
 	{
+		// insert block
+		List<int> testList = { 1, 2, 3 };
+		testList.clear();
+		auto testIt = testList.insert(testList.cbegin(), 45, -1);
+
+		std::list<int> otherList = { 1, 2, 3 };
+		otherList.clear();
+		auto otherIt = otherList.insert(otherList.cbegin(), 45, -1);
+
 		// VECTOR
 		Vector<float> vec{ 5.0f, 1.5f, 0.25f, 10.f };
 
