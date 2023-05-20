@@ -89,9 +89,9 @@ TEST(ListTest, InsertAndremove)
 	EXPECT_EQ(testList.size(), 0);
 	EXPECT_THROW(testList.front(), std::runtime_error);
 
-	// ======================================================================
-	// iterator insert( const_iterator pos, size_type count, const T& data );
-	// ======================================================================
+	// =====================================================================
+	// iterator insert( const_iterator pos, size_type count, const T& data )
+	// =====================================================================
 
 	it = testList.insert(testList.cbegin(), 45, -1);
 	EXPECT_TRUE(testList.empty() == false);
@@ -101,10 +101,17 @@ TEST(ListTest, InsertAndremove)
 	it = testList.insert(testList.cbegin(), 5, -2);
 	EXPECT_EQ(testList.front(), -2);
 	EXPECT_EQ(testList.size(), 50);
+	EXPECT_TRUE(it == testList.cbegin());
 
 	it = testList.insert(testList.cend(), 10, 0);
 	EXPECT_EQ(testList.back(), 0);
 	EXPECT_EQ(testList.size(), 60);
+	auto otherIt = testList.begin();
+	std::advance(otherIt, 51);
+	EXPECT_TRUE(otherIt == it);
+	EXPECT_EQ(it.m_Ptr->m_Data, 0);
+	it = --it;
+	EXPECT_EQ(it.m_Ptr->m_Data, -1);
 
 	it = testList.begin();
 	std::advance(it, 25);
