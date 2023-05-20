@@ -183,9 +183,8 @@ public:
 		m_Size++;
 	}
 
-	iterator insert(const_iterator pos, T data)
+	iterator insert(const_iterator pos, const T& data)
 	{
-		//CheckIndex(pos, true);
 		ListNode_t<T>* newNode = new ListNode_t<T>(data);
 
 		// Empty list case handled by creating first element
@@ -220,6 +219,68 @@ public:
 
 		m_Size++;
 		return makeIterator(pos.m_Ptr);
+	}
+
+	iterator insert(const_iterator pos, size_t count, const T& data)
+	{
+		// No insertion
+		if (count == 0)
+		{
+			return makeIterator(pos.m_Ptr);
+		}
+
+		if (m_Head == nullptr || pos == cend())
+		{
+			for (; count > 0; --count)
+			{
+				push_back(data);
+			}
+			return makeIterator(pos.m_Ptr);
+		}
+		else
+		{
+			if (pos == cbegin())
+			{
+				for (; count > 0; --count)
+				{
+					push_front(data);
+				}
+				return begin();
+			}
+			else
+			{
+				iterator returnVal = makeIterator(pos.m_Ptr);
+				for (int i = 0; i < count; ++i)
+				{
+					ListNode_t<T>* newNode = new ListNode_t<T>(data);
+
+					ListNode_t<T>* prevNode = pos.m_Ptr->m_Previous;
+					newNode->m_Next = prevNode->m_Next;
+					newNode->m_Previous = prevNode;
+					prevNode->m_Next = newNode;
+					++pos;
+
+					if (i == 0)
+					{
+						returnVal = makeIterator(newNode);
+					}
+				}
+
+				m_Size += count;
+				return returnVal;
+			}
+		}
+	}
+
+	// inserts [first last)
+	iterator insert(const_iterator pos, iterator first, iterator last)
+	{
+
+	}
+
+	iterator insert(const_iterator pos, std::initializer_list<T> ilist)
+	{
+
 	}
 
 	// Remove last node
@@ -314,7 +375,7 @@ public:
 	}
 
 	inline bool empty() const { return m_Size == 0; }
-	inline int size() const { return m_Size; }
+	inline size_t size() const { return m_Size; }
 	inline T& front() { return m_Size > 0 ? m_Head->m_Data : throw std::runtime_error("[ERROR] Trying to access and empty list"); }
 	inline const T& front() const { return m_Size > 0 ? m_Head->m_Data : throw std::runtime_error("[ERROR] Trying to access and empty list"); }
 	inline T& back() { return m_Size > 0 ? m_Tail->m_Data : throw std::runtime_error("[ERROR] Trying to access and empty list"); }
@@ -373,7 +434,7 @@ private:
 private:
 	ListNode_t<T>* m_Head = nullptr;
 	ListNode_t<T>* m_Tail = nullptr;
-	int m_Size = 0;
+	size_t m_Size = 0;
 
 	ListNode_t<T>* AdvanceTo(int index) const
 	{
@@ -399,7 +460,7 @@ private:
 	}
 
 	// AllowExtra is to allow using InsertAt the same way as AddToBack
-	bool CheckIndex(const int index, bool allowExtra = false)
+	bool CheckIndex(const size_t index, bool allowExtra = false)
 	{
 		if (allowExtra)
 		{

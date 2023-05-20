@@ -67,10 +67,10 @@ TEST(ListTest, InsertAndremove)
 	testList.insert(testList.end(), 4);
 	EXPECT_EQ(testList.back(), 4);
 
-	// We still need to implement the find algorithm for this case
 	auto it = testList.begin();
 	std::advance(it, 3);
 	testList.insert(it, -5);
+	EXPECT_FALSE(std::find(testList.begin(), testList.end(), -5) == testList.end());
 
 	// remove block
 	testList.erase(testList.begin());
@@ -79,10 +79,39 @@ TEST(ListTest, InsertAndremove)
 	testList.erase(--testList.end());
 	EXPECT_EQ(testList.back(), 3);
 
-	// We still need to implement the find algorithm for this case
 	it = testList.begin();
 	std::advance(it, 2);
 	testList.erase(it);
+	EXPECT_TRUE(std::find(testList.begin(), testList.end(), -5) == testList.end());
+
+	testList.clear();
+	EXPECT_TRUE(testList.empty() == true);
+	EXPECT_EQ(testList.size(), 0);
+	EXPECT_THROW(testList.front(), std::runtime_error);
+
+	// ======================================================================
+	// iterator insert( const_iterator pos, size_type count, const T& data );
+	// ======================================================================
+
+	testList.insert(testList.cbegin(), 45, -1);
+	EXPECT_TRUE(testList.empty() == false);
+	EXPECT_EQ(testList.size(), 45);
+
+	testList.insert(testList.cbegin(), 5, -2);
+	EXPECT_EQ(testList.front(), -2);
+	EXPECT_EQ(testList.size(), 50);
+
+	testList.insert(testList.cend(), 10, 0);
+	EXPECT_EQ(testList.back(), 0);
+	EXPECT_EQ(testList.size(), 60);
+
+	it = testList.begin();
+	std::advance(it, 25);
+	testList.insert(it, 15, -15);
+	EXPECT_EQ(testList.front(), -2);
+	EXPECT_EQ(testList.back(), 0);
+	EXPECT_EQ(testList.size(), 75);
+	EXPECT_FALSE(std::find(testList.begin(), testList.end(), -15) == testList.end());
 }
 
 TEST(ListTest, PopAndClear)
