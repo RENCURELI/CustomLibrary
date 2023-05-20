@@ -154,7 +154,7 @@ public:
 	}
 
 	// Copy
-	FList<T>& operator=(const List<T>& other)
+	FList<T>& operator=(const FList<T>& other)
 	{
 		if (this == &other)
 			return *this;

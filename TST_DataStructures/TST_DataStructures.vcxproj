@@ -32,7 +32,24 @@
   <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(ProjectDir)ContainerTests;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(ProjectDir)ContainerTests;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(ProjectDir)ContainerTests;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(ProjectDir)ContainerTests;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemGroup>
+    <ClInclude Include="ContainerTests\ArrayTest.hpp" />
+    <ClInclude Include="ContainerTests\FListTest.hpp" />
+    <ClInclude Include="ContainerTests\ListTest.hpp" />
+    <ClInclude Include="ContainerTests\StackTest.hpp" />
+    <ClInclude Include="ContainerTests\VectorTest.hpp" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
