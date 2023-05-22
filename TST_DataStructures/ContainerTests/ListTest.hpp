@@ -120,6 +120,30 @@ TEST(ListTest, InsertAndremove)
 	EXPECT_EQ(testList.back(), 0);
 	EXPECT_EQ(testList.size(), 75);
 	EXPECT_FALSE(std::find(testList.begin(), testList.end(), -15) == testList.end());
+
+	// ==================================================================
+	// iterator insert( const_iterator pos, InputIt first, InputIt last )
+	// ==================================================================
+
+	List<int> otherList = { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
+
+	testList.clear();
+	it = otherList.begin();
+	std::advance(it, 5);
+	it = testList.insert(testList.cbegin(), otherList.begin(), it);
+	EXPECT_EQ(testList.size(), 5);
+	EXPECT_TRUE(it == testList.begin());
+	
+	it = otherList.begin();
+	std::advance(it, 7);
+	otherIt = testList.begin();
+	std::advance(otherIt, 2);
+	it = testList.insert(otherIt, otherList.begin(), it);
+	EXPECT_EQ(testList.size(), 12);
+	EXPECT_TRUE(std::find(testList.begin(), testList.end(), 4) != testList.end());
+	otherIt = testList.begin();
+	std::advance(otherIt, 2);
+	EXPECT_TRUE(it == otherIt);
 }
 
 TEST(ListTest, PopAndClear)

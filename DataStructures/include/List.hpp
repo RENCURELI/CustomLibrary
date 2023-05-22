@@ -278,6 +278,58 @@ public:
 	// inserts [first last)
 	iterator insert(const_iterator pos, iterator first, iterator last)
 	{
+		iterator returnVal = makeIterator(pos.m_Ptr);
+
+		if (first == last)
+		{
+			return returnVal;
+		}
+
+		if (m_Head == nullptr)
+		{
+			for (; first != last; ++first)
+			{
+				push_back(first.m_Ptr->m_Data);
+			}
+			return begin();
+		}
+		else
+		{
+			returnVal = first;
+			int i = 0;
+			for (; first != last; ++first)
+			{
+				ListNode_t<T>* newNode = new ListNode_t<T>(first.m_Ptr->m_Data);
+				if (pos == cbegin() && i == 0)
+				{
+					newNode->m_Next = m_Head;
+					m_Head->m_Previous = newNode;
+					m_Head = newNode;
+				}
+				else if (pos == cend())
+				{
+					m_Tail->m_Next = newNode;
+					newNode->m_Previous = m_Tail;
+					m_Tail = newNode;
+				}
+				else
+				{
+					pos.m_Ptr->m_Previous->m_Next = newNode;
+					newNode->m_Previous = pos.m_Ptr->m_Previous;
+					newNode->m_Next = pos.m_Ptr;
+					pos.m_Ptr->m_Previous = newNode;
+				}
+
+				if (i == 0)
+				{
+					returnVal = makeIterator(newNode);
+				}
+
+				++i;
+				++m_Size;
+			}
+			return returnVal;
+		}
 
 	}
 
