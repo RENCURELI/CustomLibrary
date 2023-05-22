@@ -267,7 +267,6 @@ public:
 				}
 
 				newNode = new ListNode_t<T>(data);
-				++pos;
 			}
 		}
 
@@ -394,7 +393,7 @@ public:
 			m_Head = m_Head->m_Next;
 			delete currHead;
 		}
-		else if (pos == --end())
+		else if (pos == makeIterator(m_Tail))
 		{
 			ListNode_t<T>* newTail = m_Tail->m_Previous;
 			m_Tail = newTail;
@@ -439,8 +438,8 @@ public:
 	inline const_iterator cbegin() const { return const_iterator(m_Head); }
 	inline reverse_iterator rbegin() { return reverse_iterator(end()); }
 	inline const_reverse_iterator crbegin() const { return const_reverse_iterator(cend()); }
-	inline iterator end() { return iterator(m_Tail); }
-	inline const_iterator cend() const { return const_iterator(m_Tail); }
+	inline iterator end() { return iterator(nullptr); }
+	inline const_iterator cend() const { return const_iterator(nullptr); }
 	inline reverse_iterator rend() { return reverse_iterator(begin()); }
 	inline const_reverse_iterator crend() const { return const_reverse_iterator(cbegin()); }
 

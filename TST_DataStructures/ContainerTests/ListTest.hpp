@@ -76,7 +76,9 @@ TEST(ListTest, InsertAndremove)
 	testList.erase(testList.begin());
 	EXPECT_EQ(testList.front(), 1);
 
-	testList.erase(--testList.end());
+	it = testList.begin();
+	std::advance(it, testList.size() - 1);
+	testList.erase(it);
 	EXPECT_EQ(testList.back(), 3);
 
 	it = testList.begin();
@@ -144,6 +146,9 @@ TEST(ListTest, InsertAndremove)
 	otherIt = testList.begin();
 	std::advance(otherIt, 2);
 	EXPECT_TRUE(it == otherIt);
+
+	it = testList.insert(testList.cend(), otherList.begin(), otherList.end());
+	EXPECT_EQ(testList.size(), 23);
 }
 
 TEST(ListTest, PopAndClear)
