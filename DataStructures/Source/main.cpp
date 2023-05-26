@@ -28,6 +28,8 @@ int main()
 		// VECTOR
 		Vector<float> vec{ 5.0f, 1.5f, 0.25f, 10.f };
 
+		std::make_heap(vec.begin(), vec.end());
+
 		std::cout << "\n" << vec.capacity() << "\n";
 
 		for (int i = 0; i < 50; i++)

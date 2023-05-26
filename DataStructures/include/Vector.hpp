@@ -411,7 +411,7 @@ public:
 			throw std::out_of_range("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
 
 		if (ilist.size() == 0)
-			return makeIterator(pos.m_Ptr);;
+			return makeIterator(pos.m_Ptr);
 
 		iterator returnedIt = makeIterator(pos.m_Ptr);
 		if (pos == cend())

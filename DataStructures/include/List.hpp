@@ -334,7 +334,60 @@ public:
 
 	iterator insert(const_iterator pos, std::initializer_list<T> ilist)
 	{
+		if (ilist.size() == 0)
+			return makeIterator(pos.m_Ptr);
 
+		iterator returnVal = makeIterator(pos.m_Ptr);
+
+		if (m_Head == nullptr)
+		{
+			for (const auto& it : ilist)
+			{
+				push_back(it);
+			}
+			return begin();
+		}
+		else if (pos == cend())
+		{
+			int i = 0;
+			for (const auto& it : ilist)
+			{
+				ListNode_t<T>* newNode = new ListNode_t<T>(it);
+				m_Tail->m_Next = newNode;
+				newNode->m_Previous = m_Tail;
+				m_Tail = newNode;
+
+				if (i == 0)
+				{
+					returnVal = makeIterator(newNode);
+				}
+				++i;
+			}
+
+			m_Size += ilist.size();
+			return returnVal;
+		}
+		else
+		{
+			int i = 0;
+			for (const auto& it : ilist)
+			{
+				ListNode_t<T>* newNode = new ListNode_t<T>(it);
+				pos.m_Ptr->m_Previous->m_Next = newNode;
+				newNode->m_Previous = pos.m_Ptr->m_Previous;
+				newNode->m_Next = pos.m_Ptr;
+				pos.m_Ptr->m_Previous = newNode;
+
+				if (i == 0)
+				{
+					returnVal = makeIterator(newNode);
+				}
+				++i;
+			}
+
+			m_Size += ilist.size();
+			return returnVal;
+		}
 	}
 
 	// Remove last node

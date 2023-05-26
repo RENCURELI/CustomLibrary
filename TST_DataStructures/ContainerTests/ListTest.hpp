@@ -149,6 +149,28 @@ TEST(ListTest, InsertAndremove)
 
 	it = testList.insert(testList.cend(), otherList.begin(), otherList.end());
 	EXPECT_EQ(testList.size(), 23);
+
+	// =====================================================================
+	// iterator insert( const_iterator pos, std::initializer_list<T> ilist )
+	// =====================================================================
+
+	testList.clear();
+	it = testList.insert(testList.cbegin(), { 1, 2, 3, 4 });
+	EXPECT_EQ(testList.size(), 4);
+	EXPECT_TRUE(it == testList.begin());
+
+	it = testList.insert(testList.cend(), { 5, 6, 7, 8 });
+	EXPECT_EQ(testList.size(), 8);
+	otherIt = testList.begin();
+	std::advance(otherIt, 4);
+	EXPECT_TRUE(it == otherIt);
+
+	it = testList.insert(otherIt, { 10, 9 });
+	EXPECT_EQ(testList.size(), 10);
+	otherIt = testList.begin();
+	std::advance(otherIt, 4);
+	EXPECT_TRUE(it == otherIt);
+	EXPECT_TRUE(std::find(testList.begin(), testList.end(), 8) != testList.end());
 }
 
 TEST(ListTest, PopAndClear)
