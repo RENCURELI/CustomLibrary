@@ -4,10 +4,90 @@
 #include <iostream>
 #include <initializer_list>
 #include <stdexcept>
+#include <iterator>
+
+#pragma region ConstIterator
+template<typename FList>
+class FListConstIterator
+{
+public:
+	using iterator_concept = std::forward_iterator_tag;
+	using value_type = typename FList::value_type;
+	using pointer = FList::const_pointer;
+	using reference = const value_type&;
+	using difference_type = std::ptrdiff_t;
+
+	using PtrType = typename FList::pointer;
+
+	FListConstIterator(PtrType ptr) : m_Ptr(ptr) {}
+
+	// preincrement
+	FListConstIterator& operator++()
+	{
+		m_Ptr = m_Ptr->m_Next;
+		return *this;
+	}
+
+	// postincrement
+	FListConstIterator operator++(int)
+	{
+		FListConstIterator tmp = *this;
+		m_Ptr = m_Ptr.m_Next;
+		return tmp;
+	}
+
+	const reference operator*() const { return m_Ptr->m_Data; }
+	const pointer operator->() const { return this->m_Ptr; }
+	bool operator==(const FListConstIterator& other) const { return m_Ptr == other.m_Ptr; }
+	bool operator!=(const FListConstIterator& other) const { return !(*this == other); }
+
+	PtrType m_Ptr;
+};
+#pragma endregion ConstIterator
+
+#pragma region Iterator
+template<typename FList>
+class FListIterator : public FListConstIterator<FList>
+{
+public:
+	using value_type = typename FList::value_type;
+	using pointer = FList::pointer;
+	using reference = value_type&;
+	using difference_type = std::ptrdiff_t;
+	using BaseIt = FListConstIterator<FList>;
+public:
+	// preincrement
+	FListIterator& operator++()
+	{
+		BaseIt::operator++();
+		return *this;
+	}
+
+	// postincrement
+	FListIterator operator++(int)
+	{
+		FListConstIterator tmp = *this;
+		BaseIt::operator++();
+		return tmp;
+	}
+
+	reference operator*() const { return const_cast<reference>(BaseIt::operator*()); }
+	pointer operator->() const { return this->m_Ptr; }
+	bool operator==(const FListIterator& other) const { return this->m_Ptr == other.m_Ptr; }
+	bool operator!=(const FListIterator& other) const { return !(*this == other); }
+};
+#pragma endregion Iterator
 
 template<class T>
 class FList
 {
+public:
+	using value_type = T;
+	using pointer = FListNode_t<T>*;
+	using const_pointer = const T*;
+	using iterator = FListIterator<FList<T>>;
+	using const_iterator = FListConstIterator<FList<T>>;
+
 public:
 	FList() {};
 	FList(std::initializer_list<T> l)
@@ -30,7 +110,7 @@ public:
 
 	~FList()
 	{
-		Clear();
+		clear();
 	}
 
 	FListNode_t<T>* push_front(T data)
@@ -124,7 +204,7 @@ public:
 	}
 
 	// Clear the content of the List
-	void Clear()
+	void clear()
 	{
 		// Go from m_Head to m_Tail and free memory
 		while (m_Head != nullptr)
@@ -142,6 +222,10 @@ public:
 	inline int size() const { return m_Size; }
 	inline const T& front() const { return m_Size > 0 ? m_Head->m_Data : throw std::runtime_error("[ERROR] Trying to access and empty list"); }
 	inline T& front() { return m_Size > 0 ? m_Head->m_Data : throw std::runtime_error("[ERROR] Trying to access and empty list"); }
+	inline iterator begin() { return iterator(m_Head); }
+	inline const_iterator cbegin() const { return const_iterator(m_Head); }
+	inline iterator end() { return iterator(nullptr); }
+	inline const_iterator cend() const { return const_iterator(nullptr); }
 
 	void PrintList()
 	{

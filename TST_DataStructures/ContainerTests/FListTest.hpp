@@ -93,7 +93,7 @@ TEST(FListTest, PopAndClear)
 	testList.pop_front();
 	EXPECT_EQ(testList.front(), 4);
 
-	testList.Clear();
+	testList.clear();
 	EXPECT_EQ(testList.size(), 0);
 	EXPECT_EQ(testList.empty(), true);
 }
