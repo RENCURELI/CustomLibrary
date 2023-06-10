@@ -533,10 +533,10 @@ public:
 	}
 
 private:
-		iterator makeIterator(const pointer ptr)
-		{
-			return iterator(ptr);
-		}
+	iterator makeIterator(const pointer ptr)
+	{
+		return iterator(ptr);
+	}
 
 private:
 	ListNode_t<T>* m_Head = nullptr;

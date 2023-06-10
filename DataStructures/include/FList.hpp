@@ -113,7 +113,7 @@ public:
 		clear();
 	}
 
-	FListNode_t<T>* push_front(T data)
+	void push_front(T data)
 	{
 		FListNode_t<T>* newNode = new FListNode_t<T>(data);
 
@@ -128,12 +128,11 @@ public:
 			m_Head = newNode;
 		}
 		m_Size++;
-		return newNode;
 	}
 
-	FListNode_t<T>* insert(T data, int index)
+	iterator insert_after(const_iterator pos, const T& data)
 	{
-		CheckIndex(index, true);
+		//CheckIndex(index, true);
 		FListNode_t<T>* newNode = new FListNode_t<T>(data);
 
 		// Empty list case handled by creating first element
@@ -143,23 +142,29 @@ public:
 		}
 		else
 		{
-			// Start by handling Head node case
-			// We insert at index 0, specific behaviour
-			if (index == 0)
+			if (pos != cend())
 			{
-				newNode->m_Next = m_Head;
-				m_Head = newNode;
+				newNode->m_Next = pos.m_Ptr->m_Next;
+				pos.m_Ptr->m_Next = newNode;
 			}
 			else
 			{
-				FListNode_t<T>* prevNode = AdvanceTo(index - 1);
-				newNode->m_Next = prevNode->m_Next;
-				prevNode->m_Next = newNode;
+				iterator temp = begin();
+				do 
+				{
+					if (temp.m_Ptr->m_Next == nullptr)
+					{
+						temp.m_Ptr->m_Next = newNode;
+						m_Size++;
+						return makeIterator(newNode);
+					}
+					++temp;
+				} while (temp != cend());
 			}
 		}
 
 		m_Size++;
-		return newNode;
+		return makeIterator(newNode);
 	}
 
 	void pop_front()
@@ -183,7 +188,7 @@ public:
 	}
 
 	// Remove node at specified Index
-	void remove(int index)
+	void erase_after(int index)
 	{
 		CheckIndex(index);
 		if (index == 0)
@@ -261,6 +266,12 @@ public:
 			push_front(it);
 		}
 		return *this;
+	}
+
+private:
+	iterator makeIterator(const pointer ptr)
+	{
+		return iterator(ptr);
 	}
 
 private:
