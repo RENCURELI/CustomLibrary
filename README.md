@@ -5,15 +5,16 @@ Done :
   - Forward List
   - Doubly Linked List
   - Array
+  - Vector
   - Stack
 
 In Progress :
-  - Vector ( maybe emplace )
   - List Iterators
   - Deque
 
 TODO Data Structures :
   - Allocators ( yes, I'm starting to get sidetracked, but I'm curious )
+    - If Allocators are done -> Vector - Emplace
   - Set
   - Map
   - Tuple
