@@ -63,15 +63,13 @@ TEST(FListTest, InsertAndRemove)
 	EXPECT_TRUE(std::find(testList.begin(), testList.end(), 4) != testList.end());
 
 	// remove block
-	testList.erase_after(0);
+	testList.pop_front();
 	EXPECT_EQ(testList.front(), 3);
 
-	testList.erase_after(testList.size() - 1);
+	auto testIt = testList.begin();
+	std::advance(testIt, testList.size() - 2); // - 2 to erase the last element of the list as we erase the element AFTER the iterator
+	testList.erase_after(testIt);
 	EXPECT_TRUE(std::find(testList.begin(), testList.end(), 4) == testList.end());
-
-	// We test error handling
-	EXPECT_THROW(testList.erase_after(-1), std::exception);
-	EXPECT_THROW(testList.erase_after(12), std::exception);
 }
 
 TEST(FListTest, PopAndClear)

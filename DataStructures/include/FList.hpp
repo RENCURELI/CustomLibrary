@@ -188,24 +188,26 @@ public:
 	}
 
 	// Remove node at specified Index
-	void erase_after(int index)
+	iterator erase_after(const_iterator pos)
 	{
-		CheckIndex(index);
-		if (index == 0)
+		if (pos.m_Ptr->m_Next == nullptr)
 		{
-			FListNode_t<T>* currHead = m_Head;
-			m_Head = m_Head->m_Next;
-			delete currHead;
+			return end();
 		}
 		else
 		{
-			FListNode_t<T>* prevNode = AdvanceTo(index - 1);
-			FListNode_t<T>* nodeToDel = AdvanceTo(index);
-			prevNode->m_Next = nodeToDel->m_Next;
+			FListNode_t<T>* nodeToDel = pos.m_Ptr->m_Next;
+			pos.m_Ptr->m_Next = nodeToDel->m_Next;
 			delete nodeToDel;
+			m_Size--;
+			return pos.m_Ptr->m_Next == nullptr ? end() : makeIterator(pos.m_Ptr->m_Next);
 		}
+	}
 
-		m_Size--;
+	// Remove from after first to last ( excluded )
+	iterator erase_after(const_iterator first, const_iterator last)
+	{
+
 	}
 
 	// Clear the content of the List
