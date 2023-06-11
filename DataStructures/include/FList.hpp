@@ -206,7 +206,22 @@ public:
 	// Remove from after first to last ( excluded )
 	iterator erase_after(const_iterator first, const_iterator last)
 	{
+		if (first == last)
+		{
+			return makeIterator(last.m_Ptr); // convert to non const iterator
+		}
+		else
+		{
+			do 
+			{
+				FListNode_t<T>* nodeToDel = first.m_Ptr->m_Next;
+				first.m_Ptr->m_Next = nodeToDel->m_Next;
+				delete nodeToDel;
+				m_Size--;
+			} while (first.m_Ptr->m_Next != last.m_Ptr);
 
+			return makeIterator(last.m_Ptr); // convert to non const iterator
+		}
 	}
 
 	// Clear the content of the List

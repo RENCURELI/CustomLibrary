@@ -56,7 +56,7 @@ TEST(ListTest, PushAndSize)
 }
 
 // Here we test insert and remove methods
-TEST(ListTest, InsertAndremove)
+TEST(ListTest, InsertAndRemove)
 {
 	// insert block
 	List<int> testList = { 1, 2, 3 };
@@ -171,6 +171,43 @@ TEST(ListTest, InsertAndremove)
 	std::advance(otherIt, 4);
 	EXPECT_TRUE(it == otherIt);
 	EXPECT_TRUE(std::find(testList.begin(), testList.end(), 8) != testList.end());
+
+	// =====================================================================
+	// iterator erase(const_iterator pos)
+	// =====================================================================
+	
+	testList.clear();
+	testList = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+	// iterator setup
+	it = testList.begin();
+	std::advance(it, 5);
+	otherIt = testList.begin();
+	std::advance(otherIt, 6);
+
+	it = testList.erase(it);
+	EXPECT_TRUE(std::find(testList.begin(), testList.end(), 5) == testList.end());
+	EXPECT_EQ(testList.size(), 10);
+	EXPECT_TRUE(it == otherIt);
+
+	// =====================================================================
+	// iterator erase(const_iterator first, const_iterator last)
+	// =====================================================================
+
+	testList.clear();
+	testList = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+	// iterator setup
+	it = testList.begin();
+	std::advance(it, 2);
+	otherIt = testList.begin();
+	std::advance(otherIt, 6);
+
+	it = testList.erase(it, otherIt);
+	EXPECT_TRUE(std::find(testList.begin(), testList.end(), 2) == testList.end());
+	EXPECT_TRUE(std::find(testList.begin(), testList.end(), 5) == testList.end());
+	EXPECT_EQ(testList.size(), 7);
+	EXPECT_TRUE(it == otherIt);
 }
 
 TEST(ListTest, PopAndClear)

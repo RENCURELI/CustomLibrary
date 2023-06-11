@@ -70,6 +70,13 @@ TEST(FListTest, InsertAndRemove)
 	std::advance(testIt, testList.size() - 2); // - 2 to erase the last element of the list as we erase the element AFTER the iterator
 	testList.erase_after(testIt);
 	EXPECT_TRUE(std::find(testList.begin(), testList.end(), 4) == testList.end());
+
+	testList.clear();
+	testList = { 0, 1, 2, 3, 4, 5 };
+	testIt = testList.begin();
+	std::advance(testIt, 3);
+	auto otherIt = testList.erase_after(testList.cbegin(), testIt);
+	EXPECT_TRUE(testIt == otherIt);
 }
 
 TEST(FListTest, PopAndClear)

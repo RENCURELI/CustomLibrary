@@ -437,7 +437,7 @@ public:
 	}
 
 	// Remove node at specified Index
-	iterator erase(iterator pos)
+	iterator erase(const_iterator pos)
 	{
 		iterator returnedIt = makeIterator(pos.m_Ptr->m_Next);
 		if (pos == begin())
@@ -463,6 +463,29 @@ public:
 
 		m_Size--;
 		return returnedIt;
+	}
+
+	// Removes in range [First, Last)
+	iterator erase(const_iterator first, const_iterator last)
+	{
+		if (first == last)
+		{
+			return makeIterator(last.m_Ptr);
+		}
+		else
+		{
+			do
+			{
+				ListNode_t<T>* nodeToDel = first.m_Ptr;
+				first.m_Ptr = nodeToDel->m_Next;
+				first.m_Ptr->m_Previous = nodeToDel->m_Previous;
+				nodeToDel->m_Previous->m_Next = first.m_Ptr;
+				delete nodeToDel;
+				m_Size--;
+			} while (first.m_Ptr != last.m_Ptr);
+
+			return makeIterator(last.m_Ptr);
+		}
 	}
 
 	// Clear the content of the List
