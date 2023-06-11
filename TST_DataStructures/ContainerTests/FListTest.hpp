@@ -62,11 +62,23 @@ TEST(FListTest, InsertAndRemove)
 	testList.insert_after(testList.cend(), 4);
 	EXPECT_TRUE(std::find(testList.begin(), testList.end(), 4) != testList.end());
 
+	// =====================================================================
+	// insert_after( const_iterator pos, size_type count, const T& data )
+	// =====================================================================
+
+	auto testIt = testList.begin();
+	auto otherIt = testList.begin();
+	testIt = std::next(testIt);
+	testIt = testList.insert_after(testIt, 5, 12);
+	std::advance(otherIt, 6);
+	EXPECT_EQ(std::count(testList.begin(), testList.end(), 12), 5);
+	EXPECT_TRUE(testIt == otherIt);
+
 	// remove block
 	testList.pop_front();
 	EXPECT_EQ(testList.front(), 3);
 
-	auto testIt = testList.begin();
+	testIt = testList.begin();
 	std::advance(testIt, testList.size() - 2); // - 2 to erase the last element of the list as we erase the element AFTER the iterator
 	testList.erase_after(testIt);
 	EXPECT_TRUE(std::find(testList.begin(), testList.end(), 4) == testList.end());
@@ -75,7 +87,7 @@ TEST(FListTest, InsertAndRemove)
 	testList = { 0, 1, 2, 3, 4, 5 };
 	testIt = testList.begin();
 	std::advance(testIt, 3);
-	auto otherIt = testList.erase_after(testList.cbegin(), testIt);
+	otherIt = testList.erase_after(testList.cbegin(), testIt);
 	EXPECT_TRUE(testIt == otherIt);
 }
 

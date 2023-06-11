@@ -166,6 +166,50 @@ public:
 		return makeIterator(newNode);
 	}
 
+	iterator insert_after(const_iterator pos, size_t count, const T& data)
+	{
+		if (count == 0)
+		{
+			return makeIterator(pos.m_Ptr);
+		}
+
+		if (m_Head == nullptr)
+		{
+			do 
+			{
+				push_front(data);
+				--count;
+			} while (count > 0);
+
+			return begin();
+		}
+		else
+		{
+			do
+			{
+				FListNode_t<T>* newNode = new FListNode_t<T>(data);
+
+				newNode->m_Next = pos.m_Ptr->m_Next;
+				pos.m_Ptr->m_Next = newNode;
+				++pos;
+				++m_Size;
+				--count;
+			} while (count > 0);
+
+			return makeIterator(pos.m_Ptr);
+		}
+	}
+
+	iterator insert_after(const_iterator pos, iterator first, iterator last)
+	{
+
+	}
+
+	iterator insert_after(const_iterator pos, std::initializer_list<T> ilist)
+	{
+
+	}
+
 	void pop_front()
 	{
 		if (m_Size == 0)
@@ -240,7 +284,7 @@ public:
 	}
 
 	inline bool empty() const { return m_Size == 0; }
-	inline int size() const { return m_Size; }
+	inline size_t size() const { return m_Size; }
 	inline const T& front() const { return m_Size > 0 ? m_Head->m_Data : throw std::runtime_error("[ERROR] Trying to access and empty list"); }
 	inline T& front() { return m_Size > 0 ? m_Head->m_Data : throw std::runtime_error("[ERROR] Trying to access and empty list"); }
 	inline iterator begin() { return iterator(m_Head); }
@@ -292,5 +336,5 @@ private:
 
 private:
 	FListNode_t<T>* m_Head = nullptr;
-	int m_Size = 0;
+	size_t m_Size = 0;
 };
