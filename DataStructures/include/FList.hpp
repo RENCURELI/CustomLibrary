@@ -132,7 +132,6 @@ public:
 
 	iterator insert_after(const_iterator pos, const T& data)
 	{
-		//CheckIndex(index, true);
 		FListNode_t<T>* newNode = new FListNode_t<T>(data);
 
 		// Empty list case handled by creating first element
@@ -187,7 +186,7 @@ public:
 		m_Size--;
 	}
 
-	// Remove node at specified Index
+	// Remove node after specified Index
 	iterator erase_after(const_iterator pos)
 	{
 		if (pos.m_Ptr->m_Next == nullptr)
@@ -279,45 +278,4 @@ private:
 private:
 	FListNode_t<T>* m_Head = nullptr;
 	int m_Size = 0;
-
-	FListNode_t<T>* AdvanceTo(int index) const
-	{
-		// If we are accessing already allocated values, return those
-		if (index == 0)
-			return m_Head;
-		else
-		{
-			// Loop within the list to find the proper element
-			FListNode_t<T>* prevNode = m_Head;
-			int i = 0;
-
-			do
-			{
-				prevNode = prevNode->m_Next;
-				++i;
-			} while (i < index);
-
-			return prevNode;
-		}
-	}
-
-	// AllowExtra is to allow using InsertAt the same way as AddToBack
-	bool CheckIndex(const int index, bool allowExtra = false)
-	{
-		if (allowExtra)
-		{
-			if (index < 0 || index > m_Size)
-			{
-				throw std::runtime_error("[ERROR] : Index Out of Bounds.");
-				return false;
-			}
-		}
-		else if (index < 0 || index > m_Size - 1)
-		{
-			throw std::runtime_error("[ERROR] : Index Out of Bounds.");
-			return false;
-		}
-
-		return true;
-	}
 };

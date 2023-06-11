@@ -542,47 +542,4 @@ private:
 	ListNode_t<T>* m_Head = nullptr;
 	ListNode_t<T>* m_Tail = nullptr;
 	size_t m_Size = 0;
-
-	ListNode_t<T>* AdvanceTo(int index) const
-	{
-		// If we are accessing already allocated values, return those
-		if (index == 0)
-			return m_Head;
-		else if (index == m_Size - 1)
-			return m_Tail;
-		else
-		{
-			// Loop within the list to find the proper element
-			ListNode_t<T>* prevNode = m_Head;
-			int i = 0;
-
-			do
-			{
-				prevNode = prevNode->m_Next;
-				++i;
-			} while (i < index);
-			
-			return prevNode;
-		}
-	}
-
-	// AllowExtra is to allow using InsertAt the same way as AddToBack
-	bool CheckIndex(const size_t index, bool allowExtra = false)
-	{
-		if (allowExtra)
-		{
-			if (index < 0 || index > m_Size)
-			{
-				throw std::out_of_range("[ERROR] : Index Out of Bounds.");
-				return false;
-			}
-		}
-		else if (index < 0 || index > m_Size - 1)
-		{
-			throw std::out_of_range("[ERROR] : Index Out of Bounds.");
-			return false;
-		}
-
-		return true;
-	}
 };
