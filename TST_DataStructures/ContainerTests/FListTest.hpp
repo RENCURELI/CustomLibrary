@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <initializer_list>
 #include <string>
 
 #include "../DataStructures/include/FList.hpp"
@@ -103,7 +104,16 @@ TEST(FListTest, InsertAndRemove)
 
 	testList.clear();
 	testList = { 0, 1, 2, 3, 4, 5 };
+	std::initializer_list<int> initList = { 100, 101, 102, 103 };
+	testIt = testList.begin();
 
+	testIt = testList.insert_after(testIt, initList);
+	EXPECT_EQ(testList.size(), 10);
+	EXPECT_TRUE(std::find(testList.begin(), testList.end(), 101) != testList.end());
+	
+	otherIt = testList.begin();
+	std::advance(otherIt, 4);
+	EXPECT_TRUE(testIt == otherIt);
 
 	testList.clear();
 

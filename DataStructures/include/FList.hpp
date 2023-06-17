@@ -230,7 +230,20 @@ public:
 
 	iterator insert_after(const_iterator pos, std::initializer_list<T> ilist)
 	{
+		if (ilist.size() == 0)
+		{
+			return makeIterator(pos.m_Ptr);
+		}
 
+		for (T item : ilist)
+		{
+			FListNode_t<T>* newNode = new FListNode_t<T>(item);
+			newNode->m_Next = pos.m_Ptr->m_Next;
+			pos.m_Ptr->m_Next = newNode;
+			++pos;
+		}
+		m_Size += ilist.size();
+		return makeIterator(pos.m_Ptr);
 	}
 
 	void pop_front()
