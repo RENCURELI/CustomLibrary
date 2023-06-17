@@ -53,7 +53,9 @@ TEST(FListTest, PushAndSize)
 // Here we test insert and remove methods
 TEST(FListTest, InsertAndRemove)
 {
-	// insert block
+	// =====================================================================
+	//                        INSERT OPERATIONS
+	// =====================================================================
 	FList<int> testList = { 1, 2, 3 };
 
 	testList.push_front(0);
@@ -74,7 +76,42 @@ TEST(FListTest, InsertAndRemove)
 	EXPECT_EQ(std::count(testList.begin(), testList.end(), 12), 5);
 	EXPECT_TRUE(testIt == otherIt);
 
-	// remove block
+	// =====================================================================
+	// insert_after(const_iterator pos, iterator first, iterator last)
+	// =====================================================================
+
+	testList.clear();
+	testList = { 0, 1, 2, 3, 4, 5 };
+	FList<int> otherList = { 6, 7, 8, 9, 10 };
+	testIt = testList.begin();
+	testIt = std::next(testIt);
+
+	testIt = testList.insert_after(testIt, otherList.begin(), otherList.end());
+	otherIt = testList.begin();
+	std::advance(otherIt, 6);
+	EXPECT_TRUE(testIt == otherIt);
+	EXPECT_EQ(testList.size(), 11);
+
+// 	otherList.clear();
+// 	otherList = { 14, 12, 21 };
+// 	testList.clear();
+// 	testList.insert_after(testList.cbegin(), otherList.begin(), otherList.end());
+
+	// =====================================================================
+	// insert_after(const_iterator pos, std::initializer_list<T> ilist)
+	// =====================================================================
+
+	testList.clear();
+	testList = { 0, 1, 2, 3, 4, 5 };
+
+
+	testList.clear();
+
+	// =====================================================================
+	//                        REMOVE OPERATIONS
+	// =====================================================================
+
+	testList = { 4, 1, 2, 3, 0 };
 	testList.pop_front();
 	EXPECT_EQ(testList.front(), 3);
 
@@ -89,6 +126,8 @@ TEST(FListTest, InsertAndRemove)
 	std::advance(testIt, 3);
 	otherIt = testList.erase_after(testList.cbegin(), testIt);
 	EXPECT_TRUE(testIt == otherIt);
+
+	
 }
 
 TEST(FListTest, PopAndClear)

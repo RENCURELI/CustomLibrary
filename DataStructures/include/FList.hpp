@@ -200,9 +200,32 @@ public:
 		}
 	}
 
+	// Shouldn't be called on empty container
 	iterator insert_after(const_iterator pos, iterator first, iterator last)
 	{
+		if (first == last)
+		{
+			return makeIterator(pos.m_Ptr);
+		}
 
+		//FListNode_t<T>* newNode = new FListNode_t<T>(first.m_Ptr->m_Data);
+		// From testing, seems like the STL doesn't handle this case, which makes sense as after head in an empty list is null
+// 		if (m_Head == nullptr)
+// 		{
+// 			m_Head = first.m_Ptr;
+// 			++first;
+// 		}
+
+		for (; first != last; ++first)
+		{
+			FListNode_t<T>* newNode = new FListNode_t<T>(first.m_Ptr->m_Data);
+			newNode->m_Next = pos.m_Ptr->m_Next;
+			pos.m_Ptr->m_Next = newNode;
+			++pos;
+			++m_Size;
+		}
+
+		return makeIterator(pos.m_Ptr);
 	}
 
 	iterator insert_after(const_iterator pos, std::initializer_list<T> ilist)
