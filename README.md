@@ -9,7 +9,6 @@ Done :
   - Stack
 
 In Progress :
-  - List Iterators
   - Deque
 
 TODO Data Structures :
