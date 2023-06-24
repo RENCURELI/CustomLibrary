@@ -98,7 +98,7 @@ TEST(VectorTest, Resizing)
 	EXPECT_EQ(testVec.size(), 5);
 	EXPECT_EQ(testVec.capacity(), 25);
 
-	testVec.shrinkToFit();
+	testVec.shrink_to_fit();
 	EXPECT_EQ(testVec.back(), 5);
 	EXPECT_EQ(testVec.size(), 5);
 	EXPECT_EQ(testVec.capacity(), 5);

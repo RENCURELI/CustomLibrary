@@ -39,7 +39,7 @@
     <ClInclude Include="include\Queue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\DeQue.h">
+    <ClInclude Include="include\DeQue.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

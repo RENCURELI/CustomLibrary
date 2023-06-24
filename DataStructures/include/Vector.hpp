@@ -555,6 +555,8 @@ public:
 	inline T& front() { return m_Size > 0 ? this->m_Buffer[0] : throw std::runtime_error("[ERROR] Trying to access empty container"); }
 	inline const T& back() const { return m_Size > 0 ? this->m_Buffer[m_Size - 1] : throw std::runtime_error("[ERROR] Trying to access empty container"); }
 	inline T& back() { return m_Size > 0 ? this->m_Buffer[m_Size - 1] : throw std::runtime_error("[ERROR] Trying to access empty container"); }
+	inline const T* data() const { return m_Buffer; }
+	inline T* data() { return m_Buffer; }
 	inline size_t size() const { return m_Size; }
 	inline size_t max_size() const { return std::numeric_limits<size_t>::max(); }
 	inline size_t capacity() const { return m_Capacity; }
@@ -567,14 +569,6 @@ public:
 	inline const_iterator cend() const { return const_iterator(m_Buffer + m_Size); }
 	inline reverse_iterator rend() { return reverse_iterator(begin()); }
 	inline const_reverse_iterator crend() const { return const_reverse_iterator(cbegin()); }
-
-	void PrintVector()
-	{
-		for (size_t i = 0; i < m_Size; i++)
-		{
-			std::cout << " -> " << m_Buffer[i];
-		}
-	}
 
 	// Copy assign
 	Vector& operator=(const Vector& other)
@@ -668,7 +662,7 @@ public:
 	}
 
 	// Reduces capacity to size
-	void shrinkToFit()
+	void shrink_to_fit()
 	{
 		T* newBuffer = new T[m_Size];
 		memcpy_s(newBuffer, sizeof(T) * m_Size, m_Buffer, sizeof(T) * m_Size);
