@@ -18,7 +18,7 @@ int main()
 		DeQue<int> testDeque;
 		//std::deque<int> testDeque;
 
-		for (int i = 0; i < 12; ++i)
+		for (int i = 0; i < 60; ++i)
 		{
 			testDeque.push_front(i);
 		}

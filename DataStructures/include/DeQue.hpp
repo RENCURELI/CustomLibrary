@@ -1,4 +1,5 @@
 #pragma once
+#include "Array.hpp"
 #include "Vector.hpp"
 #include <iterator>
 #include <memory>
@@ -121,8 +122,26 @@ public:
 	DeQue()
 	{
 		// We first allocate the block
-		m_Map = new Vector<T>[8];
+		m_Map = new Array<T, BLOCK_SIZE>[MIN_MAP_SIZE];
 		m_MapSize = 8;
+	}
+
+	~DeQue()
+	{
+		if (m_Map != nullptr)
+		{
+			for (size_t block = m_MapSize; block > 0;)
+			{
+				if (&m_Map[--block] != nullptr)
+				{
+					std::destroy(m_Map[block].begin(), m_Map[block].end());
+				}
+			}
+			std::destroy(m_Map, m_Map + m_MapSize);
+		}
+
+		m_MapSize = 0;
+		m_Map = nullptr;
 	}
 
 	void push_front(const T& value)
@@ -130,13 +149,13 @@ public:
 		// We grow the map if the current offset is at the start of a block and we have no available blocks left to start filling
 		// NOTE : We cannot have tail and head in the same block if tail is in front of head within the block 
 		// EXAMPLE : in m_Map[0] we cannot have tail at index 1 and head at index 3 -> if such a scenario would happen, we reallocate more blocks
-		if (m_Offset % m_BlockSize == 0 && m_MapSize <= (m_Size + m_BlockSize) / m_BlockSize)
+		if (m_Offset % BLOCK_SIZE == 0 && m_MapSize <= (m_Size + BLOCK_SIZE) / BLOCK_SIZE)
 		{
-			// GrowMap will come here
+			grow_map(1);
 		}
 
 		// We get the last possible index if current offset is 0
-		size_t newOffset = m_Offset != 0 ? m_Offset : m_MapSize * m_BlockSize;
+		size_t newOffset = m_Offset != 0 ? m_Offset : m_MapSize * BLOCK_SIZE;
 		const size_t block = get_block(--newOffset); // We push in front of current head
 
 		// We allocate the block if not already done
@@ -146,7 +165,7 @@ public:
 // 		}
 
 		// We can't insert by regular means, so we set the data directly. The Deque is responsible for indexing and lookup
-		memcpy_s(m_Map[block].data() + (newOffset % m_BlockSize), sizeof(T), &value, sizeof(T));
+		memcpy_s(m_Map[block].data() + (newOffset % BLOCK_SIZE), sizeof(T), &value, sizeof(T));
 		m_Offset = newOffset;
 		++m_Size;
 	}
@@ -156,15 +175,47 @@ private:
 	size_t get_block(size_t offset) const
 	{
 		// The binary and will return the index 010 & 111 -> 010 -> 2 -> the position is in block m_Map[2]
-		return (offset / m_BlockSize) & (m_MapSize - 1);
+		return (offset / BLOCK_SIZE) & (m_MapSize - 1);
+	}
+
+	// Grow the map by AT LEAST count, map size should always be a power of 2
+	void grow_map(size_t count)
+	{
+		// This block is to find the first power of 2 larger than the current map size
+		size_t newSize = m_MapSize > 0 ? m_MapSize : 1; // Assumption is made that MapSize is always a power of 2
+		while (newSize - m_MapSize < count || newSize < MIN_MAP_SIZE)
+		{
+			// Disregarding a few safety nets from the STL here ( namely checking max possible size )
+			newSize *= 2;
+		}
+		count = newSize - m_MapSize;
+
+		size_t blockOffset = m_Offset / BLOCK_SIZE; // Here we get in which block the offset is
+		Array<T, BLOCK_SIZE>* newMap = new Array<T, BLOCK_SIZE>[m_MapSize + count]; // We allocate the memory for the new map
+		Array<T, BLOCK_SIZE>* ptr = newMap + blockOffset; // We point to the equivalent of the block offset in the new map ( pointer from where we copy over data )
+
+		// We copy the data from the offset block to the end of the old map at position ptr
+		ptr = std::uninitialized_copy(m_Map + blockOffset, m_Map + m_MapSize, ptr); // ptr is modified to now point after inserted data
+		ptr = std::uninitialized_copy(m_Map, m_Map + blockOffset, ptr); // Copy from start of old to bock offset, behind ptr
+		// NOTE : STL checks if the block offset is smaller or bigger than the increment size, but it should never be possible, so I don't check
+
+		// We free memory at old location
+		if (m_Map == nullptr)
+		{
+			std::destroy(m_Map, m_Map + m_MapSize);
+		}
+
+		m_Map = newMap; // We point to the new valid memory location
+		m_MapSize = m_MapSize + count; // We update the map size
 	}
 
 private:
 	size_t m_Size = 0; // The number of elements stored in the deque
 	size_t m_MapSize = 0; // The amount of blocks contained in the map
 	size_t m_Offset = 0; // Offset between head and first entry m_Map[0].[0]
-	size_t m_BlockSize = 8;
-	Vector<T>* m_Map; // Ring buffer of pointers to each memory block of the deque ( fixed size arrays )
+	static const size_t BLOCK_SIZE = 8;
+	const size_t MIN_MAP_SIZE = 8;
+	Array<T, BLOCK_SIZE>* m_Map; // Ring buffer of pointers to each memory block of the deque ( fixed size arrays )
 	T* m_Head = nullptr;
 	T* m_Tail = nullptr;
 };
