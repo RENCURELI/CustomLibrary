@@ -238,7 +238,9 @@ public:
 	Vector(size_t count, T data)
 	{
 		if (count <= 0)
+		{
 			throw std::runtime_error("[ERROR] Trying to create array of invalid size -> must be greater than 0");
+		}
 
 		m_Capacity = count; // We reserve for the amount of data to store
 		m_Size = m_Capacity;
@@ -248,6 +250,20 @@ public:
 		{
 			m_Buffer[i] = data;
 		}
+	}
+
+	Vector(size_t count)
+	{
+		if (count <= 0)
+		{
+			throw std::runtime_error("[ERROR] Trying to create array of invalid size -> must be greater than 0");
+		}
+
+		m_Capacity = count;
+		m_Size = 0;
+		m_Buffer = new T[count];
+
+		memset(m_Buffer, 0, sizeof(T) * m_Capacity);
 	}
 
 	~Vector()

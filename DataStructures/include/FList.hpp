@@ -72,8 +72,6 @@ public:
 
 	reference operator*() const { return const_cast<reference>(BaseIt::operator*()); }
 	pointer operator->() const { return this->m_Ptr; }
-	bool operator==(const FListIterator& other) const { return this->m_Ptr == other.m_Ptr; }
-	bool operator!=(const FListIterator& other) const { return !(*this == other); }
 };
 #pragma endregion Iterator
 
