@@ -1,5 +1,4 @@
 #pragma once
-#include "Vector.hpp"
 #include <iterator>
 #include <memory>
 
@@ -174,22 +173,28 @@ public:
 		++m_Size;
 	}
 
-// 	void push_back(const T& value)
-// 	{
-// 		if ((m_Offset + m_Size) % BLOCK_SIZE == 0 && m_MapSize <= (m_Size + BLOCK_SIZE) / BLOCK_SIZE)
-// 		{
-// 			grow_map(1);
-// 		}
-// 
-// 		// We get the last possible index if current offset is 0
-// 		size_t newOffset = m_Offset != 0 ? m_Offset : m_MapSize * BLOCK_SIZE;
-// 		const size_t block = get_block(newOffset);
-// 
-// 		memcpy_s(m_Map[block].data() + (newOffset % BLOCK_SIZE), sizeof(T), &value, sizeof(T));
-// 		
-// 		// We don't update offset because we aren't moving the "head"
-// 		++m_Size;
-// 	}
+	void push_back(const T& value)
+	{
+		if ((m_Offset + m_Size) % BLOCK_SIZE == 0 && m_MapSize <= (m_Size + BLOCK_SIZE) / BLOCK_SIZE)
+		{
+			grow_map(1);
+		}
+
+		// We get the first available position at end of Deque ( we don't keep active track of head and tail, so we calculate it )
+		size_t newOffset = m_Offset + m_Size;
+		const size_t block = get_block(newOffset);
+
+		// We allocate the block if not already done
+		if (m_Map[block] == nullptr)
+		{
+			m_Map[block] = new T[BLOCK_SIZE];
+		}
+
+		m_Map[block][newOffset % BLOCK_SIZE] = value;
+
+		// We don't update offset because we aren't moving the "head"
+		++m_Size;
+	}
 
 	size_t size() const { return m_Size; }
 
