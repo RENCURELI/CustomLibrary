@@ -21,11 +21,13 @@ int main()
 
 		for (int i = 0; i < 60; ++i)
 		{
-			//testDeque.push_front(i);
+			testDeque.push_front(i);
 			testDeque.push_back(i);
 		}
 		testDeque.push_back(1);
-		std::cout << testDeque.size();
+		//std::cout << testDeque.size();
+		//std::cout << testDeque.at(12);
+		std::cout << testDeque[12];
 	}
 	catch (std::exception& ex)
 	{

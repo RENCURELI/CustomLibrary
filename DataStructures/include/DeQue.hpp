@@ -1,6 +1,7 @@
 #pragma once
 #include <iterator>
 #include <memory>
+#include <stdexcept>
 
 #pragma region ConstIterator
 template <typename DeQue>
@@ -194,6 +195,93 @@ public:
 
 		// We don't update offset because we aren't moving the "head"
 		++m_Size;
+	}
+
+	T& at(size_t pos)
+	{
+		if (pos > m_Size)
+		{
+			throw std::out_of_range("[ERROR] Index out of container bounds");
+		}
+
+		pos = m_Offset + pos; // Offset is our index 0
+		
+		// Here we wrap around the container
+		if (pos > m_MapSize * BLOCK_SIZE)
+		{
+			pos -= m_MapSize * BLOCK_SIZE;
+		}
+
+		// We get the block to lookup
+		size_t block = get_block(pos);
+		// We get the index within the block
+		pos %= BLOCK_SIZE;
+
+		// We return the reference
+		return m_Map[block][pos];
+	}
+
+	const T& at(size_t pos) const
+	{
+		if (pos > m_Size)
+		{
+			throw std::out_of_range("[ERROR] Index out of container bounds");
+		}
+
+		pos = m_Offset + pos; // Offset is our index 0
+
+		// Here we wrap around the container
+		if (pos > m_MapSize * BLOCK_SIZE)
+		{
+			pos -= m_MapSize * BLOCK_SIZE;
+		}
+
+		// We get the block to lookup
+		size_t block = get_block(pos);
+		// We get the index within the block
+		pos %= BLOCK_SIZE;
+
+		// We return the reference
+		return m_Map[block][pos];
+	}
+
+	// Same as at() method but without bounds checking
+	T& operator[](size_t pos)
+	{
+		pos = m_Offset + pos; // Offset is our index 0
+
+		// Here we wrap around the container
+		if (pos > m_MapSize * BLOCK_SIZE)
+		{
+			pos -= m_MapSize * BLOCK_SIZE;
+		}
+
+		// We get the block to lookup
+		size_t block = get_block(pos);
+		// We get the index within the block
+		pos %= BLOCK_SIZE;
+
+		// We return the reference
+		return m_Map[block][pos];
+	}
+
+	const T& operator[](size_t pos) const
+	{
+		pos = m_Offset + pos; // Offset is our index 0
+
+		// Here we wrap around the container
+		if (pos > m_MapSize * BLOCK_SIZE)
+		{
+			pos -= m_MapSize * BLOCK_SIZE;
+		}
+
+		// We get the block to lookup
+		size_t block = get_block(pos);
+		// We get the index within the block
+		pos %= BLOCK_SIZE;
+
+		// We return the reference
+		return m_Map[block][pos];
 	}
 
 	size_t size() const { return m_Size; }
