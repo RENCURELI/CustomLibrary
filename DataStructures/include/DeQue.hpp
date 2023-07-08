@@ -182,7 +182,7 @@ public:
 		}
 
 		// We get the first available position at end of Deque ( we don't keep active track of head and tail, so we calculate it )
-		size_t newOffset = m_Offset + m_Size;
+		size_t newOffset = last_index();
 		const size_t block = get_block(newOffset);
 
 		// We allocate the block if not already done
@@ -195,6 +195,30 @@ public:
 
 		// We don't update offset because we aren't moving the "head"
 		++m_Size;
+	}
+
+	void pop_front()
+	{
+		const size_t block = get_block(m_Offset);
+
+		std::destroy_at(&m_Map[block][m_Offset % BLOCK_SIZE]);
+
+		++m_Offset; // Increasing the offset effectively makes it go towards the end
+		// We wrap around if we reached the end of the container and still have data
+		if (m_Offset >= m_MapSize * BLOCK_SIZE)
+		{
+			m_Offset = 0;
+		}
+		--m_Size;
+	}
+
+	void pop_back()
+	{
+		size_t lastIdx = last_index();
+		const size_t block = get_block(lastIdx);
+
+		std::destroy_at(&m_Map[block][lastIdx % BLOCK_SIZE]);
+		--m_Size;
 	}
 
 	T& at(size_t pos)
@@ -237,7 +261,7 @@ public:
 		}
 
 		// We get the block to lookup
-		size_t block = get_block(pos);
+		const size_t block = get_block(pos);
 		// We get the index within the block
 		pos %= BLOCK_SIZE;
 
@@ -326,6 +350,8 @@ private:
 		m_Map = newMap; // We point to the new valid memory location
 		m_MapSize = newSize; // We update the map size
 	}
+
+	inline const size_t last_index() const { return m_Offset + m_Size; }
 
 private:
 	size_t m_Size = 0; // The number of elements stored in the deque

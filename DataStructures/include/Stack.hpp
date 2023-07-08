@@ -7,7 +7,7 @@ public:
 	Stack()
 	{
 		m_Container = Container();
-	};
+	}
 
 	explicit Stack(const Container& cont) : m_Container(cont) {}
 

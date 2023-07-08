@@ -19,15 +19,24 @@ int main()
 		DeQue<int> testDeque;
 		//std::deque<int> testDeque;
 
+		testDeque.push_front(0);
+		testDeque.pop_front();
+
 		for (int i = 0; i < 60; ++i)
 		{
 			testDeque.push_front(i);
 			testDeque.push_back(i);
 		}
 		testDeque.push_back(1);
-		//std::cout << testDeque.size();
+		std::cout << testDeque.size() << "\n";
+		testDeque.pop_back();
 		//std::cout << testDeque.at(12);
-		std::cout << testDeque[12];
+		std::cout << testDeque[12] << "\n";
+		std::cout << testDeque.size() << "\n";
+
+		testDeque.pop_front();
+		std::cout << testDeque[12] << "\n";
+		std::cout << testDeque.size() << "\n";
 	}
 	catch (std::exception& ex)
 	{
