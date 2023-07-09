@@ -16,85 +16,197 @@ public:
 	using const_reference = typename DeQue::const_reference;
 	using difference_type = std::ptrdiff_t;
 
-	DeQueConstIterator(pointer ptr) : m_Ptr(ptr) {}
+	static constexpr size_t BLOCK_SIZE = DeQue::BLOCK_SIZE;
 
-// 	preincrement
-// 		DeQueConstIterator& operator++()
-// 		{
-// 			this->m_Ptr++;
-// 			return *this;
-// 		}
-// 	
-// 		// postincrement
-// 		DeQueConstIterator operator++(int)
-// 		{
-// 			DeQueConstIterator it(*this);
-// 			++(*this);
-// 			return it;
-// 		}
-// 	
-// 		// preincrement
-// 		DeQueConstIterator& operator--()
-// 		{
-// 			this->m_Ptr--;
-// 			return *this;
-// 		}
-// 	
-// 		// postincrement
-// 		DeQueConstIterator operator--(int)
-// 		{
-// 			DeQueConstIterator it(*this);
-// 			--(*this);
-// 			return it;
-// 		}
-// 	
-// 		DeQueConstIterator& operator+=(const difference_type offset)
-// 		{
-// 			this->m_Ptr += offset;
-// 			return *this;
-// 		}
-// 	
-// 		DeQueConstIterator operator+(const difference_type offset)
-// 		{
-// 			DeQueConstIterator tmp = this->m_Ptr;
-// 			tmp += offset;
-// 			return tmp;
-// 		}
-// 	
-// 		DeQueConstIterator& operator-=(const difference_type offset)
-// 		{
-// 			this->m_Ptr -= offset;
-// 			return *this;
-// 		}
-// 	
-// 		DeQueConstIterator operator-(const difference_type offset)
-// 		{
-// 			DeQueConstIterator tmp = this->m_Ptr;
-// 			tmp -= offset;
-// 			return tmp;
-// 		}
-// 	
-// 		friend difference_type operator-(const DeQueConstIterator& lhs, const DeQueConstIterator& rhs)
-// 		{
-// 			return lhs.m_Ptr - rhs.m_Ptr;
-// 		}
-// 	
-// 		const reference operator*() const { return *m_Ptr; }
-// 		reference operator[](int index) { return *(m_Ptr + index); }
-// 		const pointer operator->() const { return this->m_Ptr; }
-// 		bool operator==(const DeQueConstIterator& other) const { return m_Ptr == other.m_Ptr; }
-// 		bool operator!=(const DeQueConstIterator& other) const { return !(*this == other); }
-// 		bool operator<(const DeQueConstIterator& right) const { return m_Ptr < right.m_Ptr; }
-// 		bool operator>(const DeQueConstIterator& right) const { return right < *this; }
-// 		bool operator<=(const DeQueConstIterator& right) const { return !(right < *this); }
-// 		bool operator>=(const DeQueConstIterator& right) const { return !(*this < right); }
+	DeQueConstIterator(const DeQue* container, size_t off) : m_Container{ container }, m_Offset{ off } {}
 
-	pointer m_Ptr;
+	//preincrement
+	DeQueConstIterator& operator++()
+	{
+		++m_Offset;
+		return *this;
+	}
+
+	// postincrement
+	DeQueConstIterator operator++(int)
+	{
+		DeQueConstIterator it = *this;
+		++m_Offset;
+		return it;
+	}
+
+	// preincrement
+	DeQueConstIterator& operator--()
+	{
+		--m_Offset;
+		return *this;
+	}
+
+	// postincrement
+	DeQueConstIterator operator--(int)
+	{
+		DeQueConstIterator it = *this;
+		--m_Offset;
+		return it;
+	}
+
+	DeQueConstIterator& operator+=(const difference_type offset)
+	{
+		m_Offset += offset;
+		return *this;
+	}
+
+	DeQueConstIterator operator+(const difference_type offset)
+	{
+		DeQueConstIterator tmp = *this;
+		tmp += offset;
+		return tmp;
+	}
+
+	DeQueConstIterator& operator-=(const difference_type offset)
+	{
+		m_Offset -= offset;
+		return *this;
+	}
+
+	DeQueConstIterator operator-(const difference_type offset)
+	{
+		DeQueConstIterator tmp = *this;
+		tmp -= offset;
+		return tmp;
+	}
+
+	friend difference_type operator-(const DeQueConstIterator& lhs, const DeQueConstIterator& rhs)
+	{
+		return lhs.m_Offset - rhs.m_Offset;
+	}
+
+	const reference operator*() const
+	{
+		size_t block = m_Container->get_block(m_Offset);
+		size_t pos = m_Offset % BLOCK_SIZE;
+		return m_Container->m_Map[block][pos];
+	}
+
+	reference operator[](int index)
+	{
+		return *(this + index);
+	}
+
+	const pointer operator->() const { return std::pointer_traits<pointer>::pointer_to(**this); } // I don't know what this does...
+	bool operator==(const DeQueConstIterator& other) const { return m_Offset == other.m_Offset; }
+	bool operator!=(const DeQueConstIterator& other) const { return !(*this == other); }
+	bool operator<(const DeQueConstIterator& right) const { return m_Offset < right.m_Offset; }
+	bool operator>(const DeQueConstIterator& right) const { return right < *this; }
+	bool operator<=(const DeQueConstIterator& right) const { return !(right < *this); }
+	bool operator>=(const DeQueConstIterator& right) const { return !(*this < right); }
+
+	const DeQue* m_Container; // The container
+	size_t m_Offset; // Offset of iterator in Deque
 };
 #pragma endregion ConstIterator
 
 #pragma region Iterator
+template <typename DeQue>
+class DeQueIterator
+{
+public:
+	using iterator_concept = std::random_access_iterator_tag;
+	using value_type = typename DeQue::value_type;
+	using pointer = typename DeQue::pointer;
+	using const_pointer = typename DeQue::const_pointer;
+	using reference = typename DeQue::reference;
+	using const_reference = typename DeQue::const_reference;
+	using difference_type = std::ptrdiff_t;
 
+	static constexpr size_t BLOCK_SIZE = DeQue::BLOCK_SIZE;
+
+	DeQueIterator(const DeQue* container, size_t off) : m_Container{ container }, m_Offset{ off } {}
+
+	//preincrement
+	DeQueIterator& operator++()
+	{
+		++m_Offset;
+		return *this;
+	}
+
+	// postincrement
+	DeQueIterator operator++(int)
+	{
+		DeQueIterator it = *this;
+		++m_Offset;
+		return it;
+	}
+
+	// preincrement
+	DeQueIterator& operator--()
+	{
+		--m_Offset;
+		return *this;
+	}
+
+	// postincrement
+	DeQueIterator operator--(int)
+	{
+		DeQueIterator it = *this;
+		--m_Offset;
+		return it;
+	}
+
+	DeQueIterator& operator+=(const difference_type offset)
+	{
+		m_Offset += offset;
+		return *this;
+	}
+
+	DeQueIterator operator+(const difference_type offset)
+	{
+		DeQueIterator tmp = *this;
+		tmp += offset;
+		return tmp;
+	}
+
+	DeQueIterator& operator-=(const difference_type offset)
+	{
+		m_Offset -= offset;
+		return *this;
+	}
+
+	DeQueIterator operator-(const difference_type offset)
+	{
+		DeQueIterator tmp = *this;
+		tmp -= offset;
+		return tmp;
+	}
+
+	friend difference_type operator-(const DeQueIterator& lhs, const DeQueIterator& rhs)
+	{
+		return lhs.m_Offset - rhs.m_Offset;
+	}
+
+	const reference operator*() const
+	{
+		size_t block = m_Container->get_block(m_Offset);
+		size_t pos = m_Offset % BLOCK_SIZE;
+		return m_Container->m_Map[block][pos];
+	}
+
+	reference operator[](int index)
+	{
+		return *(this + index);
+	}
+
+	const pointer operator->() const { return std::pointer_traits<pointer>::pointer_to(**this); }
+	bool operator==(const DeQueIterator& other) const { return m_Offset == other.m_Offset; }
+	bool operator!=(const DeQueIterator& other) const { return !(*this == other); }
+	bool operator<(const DeQueIterator& right) const { return m_Offset < right.m_Offset; }
+	bool operator>(const DeQueIterator& right) const { return right < *this; }
+	bool operator<=(const DeQueIterator& right) const { return !(right < *this); }
+	bool operator>=(const DeQueIterator& right) const { return !(*this < right); }
+
+	const DeQue* m_Container; // The container
+	size_t m_Offset; // Offset of iterator in Deque
+};
 #pragma endregion Iterator
 
 #pragma region ConstReverseIterator
@@ -116,7 +228,15 @@ public:
 	using reference = T&;
 	using const_reference = const T&;
 	using map_type = T**;
-	// block for iterators
+	using const_iterator = DeQueConstIterator<DeQue<T>>;
+	using iterator = DeQueIterator<DeQue<T>>;
+
+	static const size_t BLOCK_SIZE = 8;
+	size_t m_Size = 0; // The number of elements stored in the deque
+	size_t m_MapSize = 0; // The amount of blocks contained in the map
+	size_t m_Offset = 0; // Offset between head and first entry m_Map[0].[0]
+	const size_t MIN_MAP_SIZE = 8;
+	map_type m_Map; // Ring buffer of pointers to each memory block of the deque ( fixed size arrays )
 
 public:
 	DeQue()
@@ -309,13 +429,18 @@ public:
 	}
 
 	size_t size() const { return m_Size; }
+	iterator begin() { return iterator{ this, m_Offset }; }
+	iterator end() { return iterator(this, m_Offset + m_Size); }
+	const_iterator cbegin() const { return const_iterator(this, m_Offset); }
+	const_iterator cend() const { return const_iterator(this, m_Offset + m_Size); }
 
-private:
 	size_t get_block(size_t offset) const
 	{
 		// The binary and will return the index 010 & 111 -> 010 -> 2 -> the position is in block m_Map[2]
 		return (offset / BLOCK_SIZE) & (m_MapSize - 1);
 	}
+
+private:
 
 	// Grow the map by AT LEAST count, map size should always be a power of 2
 	void grow_map(size_t count)
@@ -352,12 +477,4 @@ private:
 	}
 
 	inline const size_t last_index() const { return m_Offset + m_Size; }
-
-private:
-	size_t m_Size = 0; // The number of elements stored in the deque
-	size_t m_MapSize = 0; // The amount of blocks contained in the map
-	size_t m_Offset = 0; // Offset between head and first entry m_Map[0].[0]
-	static const size_t BLOCK_SIZE = 8;
-	const size_t MIN_MAP_SIZE = 8;
-	map_type m_Map; // Ring buffer of pointers to each memory block of the deque ( fixed size arrays )
 };

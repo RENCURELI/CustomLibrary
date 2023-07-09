@@ -210,14 +210,6 @@ public:
 			return makeIterator(pos.m_Ptr);
 		}
 
-		//FListNode_t<T>* newNode = new FListNode_t<T>(first.m_Ptr->m_Data);
-		// From testing, seems like the STL doesn't handle this case, which makes sense as after head in an empty list is null
-// 		if (m_Head == nullptr)
-// 		{
-// 			m_Head = first.m_Ptr;
-// 			++first;
-// 		}
-
 		for (; first != last; ++first)
 		{
 			FListNode_t<T>* newNode = new FListNode_t<T>(first.m_Ptr->m_Data);

@@ -27,6 +27,14 @@ int main()
 			testDeque.push_front(i);
 			testDeque.push_back(i);
 		}
+
+		auto it = testDeque.begin();
+		it = std::find(it, testDeque.end(), 41);
+		for (auto val : testDeque)
+		{
+			std::cout << val << "\n";
+		}
+
 		testDeque.push_back(1);
 		std::cout << testDeque.size() << "\n";
 		testDeque.pop_back();
