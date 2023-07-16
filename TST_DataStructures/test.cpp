@@ -9,6 +9,7 @@
 #include "ListTest.hpp"
 #include "StackTest.hpp"
 #include "VectorTest.hpp"
+#include "DequeTest.hpp"
 
 int main(int argc, char** argv)
 {

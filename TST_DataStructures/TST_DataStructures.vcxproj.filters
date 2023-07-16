@@ -21,6 +21,9 @@
     <ClInclude Include="ContainerTests\VectorTest.hpp">
       <Filter>ContainerTests</Filter>
     </ClInclude>
+    <ClInclude Include="DequeTest.hpp">
+      <Filter>ContainerTests</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

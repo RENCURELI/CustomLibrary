@@ -243,10 +243,68 @@ public:
 	{
 		// We first allocate the map
 		m_Map = new pointer[MIN_MAP_SIZE];
-		m_MapSize = 8;
+		m_MapSize = MIN_MAP_SIZE;
 
 		// We set all blocks to nullptr ( prevents undefined behaviour ), we will allocate as we push data inside
 		memset(m_Map, 0, sizeof(pointer) * m_MapSize);
+	}
+
+	DeQue(size_t count, const T& value)
+	{
+		m_Map = new pointer[MIN_MAP_SIZE];
+		m_MapSize = MIN_MAP_SIZE;
+
+		// Probably not optimal, to be improved on later
+		for (size_t i = 0; i < count; ++i)
+		{
+			push_back(value);
+		}
+	}
+
+// 	DeQue(size_t count)
+// 	{
+// 		// We first allocate the map
+// 		size_t minRequiredSize = count / BLOCK_SIZE;
+// 		minRequiredSize += count % BLOCK_SIZE > 0 ? 1 : 0; // We add one block in the case where we would have overflown
+// 		size_t mapSize = get_next_power2(minRequiredSize);
+// 		m_Map = new pointer[mapSize];
+// 		m_MapSize = mapSize;
+// 
+// 		for (size_t i = 0; i < minRequiredSize; ++i)
+// 		{
+// 			//std::construct_at(&m_Map[i], );
+// 		}
+// 	}
+
+	// How is this supposed to work
+	//template<typename InputIt, std::enable_if_t<std::input_iterator<InputIt>, int> = 0>
+	//template<std::input_iterator InputIt>
+	template<class InputIt>
+	DeQue(InputIt first, InputIt last)
+	{
+		m_Map = new pointer[MIN_MAP_SIZE];
+		m_MapSize = MIN_MAP_SIZE;
+		memset(m_Map, 0, sizeof(pointer) * m_MapSize);
+
+		for (; first != last; ++first)
+		{
+			push_back(*first);
+		}
+	}
+
+	DeQue(const DeQue& other)
+	{
+		m_Map = new pointer[other.m_MapSize];
+		m_MapSize = other.m_MapSize;
+		m_Size = other.m_Size;
+
+		memset(m_Map, 0, sizeof(pointer) * m_MapSize);
+		memcpy_s(m_Map, sizeof(pointer) * m_MapSize, other.m_Map, sizeof(T) * other.m_MapSize);
+	}
+
+	DeQue(std::initializer_list<T> initList)
+	{
+
 	}
 
 	~DeQue()
@@ -453,6 +511,7 @@ private:
 			newSize *= 2;
 		}
 		count = newSize - m_MapSize;
+		//count = get_next_power2(count) - m_MapSize;
 
 
 		size_t blockOffset = m_Offset / BLOCK_SIZE; // Here we get in which block the offset is
@@ -477,4 +536,15 @@ private:
 	}
 
 	inline const size_t last_index() const { return m_Offset + m_Size; }
+// 	const size_t get_next_power2(size_t value)
+// 	{
+// 		// This block is to find the first power of 2 larger than the current map size
+// 		size_t newSize = m_MapSize > 0 ? m_MapSize : 1; // Assumption is made that MapSize is always a power of 2
+// 		while (newSize - m_MapSize < count || newSize < MIN_MAP_SIZE)
+// 		{
+// 			// Disregarding a few safety nets from the STL here ( namely checking max possible size )
+// 			newSize *= 2;
+// 		}
+// 		return newSize;
+// 	}
 };

@@ -50,6 +50,7 @@
     <ClInclude Include="ContainerTests\ListTest.hpp" />
     <ClInclude Include="ContainerTests\StackTest.hpp" />
     <ClInclude Include="ContainerTests\VectorTest.hpp" />
+    <ClInclude Include="DequeTest.hpp" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
