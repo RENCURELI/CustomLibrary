@@ -28,6 +28,11 @@ TEST(DequeTest, DequeConstructor)
 	DeQue<int>iteratorConstructor = DeQue<int>(copyConstructor.begin(), copyConstructor.end());
 	auto otherIt = iteratorConstructor.begin();
 	EXPECT_TRUE(it == otherIt);
+
+	// Initializer list based constructor
+	DeQue<int> initListDeque = { 0, 1, 2, 3 };
+	EXPECT_EQ(initListDeque.size(), 4);
+	EXPECT_TRUE(std::find(initListDeque.begin(), initListDeque.end(), 3) != initListDeque.end());
 }
 
 // Used to test push_front, push_back, pop_front and pop_back
@@ -66,11 +71,33 @@ TEST(DequeTest, PushAndPop)
 	EXPECT_EQ(*it, 0);
 
 	// Now we pop data out of the Deque
+	// First, we check the current last element
+	it = testDeque.begin();
+	std::advance(it, testDeque.size() - 1);
+	EXPECT_EQ(*it, 9);
 
+	// Pop back
+	testDeque.pop_back();
+	// Check the new final element
+	it = testDeque.begin();
+	std::advance(it, testDeque.size() - 1);
+	EXPECT_EQ(*it, 8);
+
+	// Pop Front
+	it = testDeque.begin();
+	EXPECT_EQ(*it, 99);
+
+	testDeque.pop_front();
+	it = testDeque.begin();
+	EXPECT_EQ(*it, 98);
 }
 
-// Test at() and operator []
+// Test at(), front(), back() and operator []
 TEST(DequeTest, Accessors)
 {
-
+	DeQue<int> testDeque = { 0, 1, 2, 3, 4, 5, 6 ,7, 8, 9 };
+	EXPECT_EQ(testDeque.front(), 0);
+	EXPECT_EQ(testDeque.back(), 9);
+	EXPECT_EQ(testDeque.at(2), 2);
+	EXPECT_EQ(testDeque[5], 5);
 }

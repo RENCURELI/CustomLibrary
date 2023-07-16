@@ -253,6 +253,7 @@ public:
 	{
 		m_Map = new pointer[MIN_MAP_SIZE];
 		m_MapSize = MIN_MAP_SIZE;
+		memset(m_Map, 0, sizeof(pointer) * m_MapSize);
 
 		// Probably not optimal, to be improved on later
 		for (size_t i = 0; i < count; ++i)
@@ -304,7 +305,15 @@ public:
 
 	DeQue(std::initializer_list<T> initList)
 	{
+		m_MapSize = get_next_power2(0, initList.size());
+		m_Map = new pointer[m_MapSize];
 
+		memset(m_Map, 0, sizeof(pointer) * m_MapSize);
+
+		for (const auto& it : initList)
+		{
+			push_back(it);
+		}
 	}
 
 	~DeQue()
@@ -486,7 +495,36 @@ public:
 		return m_Map[block][pos];
 	}
 
+
+	// Accessors and helpers
 	size_t size() const { return m_Size; }
+
+	T& front()
+	{
+		size_t block = get_block(m_Offset);
+		return m_Map[block][m_Offset % BLOCK_SIZE];
+	}
+
+	const T& front() const
+	{
+		size_t block = get_block(m_Offset);
+		return m_Map[block][m_Offset % BLOCK_SIZE];
+	}
+
+	T& back()
+	{
+		size_t endPos = m_Offset + (m_Size - 1);
+		size_t block = get_block(endPos);
+		return m_Map[block][endPos % BLOCK_SIZE];
+	}
+
+	const T& back() const
+	{
+		size_t endPos = m_Offset + (m_Size - 1);
+		size_t block = get_block(endPos);
+		return m_Map[block][endPos % BLOCK_SIZE];
+	}
+
 	iterator begin() { return iterator{ this, m_Offset }; }
 	iterator end() { return iterator(this, m_Offset + m_Size); }
 	const_iterator cbegin() const { return const_iterator(this, m_Offset); }
@@ -511,7 +549,6 @@ private:
 			newSize *= 2;
 		}
 		count = newSize - m_MapSize;
-		//count = get_next_power2(count) - m_MapSize;
 
 
 		size_t blockOffset = m_Offset / BLOCK_SIZE; // Here we get in which block the offset is
@@ -536,15 +573,17 @@ private:
 	}
 
 	inline const size_t last_index() const { return m_Offset + m_Size; }
-// 	const size_t get_next_power2(size_t value)
-// 	{
-// 		// This block is to find the first power of 2 larger than the current map size
-// 		size_t newSize = m_MapSize > 0 ? m_MapSize : 1; // Assumption is made that MapSize is always a power of 2
-// 		while (newSize - m_MapSize < count || newSize < MIN_MAP_SIZE)
-// 		{
-// 			// Disregarding a few safety nets from the STL here ( namely checking max possible size )
-// 			newSize *= 2;
-// 		}
-// 		return newSize;
-// 	}
+
+	// Base val is the starting point, nextVal is the minimum threshold we want to get over
+	const size_t get_next_power2(size_t baseVal, size_t nextVal)
+	{
+		// This block is to find the first power of 2 larger than the baseVal
+		size_t newVal = baseVal > 0 ? baseVal : 1; // Assumption is made that baseVal is always a power of 2
+		while (newVal - baseVal < nextVal)
+		{
+			// Not checking against maximum possible size
+			newVal *= 2;
+		}
+		return newVal;
+	}
 };
