@@ -3,6 +3,10 @@
 #include <memory>
 #include <stdexcept>
 
+// used for debugging
+//#include <string>
+//#include <bitset>
+
 #pragma region ConstIterator
 template <typename DeQue>
 class DeQueConstIterator
@@ -305,7 +309,7 @@ public:
 
 	DeQue(std::initializer_list<T> initList)
 	{
-		m_MapSize = get_next_power2(0, initList.size());
+		m_MapSize = get_next_power2(initList.size());
 		m_Map = new pointer[m_MapSize];
 
 		memset(m_Map, 0, sizeof(pointer) * m_MapSize);
@@ -574,16 +578,25 @@ private:
 
 	inline const size_t last_index() const { return m_Offset + m_Size; }
 
-	// Base val is the starting point, nextVal is the minimum threshold we want to get over
-	const size_t get_next_power2(size_t baseVal, size_t nextVal)
+	// number is the target we want to get over
+	const size_t get_next_power2(size_t number)
 	{
-		// This block is to find the first power of 2 larger than the baseVal
-		size_t newVal = baseVal > 0 ? baseVal : 1; // Assumption is made that baseVal is always a power of 2
-		while (newVal - baseVal < nextVal)
+		//std::string binary = std::bitset<16>(number).to_string();
+		if (number <= 1)
 		{
-			// Not checking against maximum possible size
-			newVal *= 2;
+			return 1;
 		}
-		return newVal;
+		int power = 2;
+		//number--;
+
+		//binary = std::bitset<16>(number).to_string();
+
+		while (number >>= 1)
+		{
+			power <<= 1;
+			//binary = std::bitset<16>(number).to_string();
+		}
+
+		return power;
 	}
 };
