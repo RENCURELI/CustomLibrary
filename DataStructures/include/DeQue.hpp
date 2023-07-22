@@ -3,10 +3,6 @@
 #include <memory>
 #include <stdexcept>
 
-// used for debugging
-//#include <string>
-//#include <bitset>
-
 #pragma region ConstIterator
 template <typename DeQue>
 class DeQueConstIterator
@@ -309,7 +305,7 @@ public:
 
 	DeQue(std::initializer_list<T> initList)
 	{
-		m_MapSize = get_next_power2(initList.size());
+		m_MapSize = get_next_power2(initList.size() / BLOCK_SIZE);
 		m_Map = new pointer[m_MapSize];
 
 		memset(m_Map, 0, sizeof(pointer) * m_MapSize);
@@ -502,6 +498,8 @@ public:
 
 	// Accessors and helpers
 	size_t size() const { return m_Size; }
+	bool empty() const { return m_Size == 0; }
+	size_t max_size() const { return static_cast<size_t>(std::numeric_limits<std::ptrdiff_t>::max()); }
 
 	T& front()
 	{
@@ -546,14 +544,8 @@ private:
 	void grow_map(size_t count)
 	{
 		// This block is to find the first power of 2 larger than the current map size
-		size_t newSize = m_MapSize > 0 ? m_MapSize : 1; // Assumption is made that MapSize is always a power of 2
-		while (newSize - m_MapSize < count || newSize < MIN_MAP_SIZE)
-		{
-			// Disregarding a few safety nets from the STL here ( namely checking max possible size )
-			newSize *= 2;
-		}
-		count = newSize - m_MapSize;
-
+		// Assumption is made that MapSize is always a power of 2
+		size_t newSize = get_next_power2(m_MapSize + count);
 
 		size_t blockOffset = m_Offset / BLOCK_SIZE; // Here we get in which block the offset is
 		map_type newMap = new pointer[newSize]; // We allocate the memory for the new map
@@ -581,20 +573,15 @@ private:
 	// number is the target we want to get over
 	const size_t get_next_power2(size_t number)
 	{
-		//std::string binary = std::bitset<16>(number).to_string();
 		if (number <= 1)
 		{
 			return 1;
 		}
 		int power = 2;
-		//number--;
-
-		//binary = std::bitset<16>(number).to_string();
 
 		while (number >>= 1)
 		{
 			power <<= 1;
-			//binary = std::bitset<16>(number).to_string();
 		}
 
 		return power;
