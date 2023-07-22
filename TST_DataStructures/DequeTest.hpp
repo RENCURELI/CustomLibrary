@@ -101,3 +101,20 @@ TEST(DequeTest, Accessors)
 	EXPECT_EQ(testDeque.at(2), 2);
 	EXPECT_EQ(testDeque[5], 5);
 }
+
+TEST(DequeTest, Resizing)
+{
+	DeQue<int> testDeque = { 0, 1, 2, 3, 4, 5, 6 ,7, 8, 9 };
+	EXPECT_EQ(testDeque.size(), 10);
+
+	testDeque.resize(15);
+	EXPECT_EQ(testDeque.size(), 15);
+
+	testDeque.resize(5);
+	EXPECT_EQ(testDeque.size(), 5);
+	EXPECT_TRUE(std::find(testDeque.begin(), testDeque.end(), 10) == testDeque.end());
+
+	testDeque.resize(15, 12);
+	EXPECT_EQ(testDeque.size(), 15);
+	EXPECT_EQ(std::count(testDeque.begin(), testDeque.end(), 12), 10);
+}

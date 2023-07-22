@@ -408,6 +408,62 @@ public:
 		--m_Size;
 	}
 
+	void resize(size_t count)
+	{
+		// count and size are equal, do nothing
+		if (count == m_Size)
+		{
+			return;
+		}
+
+		// We append default constructed values
+		if (count > m_Size)
+		{
+			for (; m_Size < count;)
+			{
+				push_back(T());
+			}
+		}
+		else // count is smaller than size, we trim
+		{
+			for (size_t i = m_Offset + count; i < last_index(); ++i)
+			{
+				const size_t block = get_block(i);
+				std::destroy_at(&m_Map[block][i % BLOCK_SIZE]);
+			}
+
+			m_Size -= m_Size - count;
+		}
+	}
+
+	void resize(size_t count, const T& value)
+	{
+		// count and size are equal, do nothing
+		if (count == m_Size)
+		{
+			return;
+		}
+
+		// We append default constructed values
+		if (count > m_Size)
+		{
+			for (; m_Size < count;)
+			{
+				push_back(value);
+			}
+		}
+		else // count is smaller than size, we trim
+		{
+			for (size_t i = m_Offset + count; i < last_index(); ++i)
+			{
+				const size_t block = get_block(i);
+				std::destroy_at(&m_Map[block][i % BLOCK_SIZE]);
+			}
+
+			m_Size -= m_Size - count;
+		}
+	}
+
 	T& at(size_t pos)
 	{
 		if (pos > m_Size)
