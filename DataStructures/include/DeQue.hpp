@@ -464,6 +464,37 @@ public:
 		}
 	}
 
+	iterator insert(const_iterator pos, const T& value)
+	{
+		size_t offset = pos - cbegin();
+
+		// We check if we are closer to front or back
+		if (offset <= m_Size / 2)
+		{
+			// Push ( front or back ) handles resize if necessary
+			push_front(value);
+			// We rotate begin ( inserted value ) around begin + 1 ( begin before insertion ) to begin + offset + 1 ( +1 is to account for values being offset by inserted value )
+			std::rotate(begin(), std::next(begin()), begin() + (1 + offset));
+		}
+		else
+		{
+			push_back(value);
+			std::rotate(begin() + offset, --end(), end());
+		}
+
+		return begin() + offset;
+	}
+
+// 	iterator insert(const_iterator pos, size_t count, const T& value)
+// 	{
+// 
+// 	}
+// 
+// 	iterator insert(const_iterator pos, std::initializer_list<T> ilist)
+// 	{
+// 
+// 	}
+
 	T& at(size_t pos)
 	{
 		if (pos > m_Size)
@@ -641,5 +672,10 @@ private:
 		}
 
 		return power;
+	}
+
+	iterator makeIterator(const DeQue* container, size_t offset)
+	{
+		return iterator(container, offset);
 	}
 };

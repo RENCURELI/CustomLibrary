@@ -118,3 +118,14 @@ TEST(DequeTest, Resizing)
 	EXPECT_EQ(testDeque.size(), 15);
 	EXPECT_EQ(std::count(testDeque.begin(), testDeque.end(), 12), 10);
 }
+
+TEST(DequeTest, Insertion)
+{
+	DeQue<int> testDeque = { 0, 1, 2, 3, 4, 5, 6 ,7, 8, 9 };
+	auto it = testDeque.cbegin();
+	std::advance(it, 3);
+	auto returnedIt = testDeque.insert(it, 10);
+
+	EXPECT_FALSE(std::find(testDeque.begin(), testDeque.end(), 10) == testDeque.end());
+	EXPECT_EQ(*returnedIt, 10);
+}
