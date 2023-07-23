@@ -1,7 +1,10 @@
 #pragma once
+#include <concepts>
 #include <iterator>
 #include <memory>
 #include <stdexcept>
+
+#include <xutility>
 
 #pragma region ConstIterator
 template <typename DeQue>
@@ -217,7 +220,6 @@ public:
 
 #pragma endregion ReverseIterator
 
-
 template<typename T>
 class DeQue
 {
@@ -277,10 +279,8 @@ public:
 // 		}
 // 	}
 
-	// How is this supposed to work
-	//template<typename InputIt, std::enable_if_t<std::input_iterator<InputIt>, int> = 0>
-	//template<std::input_iterator InputIt>
-	template<class InputIt>
+	// How is this supposed to work??? I can't make it fail, does it work? Does it not work? Who knows...
+	template<std::input_iterator InputIt>
 	DeQue(InputIt first, InputIt last)
 	{
 		m_Map = new pointer[MIN_MAP_SIZE];
