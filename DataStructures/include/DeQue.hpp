@@ -1,10 +1,7 @@
 #pragma once
-#include <concepts>
 #include <iterator>
 #include <memory>
 #include <stdexcept>
-
-#include <xutility>
 
 #pragma region ConstIterator
 template <typename DeQue>
@@ -279,10 +276,11 @@ public:
 // 		}
 // 	}
 
-	// How is this supposed to work??? I can't make it fail, does it work? Does it not work? Who knows...
-	template<std::input_iterator InputIt>
-	DeQue(InputIt first, InputIt last)
+	//template<std::input_iterator InputIt>
+	template<typename InputIt/*, typename = std::enable_if_t<std::is_convertible_v<InputIt::iterator_concept, std::input_iterator_tag>>*/>
+	DeQue(InputIt first, InputIt last) //requires std::input_iterator<InputIt>
 	{
+		static_assert(std::is_convertible_v<InputIt::iterator_concept, std::input_iterator_tag>, "Iterator must be input iterator");
 		m_Map = new pointer[MIN_MAP_SIZE];
 		m_MapSize = MIN_MAP_SIZE;
 		memset(m_Map, 0, sizeof(pointer) * m_MapSize);
@@ -487,9 +485,11 @@ public:
 
 // 	iterator insert(const_iterator pos, size_t count, const T& value)
 // 	{
+// 		size_t offset = pos - cbegin();
 // 
+// 		if (offset)
 // 	}
-// 
+
 // 	iterator insert(const_iterator pos, std::initializer_list<T> ilist)
 // 	{
 // 
