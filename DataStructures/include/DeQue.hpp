@@ -276,11 +276,9 @@ public:
 // 		}
 // 	}
 
-	//template<std::input_iterator InputIt>
-	template<typename InputIt/*, typename = std::enable_if_t<std::is_convertible_v<InputIt::iterator_concept, std::input_iterator_tag>>*/>
-	DeQue(InputIt first, InputIt last) //requires std::input_iterator<InputIt>
+	template<std::input_iterator InputIt>
+	DeQue(InputIt first, InputIt last)
 	{
-		static_assert(std::is_convertible_v<InputIt::iterator_concept, std::input_iterator_tag>, "Iterator must be input iterator");
 		m_Map = new pointer[MIN_MAP_SIZE];
 		m_MapSize = MIN_MAP_SIZE;
 		memset(m_Map, 0, sizeof(pointer) * m_MapSize);

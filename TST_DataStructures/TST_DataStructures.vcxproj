@@ -46,11 +46,11 @@
   </PropertyGroup>
   <ItemGroup>
     <ClInclude Include="ContainerTests\ArrayTest.hpp" />
+    <ClInclude Include="ContainerTests\DequeTest.hpp" />
     <ClInclude Include="ContainerTests\FListTest.hpp" />
     <ClInclude Include="ContainerTests\ListTest.hpp" />
     <ClInclude Include="ContainerTests\StackTest.hpp" />
     <ClInclude Include="ContainerTests\VectorTest.hpp" />
-    <ClInclude Include="DequeTest.hpp" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
