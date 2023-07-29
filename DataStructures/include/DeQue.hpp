@@ -524,8 +524,7 @@ public:
 
 		if (offset <= m_Size / 2)
 		{
-			// Must find a way to evaluate iterator_category or iterator_concept based on what the iterator defines
-			constexpr bool isBidirectional = std::is_convertible_v<InputIt::iterator_category, std::bidirectional_iterator_tag> /*|| std::is_convertible_v<InputIt::iterator_concept, std::bidirectional_iterator_tag>*/;
+			constexpr bool isBidirectional = std::bidirectional_iterator<InputIt>;
 			// If bidirectional iterator, decrement and insert in order. Followed by rotate
 			if constexpr (isBidirectional)
 			{
