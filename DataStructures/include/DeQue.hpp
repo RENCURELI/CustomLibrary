@@ -481,12 +481,85 @@ public:
 		return begin() + offset;
 	}
 
-// 	iterator insert(const_iterator pos, size_t count, const T& value)
-// 	{
-// 		size_t offset = pos - cbegin();
-// 
-// 		if (offset)
-// 	}
+	iterator insert(const_iterator pos, size_t count, const T& value)
+	{
+		if (count == 0)
+		{
+			return makeIterator(this, pos.m_Offset);
+		}
+
+		size_t offset = pos - cbegin();
+
+		if (offset <= m_Size / 2)
+		{
+			for (size_t i = count; i > 0; --i)
+			{
+				push_front(value);
+			}
+			std::rotate(begin(), std::next(begin(), count), begin() + offset + count);
+		}
+		else
+		{
+			for (size_t i = count; i > 0; --i)
+			{
+				push_back(value);
+			}
+			std::rotate(begin() + offset, end() - count, end());
+		}
+
+		return begin() + offset;
+	}
+
+	template<std::input_iterator InputIt>
+	iterator insert(const_iterator pos, InputIt first, InputIt last)
+	{
+		if (first == last)
+		{
+			return makeIterator(this, pos.m_Offset);
+		}
+
+		size_t offset = pos - cbegin();
+		size_t oldSize = m_Size;
+		size_t numElems = 0; // The number of elements inserted
+
+		if (offset <= m_Size / 2)
+		{
+			// Must find a way to evaluate iterator_category or iterator_concept based on what the iterator defines
+			constexpr bool isBidirectional = std::is_convertible_v<InputIt::iterator_category, std::bidirectional_iterator_tag> /*|| std::is_convertible_v<InputIt::iterator_concept, std::bidirectional_iterator_tag>*/;
+			// If bidirectional iterator, decrement and insert in order. Followed by rotate
+			if constexpr (isBidirectional)
+			{
+				while (first != last)
+				{
+					push_front(*(--last));
+				}
+				numElems = m_Size - oldSize;
+			}
+			// If NOT bidirectional iterator, insert flipped, std::reverse, rotate
+			else
+			{
+				for (; first != last; ++first)
+				{
+					push_front(*first);
+				}
+				numElems = m_Size - oldSize;
+				std::reverse(begin(), begin() + numElems);
+			}
+
+			iterator pivot = begin() + numElems;
+
+			std::rotate(begin(), pivot, pivot + offset);
+			return begin() + offset;
+		}
+
+		for (; first != last; ++first)
+		{
+			push_back(*first);
+		}
+		std::rotate(begin() + offset, begin() + oldSize, end());
+
+		return begin() + offset;
+	}
 
 // 	iterator insert(const_iterator pos, std::initializer_list<T> ilist)
 // 	{

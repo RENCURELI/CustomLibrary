@@ -1,6 +1,8 @@
 #pragma once
 
 #include <algorithm>
+#include <forward_list>
+#include <vector>
 
 #include "../DataStructures/include/DeQue.hpp"
 
@@ -128,4 +130,30 @@ TEST(DequeTest, Insertion)
 
 	EXPECT_FALSE(std::find(testDeque.begin(), testDeque.end(), 10) == testDeque.end());
 	EXPECT_EQ(*returnedIt, 10);
+
+	// insert count values
+	it = testDeque.cbegin();
+	std::advance(it, 3);
+	returnedIt = testDeque.insert(it, 10, 150);
+
+	EXPECT_FALSE(std::find(testDeque.begin(), testDeque.end(), 150) == testDeque.end());
+	EXPECT_EQ(*returnedIt, 150);
+	returnedIt = std::find(testDeque.begin(), testDeque.end(), 10);
+	EXPECT_EQ(*(--returnedIt), 150);
+
+	// insert iter first, iter last ( bidirectional )
+	std::vector<int> insertableVec = { -1, -2, -3, -4, -5 };
+	it = testDeque.cbegin();
+	std::advance(it, 10);
+	returnedIt = testDeque.insert(it, insertableVec.begin(), insertableVec.end());
+
+	EXPECT_FALSE(std::find(testDeque.begin(), testDeque.end(), -3) == testDeque.end());
+
+	// insert iter first, iter last ( non-bidirectional )
+	std::forward_list<int> insertableFList = { -10, -20, -30, -40, -50 };
+	it = testDeque.cbegin();
+	std::advance(it, 12);
+	returnedIt = testDeque.insert(it, insertableFList.begin(), insertableFList.end());
+
+	EXPECT_FALSE(std::find(testDeque.begin(), testDeque.end(), -30) == testDeque.end());
 }
