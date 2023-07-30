@@ -12,7 +12,7 @@ class FListConstIterator
 public:
 	using iterator_concept = std::forward_iterator_tag;
 	using value_type = typename FList::value_type;
-	using pointer = FList::const_pointer;
+	using pointer = typename FList::const_pointer;
 	using reference = const value_type&;
 	using difference_type = std::ptrdiff_t;
 
@@ -50,7 +50,7 @@ class FListIterator : public FListConstIterator<FList>
 {
 public:
 	using value_type = typename FList::value_type;
-	using pointer = FList::pointer;
+	using pointer = typename FList::pointer;
 	using reference = value_type&;
 	using difference_type = std::ptrdiff_t;
 	using BaseIt = FListConstIterator<FList>;

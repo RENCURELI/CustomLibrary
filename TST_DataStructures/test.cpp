@@ -4,12 +4,12 @@
 #include <algorithm>
 #include <string>
 
-#include "ArrayTest.hpp"
-#include "FListTest.hpp"
-#include "ListTest.hpp"
-#include "StackTest.hpp"
-#include "VectorTest.hpp"
-#include "DequeTest.hpp"
+#include "ContainerTests/ArrayTest.hpp"
+#include "ContainerTests/FListTest.hpp"
+#include "ContainerTests/ListTest.hpp"
+#include "ContainerTests/StackTest.hpp"
+#include "ContainerTests/VectorTest.hpp"
+#include "ContainerTests/DequeTest.hpp"
 
 int main(int argc, char** argv)
 {

@@ -12,7 +12,7 @@ class ListConstIterator
 public:
 	using iterator_concept = std::bidirectional_iterator_tag;
 	using value_type = typename List::value_type;
-	using pointer = List::const_pointer;
+	using pointer = typename List::const_pointer;
 	using reference = const value_type&;
 	using difference_type = std::ptrdiff_t;
 
@@ -66,7 +66,7 @@ class ListIterator : public ListConstIterator<List>
 {
 public:
 	using value_type = typename List::value_type;
-	using pointer = List::pointer;
+	using pointer = typename List::pointer;
 	using reference = value_type&;
 	using difference_type = std::ptrdiff_t;
 	using BaseIt = ListConstIterator<List>;

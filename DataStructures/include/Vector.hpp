@@ -16,7 +16,7 @@ class VectorConstIterator
 public:
 	using iterator_concept = std::contiguous_iterator_tag;
 	using value_type = typename Vector::value_type;
-	using pointer = Vector::const_pointer;
+	using pointer = typename Vector::const_pointer;
 	using reference = const value_type&;
 	using difference_type = std::ptrdiff_t;
 
@@ -106,7 +106,7 @@ class VectorIterator : public VectorConstIterator<Vector>
 {
 public:
 	using value_type = typename Vector::value_type;
-	using pointer = Vector::pointer;
+	using pointer = typename Vector::pointer;
 	using reference = value_type&;
 	using difference_type = std::ptrdiff_t;
 	using BaseIt = VectorConstIterator<Vector>;

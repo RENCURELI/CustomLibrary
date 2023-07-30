@@ -1,0 +1,21 @@
+name: Unit Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: cmake build
+      run: cmake .
+    - name: cmake make
+      run: cmake --build . --target ALL_BUILD
+    - name: List Files
+      run: Get-ChildItem -Exclude .github,.git,.vs,out,packages,_deps | Get-ChildItem -Recurse
+    - name: run test 1
+      run: Debug/Libraries.exe

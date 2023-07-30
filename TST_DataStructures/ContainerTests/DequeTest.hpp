@@ -6,6 +6,9 @@
 
 #include "../DataStructures/include/DeQue.hpp"
 
+// for comparative testing against std::vector
+#include "../DataStructures/include/Vector.hpp"
+
 // ================================================
 // ==============   DEQUE TESTS   =================
 // ================================================
@@ -156,4 +159,11 @@ TEST(DequeTest, Insertion)
 	returnedIt = testDeque.insert(it, insertableFList.begin(), insertableFList.end());
 
 	EXPECT_FALSE(std::find(testDeque.begin(), testDeque.end(), -30) == testDeque.end());
+
+	Vector<int> customVec = { 100, 101, 102, 103, 104, 105 };
+	it = testDeque.cbegin();
+	std::advance(it, 15);
+	returnedIt = testDeque.insert(it, customVec.begin(), customVec.end());
+
+	EXPECT_FALSE(std::find(testDeque.begin(), testDeque.end(), 102) == testDeque.end());
 }
