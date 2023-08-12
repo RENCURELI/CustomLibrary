@@ -11,7 +11,7 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v3
-    - uses: CustomLibrary/cmake-action@v1.3.0
+    - uses: RENCURELI/CustomLibrary@v1
       with:
         c-compiler: gcc
         cxx-compiler: gcc
