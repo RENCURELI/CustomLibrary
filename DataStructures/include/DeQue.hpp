@@ -1,4 +1,5 @@
 #pragma once
+#include <climits>
 #include <cstring>
 #include <iterator>
 #include <memory>
@@ -262,20 +263,25 @@ public:
 		}
 	}
 
-// 	DeQue(size_t count)
-// 	{
-// 		// We first allocate the map
-// 		size_t minRequiredSize = count / BLOCK_SIZE;
-// 		minRequiredSize += count % BLOCK_SIZE > 0 ? 1 : 0; // We add one block in the case where we would have overflown
-// 		size_t mapSize = get_next_power2(minRequiredSize);
-// 		m_Map = new pointer[mapSize];
-// 		m_MapSize = mapSize;
-// 
-// 		for (size_t i = 0; i < minRequiredSize; ++i)
-// 		{
-// 			//std::construct_at(&m_Map[i], );
-// 		}
-// 	}
+	DeQue(size_t count)
+	{
+		// We first allocate the map
+		//size_t minRequiredSize = count / BLOCK_SIZE;
+		//minRequiredSize += count % BLOCK_SIZE > 0 ? 1 : 0; // We add one block in the case where we would have overflown
+		//size_t mapSize = get_next_power2(minRequiredSize);
+		size_t mapSize = MIN_MAP_SIZE;
+		m_Map = new pointer[mapSize];
+		m_MapSize = mapSize;
+
+		memset(m_Map, 0, sizeof(pointer) * m_MapSize);
+
+		//for (size_t i = 0; i < minRequiredSize; ++i)
+		for (size_t i = 0; i < count; ++i)
+		{
+			// std::construct_at(&m_Map[i], T()); -> throws Error C2440 can't convert _Ty to _Ty
+			push_back(T());
+		}
+	}
 
 	template<std::input_iterator InputIt>
 	DeQue(InputIt first, InputIt last)
@@ -561,10 +567,30 @@ public:
 		return begin() + offset;
 	}
 
-// 	iterator insert(const_iterator pos, std::initializer_list<T> ilist)
-// 	{
-// 
-// 	}
+	iterator insert(const_iterator pos, std::initializer_list<T> ilist)
+	{
+		return insert(pos, ilist.begin(), ilist.end());
+	}
+
+	void clear()
+	{
+		if (m_Map != nullptr)
+		{
+			for (size_t block = m_MapSize; block > 0;)
+			{
+				if (m_Map[--block] != nullptr)
+				{
+					std::destroy(&m_Map[block], &m_Map[block] + BLOCK_SIZE);
+				}
+			}
+			std::destroy(m_Map, m_Map + m_MapSize);
+		}
+
+		// Adjust all sizes
+		m_MapSize = 0;
+		m_Size = 0;
+		m_Offset = 0; // reset the offset for future insertions
+	}
 
 	T& at(size_t pos)
 	{

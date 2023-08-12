@@ -419,6 +419,9 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 
+#out folder created by cmake
+out/
+
 ### CMake Patch ###
 # External projects
 *-prefix/

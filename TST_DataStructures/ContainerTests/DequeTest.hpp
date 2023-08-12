@@ -38,6 +38,18 @@ TEST(DequeTest, DequeConstructor)
 	DeQue<int> initListDeque = { 0, 1, 2, 3 };
 	EXPECT_EQ(initListDeque.size(), 4);
 	EXPECT_TRUE(std::find(initListDeque.begin(), initListDeque.end(), 3) != initListDeque.end());
+
+	// Count value constructor
+	DeQue<int> countValConstructor = DeQue<int>(10, 5);
+	EXPECT_EQ(countValConstructor.size(), 10);
+	EXPECT_TRUE(std::find(countValConstructor.begin(), countValConstructor.end(), 5) != countValConstructor.end());
+	EXPECT_FALSE(std::find(countValConstructor.begin(), countValConstructor.end(), 3) != countValConstructor.end());
+
+	// Count default constructed T constructor
+	DeQue<int> countDefaultConstructor = DeQue<int>(10);
+	EXPECT_EQ(countDefaultConstructor.size(), 10);
+	EXPECT_TRUE(std::find(countDefaultConstructor.begin(), countDefaultConstructor.end(), 0) != countDefaultConstructor.end());
+	EXPECT_FALSE(std::find(countDefaultConstructor.begin(), countDefaultConstructor.end(), 3) != countDefaultConstructor.end());
 }
 
 // Used to test push_front, push_back, pop_front and pop_back
@@ -160,10 +172,33 @@ TEST(DequeTest, Insertion)
 
 	EXPECT_FALSE(std::find(testDeque.begin(), testDeque.end(), -30) == testDeque.end());
 
+	// insert iter first, iter last ( bidirectional )
 	Vector<int> customVec = { 100, 101, 102, 103, 104, 105 };
 	it = testDeque.cbegin();
 	std::advance(it, 15);
 	returnedIt = testDeque.insert(it, customVec.begin(), customVec.end());
 
 	EXPECT_FALSE(std::find(testDeque.begin(), testDeque.end(), 102) == testDeque.end());
+
+	// insert initializer_list
+	it = testDeque.cbegin();
+	std::advance(it, 22);
+	returnedIt = testDeque.insert(it, std::initializer_list<int>{110, 120, 130, 140, 150});
+
+	EXPECT_FALSE(std::find(testDeque.begin(), testDeque.end(), 120) == testDeque.end());
+}
+
+TEST(DequeTest, ClearAndErase)
+{
+	DeQue<int> testDeque = { 0, 1, 2, 3, 4, 5, 6 ,7, 8, 9 };
+	EXPECT_EQ(testDeque.size(), 10);
+
+	// CLEAR
+	testDeque.clear();
+	EXPECT_EQ(testDeque.size(), 0);
+	EXPECT_TRUE(std::find(testDeque.begin(), testDeque.end(), 5) == testDeque.end());
+
+	testDeque.insert(testDeque.cbegin(), std::initializer_list<int>{110, 120, 130, 140, 150});
+	EXPECT_EQ(testDeque.size(), 5);
+	EXPECT_FALSE(std::find(testDeque.begin(), testDeque.end(), 120) == testDeque.end());
 }
