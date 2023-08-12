@@ -211,6 +211,9 @@ public:
 };
 #pragma endregion Iterator
 
+template<typename T>
+std::ptrdiff_t operator-(const DeQueIterator<T>& lhs, const DeQueConstIterator<T>& rhs) { return lhs.m_Offset - rhs.m_Offset; }
+
 #pragma region ConstReverseIterator
 
 #pragma endregion ConstReverseIterator
@@ -571,6 +574,47 @@ public:
 	{
 		return insert(pos, ilist.begin(), ilist.end());
 	}
+
+	iterator erase(const_iterator pos)
+	{
+		if (pos == cbegin())
+		{
+			pop_front();
+			return begin();
+		}
+		else if (pos == cend() - 1)
+		{
+			pop_back();
+			return end();
+		}
+		else
+		{
+			// Interestingly, STL first moves data, then pops either front or back
+
+			size_t offset = pos - cbegin();
+			std::destroy_at(&pos);
+
+			// closer to front or back
+			if (offset <= m_Size / 2)
+			{
+				std::move_backward(begin(), begin() + offset, begin() + offset + 1);
+
+				// We moved back the first element, we update the offset
+				m_Offset++;
+			}
+			else
+			{
+				std::move(begin() + offset + 1, end(), begin() + offset);
+			}
+			m_Size--;
+			return makeIterator(this, offset);
+		}
+	}
+
+// 	iterator erase(const_iterator first, const_iterator last)
+// 	{
+// 
+// 	}
 
 	void clear()
 	{

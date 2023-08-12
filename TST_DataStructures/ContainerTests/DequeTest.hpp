@@ -201,4 +201,23 @@ TEST(DequeTest, ClearAndErase)
 	testDeque.insert(testDeque.cbegin(), std::initializer_list<int>{110, 120, 130, 140, 150});
 	EXPECT_EQ(testDeque.size(), 5);
 	EXPECT_FALSE(std::find(testDeque.begin(), testDeque.end(), 120) == testDeque.end());
+
+	// Erase(pos) - First half
+	auto it = testDeque.cbegin();
+	std::advance(it, 2);
+	auto returnedIt = testDeque.erase(it);
+	EXPECT_EQ(testDeque.size(), 4);
+	EXPECT_TRUE(std::find(testDeque.begin(), testDeque.end(), 130) == testDeque.end());
+
+	// Erase(pos) - Second half
+	it = testDeque.cbegin();
+
+	// Just to add some buffer
+	testDeque.push_back(160);
+	testDeque.push_back(170);
+
+	std::advance(it, 4);
+	returnedIt = testDeque.erase(it);
+	EXPECT_EQ(testDeque.size(), 5);
+	EXPECT_TRUE(std::find(testDeque.begin(), testDeque.end(), 160) == testDeque.end());
 }
