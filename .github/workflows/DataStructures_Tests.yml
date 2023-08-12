@@ -11,9 +11,9 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v3
+      with:
+        cxx-compiler: gcc
     - name: cmake build
-      env:
-        CC: gcc
       run: cmake .
     - name: cmake make
       run: cmake --build . --target ALL_BUILD
