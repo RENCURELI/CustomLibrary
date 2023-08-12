@@ -11,10 +11,8 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v3
-    - uses: RENCURELI/CustomLibrary@v1
-      with:
-        c-compiler: gcc
-        cxx-compiler: gcc
+    - name: Configure
+      run: cmake -DCMAKE_CXX_COMPILER=g++ -DCMAKE_C_COMPILER=gcc
     - name: cmake build
       run: cmake .
     - name: cmake make
