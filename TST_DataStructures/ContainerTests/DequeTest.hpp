@@ -220,4 +220,35 @@ TEST(DequeTest, ClearAndErase)
 	returnedIt = testDeque.erase(it);
 	EXPECT_EQ(testDeque.size(), 5);
 	EXPECT_TRUE(std::find(testDeque.begin(), testDeque.end(), 160) == testDeque.end());
+
+	testDeque.clear();
+
+	// Erase(iter first, iter last) - First half
+	testDeque.insert(testDeque.cbegin(), std::initializer_list<int>{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19});
+	EXPECT_EQ(testDeque.size(), 20);
+	EXPECT_TRUE(std::find(testDeque.begin(), testDeque.end(), 16) != testDeque.end());
+
+	// Empty range and empty range pointing to end should work and not erase anything
+	returnedIt = testDeque.erase(testDeque.cbegin(), testDeque.cbegin());
+	EXPECT_EQ(testDeque.size(), 20);
+	EXPECT_TRUE(std::find(testDeque.begin(), testDeque.end(), 0) != testDeque.end());
+	EXPECT_TRUE(returnedIt == testDeque.begin());
+
+	returnedIt = testDeque.erase(testDeque.cend(), testDeque.cend());
+	EXPECT_EQ(testDeque.size(), 20);
+	EXPECT_TRUE(std::find(testDeque.begin(), testDeque.end(), 19) != testDeque.end());
+	EXPECT_TRUE(returnedIt == testDeque.end());
+
+	testDeque.erase(testDeque.cbegin(), testDeque.cbegin() + 5);
+	EXPECT_EQ(testDeque.size(), 15);
+	EXPECT_FALSE(std::find(testDeque.begin(), testDeque.end(), 3) != testDeque.end());
+	EXPECT_EQ(*testDeque.begin(), 5);
+
+	// Erase(iter first, iter last) - Second half
+	it = testDeque.cbegin();
+	std::advance(it, 8);
+	returnedIt = testDeque.erase(it, testDeque.cend());
+	EXPECT_EQ(testDeque.size(), 8);
+	EXPECT_FALSE(std::find(testDeque.begin(), testDeque.end(), 19) != testDeque.end());
+	EXPECT_TRUE(returnedIt == testDeque.end());
 }

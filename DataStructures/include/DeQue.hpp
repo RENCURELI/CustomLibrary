@@ -611,10 +611,38 @@ public:
 		}
 	}
 
-// 	iterator erase(const_iterator first, const_iterator last)
-// 	{
-// 
-// 	}
+	iterator erase(const_iterator first, const_iterator last)
+	{
+		if (first == last)
+		{
+			return makeIterator(this, last.m_Offset);
+		}
+
+		size_t offset = first - cbegin();
+		size_t range = last - first;
+
+		// Closer to front -> Less data to erase afterwards
+		if (offset <= end() - last)
+		{
+			std::move_backward(begin(), begin() + offset, begin() + offset + range);
+
+			for (; range > 0; --range)
+			{
+				pop_front();
+			}
+		}
+		else
+		{
+			std::move(begin() + offset + range, end(), begin() + offset);
+
+			for (; range > 0; --range)
+			{
+				pop_back();
+			}
+		}
+
+		return begin() + offset;
+	}
 
 	void clear()
 	{
@@ -754,6 +782,12 @@ public:
 		size_t block = get_block(endPos);
 		return m_Map[block][endPos % BLOCK_SIZE];
 	}
+
+	// Might do this later, from what I saw, it looks pretty complicated
+// 	void shrink_to_fit()
+// 	{
+// 
+// 	}
 
 	iterator begin() { return iterator{ this, m_Offset }; }
 	iterator end() { return iterator(this, m_Offset + m_Size); }
