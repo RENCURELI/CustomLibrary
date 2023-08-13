@@ -52,6 +52,7 @@ TEST(StackTest, PushPop)
 
 	// Container = DeQue
 	Stack<int, DeQue<int>> dequeStack;
+	dequeStack.push(2);
 	EXPECT_EQ(dequeStack.size(), 1);
 	EXPECT_EQ(dequeStack.empty(), false);
 	EXPECT_EQ(dequeStack.top(), 2);
