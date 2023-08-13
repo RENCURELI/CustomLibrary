@@ -510,10 +510,10 @@ public:
 
 	inline bool empty() const { return m_Size == 0; }
 	inline size_t size() const { return m_Size; }
-	inline T& front() { return m_Size > 0 ? m_Head->m_Data : throw std::runtime_error("[ERROR] Trying to access and empty list"); }
-	inline const T& front() const { return m_Size > 0 ? m_Head->m_Data : throw std::runtime_error("[ERROR] Trying to access and empty list"); }
-	inline T& back() { return m_Size > 0 ? m_Tail->m_Data : throw std::runtime_error("[ERROR] Trying to access and empty list"); }
-	inline const T& back() const { return m_Size > 0 ? m_Tail->m_Data : throw std::runtime_error("[ERROR] Trying to access and empty list"); }
+	inline T& front() { return m_Size > 0 ? m_Head->m_Data : throw std::runtime_error("[ERROR] Trying to access an empty list"); }
+	inline const T& front() const { return m_Size > 0 ? m_Head->m_Data : throw std::runtime_error("[ERROR] Trying to access an empty list"); }
+	inline T& back() { return m_Size > 0 ? m_Tail->m_Data : throw std::runtime_error("[ERROR] Trying to access an empty list"); }
+	inline const T& back() const { return m_Size > 0 ? m_Tail->m_Data : throw std::runtime_error("[ERROR] Trying to access an empty list"); }
 	inline iterator begin() { return iterator(m_Head); }
 	inline const_iterator cbegin() const { return const_iterator(m_Head); }
 	inline reverse_iterator rbegin() { return reverse_iterator(end()); }

@@ -751,26 +751,77 @@ public:
 		return m_Map[block][pos];
 	}
 
+	DeQue& operator=(const DeQue& other)
+	{
+		if (this == &other)
+		{
+			return *this;
+		}
+
+		clear(); // we first empty this
+
+		m_Map = new pointer[other.m_MapSize];
+		m_MapSize = other.m_MapSize;
+		m_Size = other.m_Size;
+
+		memset(m_Map, 0, sizeof(pointer) * m_MapSize);
+		memcpy_s(m_Map, sizeof(pointer) * m_MapSize, other.m_Map, sizeof(T) * other.m_MapSize);
+
+		return *this;
+	}
+
+	DeQue& operator=(std::initializer_list<T> ilist)
+	{
+		clear(); // we first empty this
+
+		m_MapSize = get_next_power2(ilist.size() / BLOCK_SIZE);
+		m_Map = new pointer[m_MapSize];
+
+		memset(m_Map, 0, sizeof(pointer) * m_MapSize);
+
+		for (const auto& it : ilist)
+		{
+			push_back(it);
+		}
+
+		return *this;
+	}
 
 	// Accessors and helpers
 	size_t size() const { return m_Size; }
 	bool empty() const { return m_Size == 0; }
 	size_t max_size() const { return static_cast<size_t>(std::numeric_limits<std::ptrdiff_t>::max()); }
 
+	// Might want to simplify these by dereferencing related iterator ( begin or end ) and making inline
 	T& front()
 	{
+		if (m_Size == 0)
+		{
+			throw std::runtime_error("[ERROR] Trying to access empty container");
+		}
+
 		size_t block = get_block(m_Offset);
 		return m_Map[block][m_Offset % BLOCK_SIZE];
 	}
 
 	const T& front() const
 	{
+		if (m_Size == 0)
+		{
+			throw std::runtime_error("[ERROR] Trying to access empty container");
+		}
+
 		size_t block = get_block(m_Offset);
 		return m_Map[block][m_Offset % BLOCK_SIZE];
 	}
 
 	T& back()
 	{
+		if (m_Size == 0)
+		{
+			throw std::runtime_error("[ERROR] Trying to access empty container");
+		}
+
 		size_t endPos = m_Offset + (m_Size - 1);
 		size_t block = get_block(endPos);
 		return m_Map[block][endPos % BLOCK_SIZE];
@@ -778,6 +829,11 @@ public:
 
 	const T& back() const
 	{
+		if (m_Size == 0)
+		{
+			throw std::runtime_error("[ERROR] Trying to access empty container");
+		}
+
 		size_t endPos = m_Offset + (m_Size - 1);
 		size_t block = get_block(endPos);
 		return m_Map[block][endPos % BLOCK_SIZE];

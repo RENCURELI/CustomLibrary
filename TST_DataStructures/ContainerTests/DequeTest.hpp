@@ -252,3 +252,24 @@ TEST(DequeTest, ClearAndErase)
 	EXPECT_FALSE(std::find(testDeque.begin(), testDeque.end(), 19) != testDeque.end());
 	EXPECT_TRUE(returnedIt == testDeque.end());
 }
+
+TEST(DequeTest, Assignment)
+{
+	DeQue<int> thisDeque = { 0, 1, 2, 3, 4, 5 };
+	DeQue<int> otherDeque = { -1, -2, -3, -4, -5 };
+
+	thisDeque = otherDeque;
+	EXPECT_EQ(thisDeque.size(), 5);
+	EXPECT_FALSE(std::find(thisDeque.begin(), thisDeque.end(), -3) == thisDeque.end());
+	EXPECT_TRUE(std::find(thisDeque.begin(), thisDeque.end(), 3) == thisDeque.end());
+	
+	// Other deque should still be fine
+	EXPECT_EQ(otherDeque.size(), 5);
+	EXPECT_FALSE(std::find(otherDeque.begin(), otherDeque.end(), -3) == otherDeque.end());
+	EXPECT_TRUE(std::find(otherDeque.begin(), otherDeque.end(), 3) == otherDeque.end());
+
+	thisDeque = std::initializer_list<int>{ 0, 1, 2, 3 };
+	EXPECT_EQ(thisDeque.size(), 4);
+	EXPECT_FALSE(std::find(thisDeque.begin(), thisDeque.end(), -3) != thisDeque.end());
+	EXPECT_TRUE(std::find(thisDeque.begin(), thisDeque.end(), 3) != thisDeque.end());
+}

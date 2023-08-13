@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <string>
 
+#include "../DataStructures/include/DeQue.hpp"
 #include "../DataStructures/include/List.hpp"
 #include "../DataStructures/include/Vector.hpp"
 
@@ -26,6 +27,11 @@ TEST(StackTest, Constructor)
 	Stack<int, List<int>> listStack;
 	EXPECT_EQ(listStack.size(), 0);
 	EXPECT_EQ(listStack.empty(), true);
+
+	// Container = DeQue
+	Stack<int, DeQue<int>> dequeStack;
+	EXPECT_EQ(dequeStack.size(), 0);
+	EXPECT_EQ(dequeStack.empty(), true);
 }
 
 TEST(StackTest, PushPop)
@@ -43,6 +49,12 @@ TEST(StackTest, PushPop)
 	EXPECT_EQ(listStack.size(), 1);
 	EXPECT_EQ(listStack.empty(), false);
 	EXPECT_EQ(listStack.top(), 2);
+
+	// Container = DeQue
+	Stack<int, DeQue<int>> dequeStack;
+	EXPECT_EQ(dequeStack.size(), 1);
+	EXPECT_EQ(dequeStack.empty(), false);
+	EXPECT_EQ(dequeStack.top(), 2);
 }
 
 TEST(StackTest, Accessors)
@@ -56,6 +68,11 @@ TEST(StackTest, Accessors)
 	Stack<int, List<int>> listStack;
 	EXPECT_THROW(listStack.top(), std::runtime_error);
 	EXPECT_EQ(listStack.empty(), true);
+
+	// Container = DeQue
+	Stack<int, DeQue<int>> dequeStack;
+	EXPECT_THROW(dequeStack.top(), std::runtime_error);
+	EXPECT_EQ(dequeStack.empty(), true);
 }
 
 #pragma endregion StackTests
