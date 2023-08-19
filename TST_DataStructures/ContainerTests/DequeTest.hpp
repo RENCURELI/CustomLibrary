@@ -4,10 +4,10 @@
 #include <forward_list>
 #include <vector>
 
-#include "../DataStructures/include/DeQue.hpp"
+#include <DeQue.hpp>
 
 // for comparative testing against std::vector
-#include "../DataStructures/include/Vector.hpp"
+#include <Vector.hpp>
 
 // ================================================
 // ==============   DEQUE TESTS   =================

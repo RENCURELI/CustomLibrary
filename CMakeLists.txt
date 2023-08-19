@@ -34,3 +34,5 @@ target_link_libraries(Libraries PUBLIC DataStructures)
 target_link_libraries(Libraries PUBLIC GTest::gtest_main)
 
 include(GoogleTest)
+
+target_include_directories(Libraries PUBLIC DataStructures/include)

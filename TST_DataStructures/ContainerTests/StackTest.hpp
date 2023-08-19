@@ -3,12 +3,12 @@
 #include <algorithm>
 #include <string>
 
-#include "../DataStructures/include/DeQue.hpp"
-#include "../DataStructures/include/List.hpp"
-#include "../DataStructures/include/Vector.hpp"
+#include <DeQue.hpp>
+#include <List.hpp>
+#include <Vector.hpp>
 
 // Must come last due to dependencies on other classes
-#include "../DataStructures/include/Stack.hpp"
+#include <Stack.hpp>
 
 
 #pragma region StackTests

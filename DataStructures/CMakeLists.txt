@@ -15,3 +15,5 @@ include/Queue.hpp
 include/Stack.hpp
 include/Vector.hpp
 )
+
+target_include_directories(DataStructures PUBLIC include)

@@ -1,12 +1,12 @@
 #include <iostream>
 
-#include "../include/List.hpp"
-#include "../include/FList.hpp"
+#include <List.hpp>
+#include <FList.hpp>
 
-#include "../include/DeQue.hpp"
+#include <DeQue.hpp>
 
-#include "../include/Vector.hpp"
-#include "../include/Stack.hpp"
+#include <Vector.hpp>
+#include <Stack.hpp>
 
 #include <algorithm>
 #include <deque>
