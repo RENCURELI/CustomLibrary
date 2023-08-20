@@ -8,6 +8,7 @@
 #include "ContainerTests/FListTest.hpp"
 #include "ContainerTests/ListTest.hpp"
 #include "ContainerTests/StackTest.hpp"
+#include "ContainerTests/QueueTest.hpp"
 #include "ContainerTests/VectorTest.hpp"
 #include "ContainerTests/DequeTest.hpp"
 
