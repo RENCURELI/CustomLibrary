@@ -592,8 +592,16 @@ public:
 		if (this == &other)
 			return *this;
 
+		if (other.capacity() > m_Capacity)
+		{
+			reserve(other.capacity());
+		}
+
 		memset(m_Buffer, 0, sizeof(T) * m_Capacity);
-		memcpy_s(m_Buffer, sizeof(T) * m_Size, other.m_Buffer, sizeof(T) * other.m_Size);
+		memcpy_s(m_Buffer, sizeof(T) * other.size(), other.data(), sizeof(T) * other.size());
+
+		m_Size = other.size();
+		m_Capacity = other.capacity();
 
 		return *this;
 	}

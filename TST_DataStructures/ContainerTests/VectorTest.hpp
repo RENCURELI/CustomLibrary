@@ -240,6 +240,16 @@ TEST(VectorTest, AssignMethods)
 	EXPECT_EQ(testVec.capacity(), 10);
 	EXPECT_EQ(testVec.front(), 10);
 	EXPECT_EQ(testVec.back(), 10);
+
+	testVec.clear();
+	newVec.clear();
+
+	// If this test ever fails, it crashes ( but I'd rather crash here than in another test )
+	for (int i = 0; i < 1000; ++i)
+	{
+		newVec.push_back(i);
+	}
+	testVec = newVec;
 }
 
 #pragma endregion VectorTests

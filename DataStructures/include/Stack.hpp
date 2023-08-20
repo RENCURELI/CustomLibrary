@@ -1,6 +1,6 @@
 #pragma once
 
-template<typename T, typename Container = Vector<T>>
+template<typename T, typename Container = DeQue<T>>
 class Stack
 {
 public:
@@ -36,6 +36,7 @@ public:
 	Stack& operator=(const Stack& other)
 	{
 		m_Container = other.GetContainer();
+		return *this;
 	}
 
 	const Container& GetContainer() const
