@@ -7,9 +7,11 @@ Done :
   - Array
   - Vector
   - Stack
+  - Deque
 
 In Progress :
-  - Deque
+  - Queue
+  - Priority Queue
 
 TODO Data Structures :
   - Allocators ( yes, I'm starting to get sidetracked, but I'm curious )
@@ -17,7 +19,6 @@ TODO Data Structures :
   - Set
   - Map
   - Tuple
-  - Queue
   - Graphs ( Binary tree, Heap, etc... )
 
 TODO Algorithms :
