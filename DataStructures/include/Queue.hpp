@@ -1,5 +1,7 @@
 #pragma once
 
+#include <DeQue.hpp>
+
 template<typename T, typename Container = DeQue<T>>
 class Queue
 {

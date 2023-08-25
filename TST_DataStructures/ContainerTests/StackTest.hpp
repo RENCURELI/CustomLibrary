@@ -3,13 +3,10 @@
 #include <algorithm>
 #include <string>
 
-#include <DeQue.hpp>
-#include <List.hpp>
-#include <Vector.hpp>
-
-// Must come last due to dependencies on other classes
 #include <Stack.hpp>
 
+#include <List.hpp>
+#include <Vector.hpp>
 
 #pragma region StackTests
 // ================================================

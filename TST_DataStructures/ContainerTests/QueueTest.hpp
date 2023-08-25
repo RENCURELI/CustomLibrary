@@ -1,11 +1,9 @@
 #pragma once
 
-#include <DeQue.hpp>
+#include<Queue.hpp>
+
 #include <List.hpp>
 #include <Vector.hpp>
-
-// Must come last due to dependencies on other classes
-#include<Queue.hpp>
 
 #pragma region QueueTests
 // ================================================
