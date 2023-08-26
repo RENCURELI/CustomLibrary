@@ -25,6 +25,7 @@ TST_DataStructures/ContainerTests/DequeTest.hpp
 TST_DataStructures/ContainerTests/FListTest.hpp
 TST_DataStructures/ContainerTests/ListTest.hpp
 TST_DataStructures/ContainerTests/QueueTest.hpp
+TST_DataStructures/ContainerTests/PriorityQueueTest.hpp
 TST_DataStructures/ContainerTests/StackTest.hpp
 TST_DataStructures/ContainerTests/VectorTest.hpp
 )

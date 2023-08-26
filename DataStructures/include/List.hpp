@@ -279,7 +279,8 @@ public:
 	}
 
 	// inserts [first last)
-	iterator insert(const_iterator pos, iterator first, iterator last)
+	template<std::input_iterator InputIt>
+	iterator insert(const_iterator pos, InputIt first, InputIt last)
 	{
 		iterator returnVal = makeIterator(pos.m_Ptr);
 

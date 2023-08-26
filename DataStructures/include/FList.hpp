@@ -203,7 +203,8 @@ public:
 	}
 
 	// Shouldn't be called on empty container
-	iterator insert_after(const_iterator pos, iterator first, iterator last)
+	template<std::input_iterator InputIt>
+	iterator insert_after(const_iterator pos, InputIt first, InputIt last)
 	{
 		if (first == last)
 		{

@@ -266,6 +266,12 @@ public:
 		memset(m_Buffer, 0, sizeof(T) * m_Capacity);
 	}
 
+	// TODO : Move constructor
+	constexpr Vector(Vector&& other)
+	{
+
+	}
+
 	~Vector()
 	{
 		delete[] m_Buffer;
@@ -371,7 +377,8 @@ public:
 	}
 
 	// inserts [first last)
-	iterator insert(const_iterator pos, iterator first, iterator last)
+	template<std::input_iterator InputIt>
+	iterator insert(const_iterator pos, InputIt first, InputIt last)
 	{
 		if (pos > cend())
 			throw std::out_of_range("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
@@ -383,13 +390,16 @@ public:
 		if (pos == cend())
 		{
 			for (; first != last; ++first)
+			{
 				push_back(*first);
+			}
 		}
 		else
 		{
 			size_t posOffset = pos - begin();
 			size_t count = last - first;
 			size_t newSize = m_Size + count;
+			size_t oldSize = m_Size;
 			if (newSize > m_Capacity)
 			{
 				reserve(newSize * 2);
@@ -398,20 +408,16 @@ public:
 				pos = begin() + posOffset;
 			}
 
-			// We move all data from after the last "to be inserted" position
-			const_iterator it = cend();
-			do
-			{
-				*(it + (count - 1)).m_Ptr = *(it - 1).m_Ptr;
-				--it;
-			} while (it > pos);
-
+			// We insert the data
 			iterator temp = makeIterator(pos.m_Ptr);
 			for (; first != last; ++first)
 			{
-				*temp.m_Ptr = *first.m_Ptr;
+				push_back(*first);
 				++temp;
 			}
+
+			// We rotate the data
+			std::rotate(begin() + posOffset, begin() + oldSize, end());
 
 			m_Size = newSize;
 
@@ -423,54 +429,7 @@ public:
 
 	iterator insert(const_iterator pos, std::initializer_list<T> ilist)
 	{
-		if (pos > cend())
-			throw std::out_of_range("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
-
-		if (ilist.size() == 0)
-			return makeIterator(pos.m_Ptr);
-
-		iterator returnedIt = makeIterator(pos.m_Ptr);
-		if (pos == cend())
-		{
-			returnedIt = end();
-
-			for (const auto& it : ilist)
-				push_back(it);
-		}
-		else
-		{
-			size_t posOffset = pos - begin();
-			size_t count = ilist.size();
-			size_t newSize = m_Size + count;
-			if (newSize > m_Capacity)
-			{
-				reserve(newSize * 2);
-
-				// After reserve, "pos" is invalidated
-				pos = begin() + posOffset;
-			}
-
-			// We move all data from after the last "to be inserted" position
-			const_iterator it = cend();
-			do
-			{
-				*(it + (count - 1)).m_Ptr = *(it - 1).m_Ptr;
-				--it;
-			} while (it > pos);
-
-			iterator temp = makeIterator(pos.m_Ptr);
-			for (const auto& it : ilist)
-			{
-				*temp.m_Ptr = it;
-				++temp;
-			}
-
-			m_Size = newSize;
-
-			return makeIterator(pos.m_Ptr);
-		}
-
-		return returnedIt;
+		return insert(pos, ilist.begin(), ilist.end());
 	}
 
 	T& at(const size_t index)
