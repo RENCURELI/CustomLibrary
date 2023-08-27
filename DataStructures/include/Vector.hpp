@@ -267,10 +267,8 @@ public:
 	}
 
 	constexpr Vector(Vector&& other)
+		: m_Buffer{ std::exchange(other.m_Buffer, nullptr) }
 	{
-		// We shallow copy the buffer
-		m_Buffer = other.data();
-		other.m_Buffer = nullptr;
 		m_Capacity = other.capacity();
 		m_Size = other.size();
 	}
@@ -579,6 +577,19 @@ public:
 			push_back(it);
 		}
 
+		return *this;
+	}
+
+	constexpr Vector& operator=(Vector&& other)
+	{
+		if (this == &other)
+		{
+			return *this;
+		}
+
+		m_Buffer = std::exchange(other.m_Buffer, nullptr);
+		m_Size = other.size();
+		m_Capacity = other.capacity();
 		return *this;
 	}
 

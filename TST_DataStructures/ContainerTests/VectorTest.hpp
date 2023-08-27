@@ -256,6 +256,12 @@ TEST(VectorTest, AssignMethods)
 		newVec.push_back(i);
 	}
 	testVec = newVec;
+
+	testVec = std::move(Vector<int>(10, 1));
+	EXPECT_EQ(testVec.size(), 10);
+	EXPECT_EQ(testVec.capacity(), 10);
+	EXPECT_EQ(testVec.front(), 1);
+	EXPECT_EQ(testVec.back(), 1);
 }
 
 #pragma endregion VectorTests
