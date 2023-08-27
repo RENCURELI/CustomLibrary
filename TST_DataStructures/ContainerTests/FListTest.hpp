@@ -4,7 +4,7 @@
 #include <initializer_list>
 #include <string>
 
-#include "../DataStructures/include/FList.hpp"
+#include "FList.hpp"
 
 #pragma region FListTests
 // ================================================

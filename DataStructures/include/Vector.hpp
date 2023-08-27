@@ -266,10 +266,13 @@ public:
 		memset(m_Buffer, 0, sizeof(T) * m_Capacity);
 	}
 
-	// TODO : Move constructor
 	constexpr Vector(Vector&& other)
 	{
-
+		// We shallow copy the buffer
+		m_Buffer = other.data();
+		other.m_Buffer = nullptr;
+		m_Capacity = other.capacity();
+		m_Size = other.size();
 	}
 
 	~Vector()

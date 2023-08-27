@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <string>
 
-#include "../DataStructures/include/Array.hpp"
+#include "Array.hpp"
 
 #pragma region ArrayTests
 // ================================================

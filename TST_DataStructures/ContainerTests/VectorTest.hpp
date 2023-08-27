@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <string>
 
-#include "../DataStructures/include/Vector.hpp"
+#include "Vector.hpp"
 
 #pragma region VectorTests
 // ================================================
@@ -34,6 +34,12 @@ TEST(VectorTest, VectorConstructor)
 	EXPECT_EQ(customConstructor.capacity(), 4);
 	EXPECT_EQ(customConstructor.front(), 1);
 	EXPECT_EQ(customConstructor.back(), 1);
+
+	Vector<int> moveConstructor = Vector<int>(std::move(Vector<int>({ 1, 2, 3 })));
+	EXPECT_EQ(moveConstructor.size(), 3);
+	EXPECT_EQ(moveConstructor.capacity(), 3);
+	EXPECT_EQ(moveConstructor.front(), 1);
+	EXPECT_EQ(moveConstructor.back(), 3);
 }
 
 // These tests are for at, first, last, and [] operator

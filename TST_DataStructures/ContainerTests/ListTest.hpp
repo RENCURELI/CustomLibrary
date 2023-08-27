@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <string>
 
-#include "../DataStructures/include/List.hpp"
+#include "List.hpp"
 
 #pragma region ListTests
 // ================================================

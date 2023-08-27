@@ -66,12 +66,65 @@ TEST(PriorityQueueTest, DequeConstructors)
 
 TEST(PriorityQueueTest, PushPop)
 {
+	// Container = Vector
+	// Psuh
+	PriorityQueue<int> vecQueue;
+	vecQueue.push(3);
+	EXPECT_EQ(vecQueue.size(), 1);
+	EXPECT_EQ(vecQueue.empty(), false);
+	EXPECT_EQ(vecQueue.top(), 3);
 
+	vecQueue.push(5);
+	EXPECT_EQ(vecQueue.size(), 2);
+	EXPECT_EQ(vecQueue.empty(), false);
+	EXPECT_EQ(vecQueue.top(), 5);
+
+	vecQueue.push(1);
+	EXPECT_EQ(vecQueue.size(), 3);
+	EXPECT_EQ(vecQueue.empty(), false);
+	EXPECT_EQ(vecQueue.top(), 5);
+
+	// Pop
+	vecQueue.pop();
+	EXPECT_EQ(vecQueue.size(), 2);
+	EXPECT_EQ(vecQueue.empty(), false);
+	EXPECT_EQ(vecQueue.top(), 3);
+
+	// Container = Deque
+	PriorityQueue<int, DeQue<int>> dequeQueue;
+	dequeQueue.push(3);
+	EXPECT_EQ(dequeQueue.size(), 1);
+	EXPECT_EQ(dequeQueue.empty(), false);
+	EXPECT_EQ(dequeQueue.top(), 3);
+
+	dequeQueue.push(5);
+	EXPECT_EQ(dequeQueue.size(), 2);
+	EXPECT_EQ(dequeQueue.empty(), false);
+	EXPECT_EQ(dequeQueue.top(), 5);
+
+	dequeQueue.push(1);
+	EXPECT_EQ(dequeQueue.size(), 3);
+	EXPECT_EQ(dequeQueue.empty(), false);
+	EXPECT_EQ(dequeQueue.top(), 5);
+
+	// Pop
+	dequeQueue.pop();
+	EXPECT_EQ(dequeQueue.size(), 2);
+	EXPECT_EQ(dequeQueue.empty(), false);
+	EXPECT_EQ(dequeQueue.top(), 3);
 }
 
 TEST(PriorityQueueTest, Accessors)
 {
+	// Container = Vector
+	PriorityQueue<int> vecQueue;
+	EXPECT_THROW(vecQueue.top(), std::runtime_error);
+	EXPECT_EQ(vecQueue.empty(), true);
 
+	// Container = DeQue
+	PriorityQueue<int, DeQue<int>> dequeQueue;
+	EXPECT_THROW(dequeQueue.top(), std::runtime_error);
+	EXPECT_EQ(dequeQueue.empty(), true);
 }
 
 TEST(PriorityQueueTest, Assignment)
