@@ -12,17 +12,27 @@
 
 TEST(ListTest, Constructor)
 {
+	// Default Constructor
 	List<int> emptyList;
 	EXPECT_EQ(emptyList.size(), 0);
 	EXPECT_EQ(emptyList.empty(), true);
 
+	// InitList Constructor
 	List<int> initList = { 1, 2, 3 };
 	EXPECT_EQ(initList.size(), 3);
 	EXPECT_EQ(initList.empty(), false);
 
+	// Copy Constructor
 	List<int> copyConstruct = initList;
 	EXPECT_EQ(copyConstruct.size(), 3);
 	EXPECT_EQ(copyConstruct.empty(), false);
+
+	// Move Constructor
+	List<int> moveConstruct = std::move(copyConstruct);
+	EXPECT_EQ(moveConstruct.size(), 3);
+	EXPECT_EQ(copyConstruct.size(), 0);
+	EXPECT_EQ(moveConstruct.empty(), false);
+	EXPECT_EQ(copyConstruct.empty(), true);
 }
 
 TEST(ListTest, FrontBack)
@@ -223,6 +233,36 @@ TEST(ListTest, PopAndClear)
 	testList.clear();
 	EXPECT_EQ(testList.size(), 0);
 	EXPECT_EQ(testList.empty(), true);
+}
+
+TEST(ListTest, Assignment)
+{
+	// Copy Assign
+	List<int> testList;
+	EXPECT_TRUE(testList.empty());
+
+	List<int> otherList = { 1, 2, 3, 4, 5 };
+	EXPECT_FALSE(otherList.empty());
+
+	testList = otherList;
+	EXPECT_FALSE(testList.empty());
+	EXPECT_FALSE(otherList.empty());
+	EXPECT_TRUE(std::find(testList.begin(), testList.end(), 3) != testList.end());
+
+	// InitList Assign
+	std::initializer_list<int> initList {0, -1, -2, -3, -4};
+	testList = initList;
+	EXPECT_FALSE(std::find(testList.begin(), testList.end(), 3) != testList.end());
+	EXPECT_TRUE(std::find(testList.begin(), testList.end(), -3) != testList.end());
+
+	// Move Assign
+	List<int> movableList = { 10, 11, 12, 13, 14, 15 };
+	EXPECT_FALSE(movableList.empty());
+
+	testList = std::move(movableList);
+	EXPECT_TRUE(movableList.empty());
+	EXPECT_FALSE(std::find(testList.begin(), testList.end(), -3) != testList.end());
+	EXPECT_TRUE(std::find(testList.begin(), testList.end(), 10) != testList.end());
 }
 
 #pragma endregion ListTests

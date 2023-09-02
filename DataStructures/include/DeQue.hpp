@@ -309,6 +309,11 @@ public:
 		memcpy_s(m_Map, sizeof(pointer) * m_MapSize, other.m_Map, sizeof(T) * other.m_MapSize);
 	}
 
+	DeQue(DeQue&& other)
+	{
+		TakeContents(other);
+	}
+
 	DeQue(std::initializer_list<T> initList)
 	{
 		m_MapSize = get_next_power2(initList.size() / BLOCK_SIZE);
@@ -787,6 +792,19 @@ public:
 		return *this;
 	}
 
+	DeQue& operator=(DeQue&& other)
+	{
+		if (this == std::addressof(other))
+		{
+			return *this;
+		}
+
+		clear();
+		TakeContents(other);
+
+		return *this;
+	}
+
 	// Accessors and helpers
 	size_t size() const { return m_Size; }
 	bool empty() const { return m_Size == 0; }
@@ -908,5 +926,20 @@ private:
 	iterator makeIterator(const DeQue* container, size_t offset)
 	{
 		return iterator(container, offset);
+	}
+
+	void TakeContents(DeQue& other)
+	{
+		// We shallow copy
+		m_Map = other.m_Map;
+		m_MapSize = other.m_MapSize;
+		m_Offset = other.m_Offset;
+		m_Size = other.m_Size;
+
+		// We remove from other
+		other.m_Map = nullptr;
+		other.m_MapSize = 0;
+		other.m_Offset = 0;
+		other.m_Size = 0;
 	}
 };

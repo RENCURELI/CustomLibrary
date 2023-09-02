@@ -4,6 +4,7 @@
 #include <initializer_list>
 #include <stdexcept>
 #include <iterator>
+#include <utility>
 
 #pragma region ConstIterator
 template<typename List>
@@ -142,6 +143,13 @@ public:
 			this->push_back(temp->m_Data);
 			temp = temp->m_Next;
 		}
+	}
+
+	List(List<T>&& other)
+	{
+		std::swap(this->m_Head, other.m_Head);
+		std::swap(this->m_Tail, other.m_Tail);
+		std::swap(this->m_Size, other.m_Size);
 	}
 
 	~List()
@@ -524,21 +532,13 @@ public:
 	inline reverse_iterator rend() { return reverse_iterator(begin()); }
 	inline const_reverse_iterator crend() const { return const_reverse_iterator(cbegin()); }
 
-	void PrintList()
-	{
-		ListNode_t<T>* current = m_Head;
-		while (current != nullptr)
-		{
-			std::cout << " -> " << current->m_Data;
-			current = current->m_Next;
-		}
-	}
-
 	// Copy
 	List<T>& operator=(const List<T>& other)
 	{
 		if (this == &other)
 			return *this;
+
+		clear();
 
 		ListNode_t<T>* temp = other.m_Head;
 		while (temp != nullptr)
@@ -553,10 +553,28 @@ public:
 	// Assign
 	List<T>& operator=(std::initializer_list<T> ilist)
 	{
+		clear();
+
 		for (const auto& it : ilist)
 		{
 			push_back(it);
 		}
+		return *this;
+	}
+
+	// Move
+	List<T>& operator=(List<T>&& other)
+	{
+		if (this == std::addressof(other))
+		{
+			return *this;
+		}
+
+		clear();
+		std::swap(this->m_Tail, other.m_Tail);
+		std::swap(this->m_Head, other.m_Head);
+		std::swap(this->m_Size, other.m_Size);
+
 		return *this;
 	}
 

@@ -60,4 +60,17 @@ TEST(ArrayTest, ArrayFill)
 		EXPECT_EQ(testArray.at(i), 12);
 }
 
+TEST(ArrayTest, Assignment)
+{
+	Array<int, 5> testArray{ 1, 2, 3, 4, 5 };
+	Array<int, 5> otherArray{ 0, 0, 0, 0, 0 };
+
+	EXPECT_FALSE(std::find(testArray.begin(), testArray.end(), 0) != testArray.end());
+	EXPECT_TRUE(std::find(testArray.begin(), testArray.end(), 5) != testArray.end());
+
+	testArray = otherArray;
+	EXPECT_TRUE(std::find(testArray.begin(), testArray.end(), 0) != testArray.end());
+	EXPECT_FALSE(std::find(testArray.begin(), testArray.end(), 5) != testArray.end());
+}
+
 #pragma endregion ArrayTests

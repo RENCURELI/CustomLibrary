@@ -50,6 +50,16 @@ TEST(DequeTest, DequeConstructor)
 	EXPECT_EQ(countDefaultConstructor.size(), 10);
 	EXPECT_TRUE(std::find(countDefaultConstructor.begin(), countDefaultConstructor.end(), 0) != countDefaultConstructor.end());
 	EXPECT_FALSE(std::find(countDefaultConstructor.begin(), countDefaultConstructor.end(), 3) != countDefaultConstructor.end());
+
+	// Move Constructor
+	DeQue<int> moveConstructor = std::move(countValConstructor);
+	EXPECT_EQ(moveConstructor.size(), 10);
+	EXPECT_TRUE(std::find(moveConstructor.begin(), moveConstructor.end(), 5) != moveConstructor.end());
+	EXPECT_FALSE(std::find(moveConstructor.begin(), moveConstructor.end(), 3) != moveConstructor.end());
+
+	// We check that we indeed moved data away from previous DeQue
+	EXPECT_EQ(countValConstructor.size(), 0);
+	EXPECT_FALSE(std::find(countValConstructor.begin(), countValConstructor.end(), 5) != countValConstructor.end());
 }
 
 // Used to test push_front, push_back, pop_front and pop_back
@@ -272,4 +282,17 @@ TEST(DequeTest, Assignment)
 	EXPECT_EQ(thisDeque.size(), 4);
 	EXPECT_FALSE(std::find(thisDeque.begin(), thisDeque.end(), -3) != thisDeque.end());
 	EXPECT_TRUE(std::find(thisDeque.begin(), thisDeque.end(), 3) != thisDeque.end());
+
+	// Move Assign
+	DeQue<int> movableDeque = { 100, 101, 102, 103, 104 };
+	thisDeque = std::move(movableDeque);
+	EXPECT_EQ(thisDeque.size(), 5);
+	EXPECT_EQ(movableDeque.size(), 0);
+	EXPECT_FALSE(std::find(thisDeque.begin(), thisDeque.end(), 3) != thisDeque.end());
+	EXPECT_TRUE(std::find(thisDeque.begin(), thisDeque.end(), 103) != thisDeque.end());
+
+	thisDeque = DeQue<int>(10, 5);
+	EXPECT_EQ(thisDeque.size(), 10);
+	EXPECT_FALSE(std::find(thisDeque.begin(), thisDeque.end(), 103) != thisDeque.end());
+	EXPECT_TRUE(std::find(thisDeque.begin(), thisDeque.end(), 5) != thisDeque.end());
 }

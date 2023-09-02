@@ -24,6 +24,12 @@ TEST(FListTest, Constructor)
 	FList<int> copyConstruct = initList;
 	EXPECT_EQ(copyConstruct.size(), 3);
 	EXPECT_EQ(copyConstruct.empty(), false);
+
+	FList<int> moveConstructor = std::move(copyConstruct);
+	EXPECT_EQ(copyConstruct.size(), 0);
+	EXPECT_EQ(moveConstructor.size(), 3);
+	EXPECT_EQ(copyConstruct.empty(), true);
+	EXPECT_EQ(moveConstructor.empty(), false);
 }
 
 TEST(FListTest, Front)
@@ -136,8 +142,6 @@ TEST(FListTest, InsertAndRemove)
 	std::advance(testIt, 3);
 	otherIt = testList.erase_after(testList.cbegin(), testIt);
 	EXPECT_TRUE(testIt == otherIt);
-
-	
 }
 
 TEST(FListTest, PopAndClear)
@@ -150,6 +154,36 @@ TEST(FListTest, PopAndClear)
 	testList.clear();
 	EXPECT_EQ(testList.size(), 0);
 	EXPECT_EQ(testList.empty(), true);
+}
+
+TEST(FListTest, Assingment)
+{
+	// Copy Assign
+	FList<int> testList;
+	EXPECT_TRUE(testList.empty());
+
+	FList<int> otherList = { 1, 2, 3, 4, 5 };
+	EXPECT_FALSE(otherList.empty());
+
+	testList = otherList;
+	EXPECT_FALSE(testList.empty());
+	EXPECT_FALSE(otherList.empty());
+	EXPECT_TRUE(std::find(testList.begin(), testList.end(), 3) != testList.end());
+
+	// InitList Assign
+	std::initializer_list<int> initList {0, -1, -2, -3, -4};
+	testList = initList;
+	EXPECT_FALSE(std::find(testList.begin(), testList.end(), 3) != testList.end());
+	EXPECT_TRUE(std::find(testList.begin(), testList.end(), -3) != testList.end());
+
+	// Move Assign
+	FList<int> movableList = { 10, 11, 12, 13, 14, 15 };
+	EXPECT_FALSE(movableList.empty());
+
+	testList = std::move(movableList);
+	EXPECT_TRUE(movableList.empty());
+	EXPECT_FALSE(std::find(testList.begin(), testList.end(), -3) != testList.end());
+	EXPECT_TRUE(std::find(testList.begin(), testList.end(), 10) != testList.end());
 }
 
 #pragma endregion FListTests

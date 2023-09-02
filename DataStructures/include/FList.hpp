@@ -110,6 +110,12 @@ public:
 		}
 	}
 
+	FList(FList<T>&& other)
+	{
+		std::swap(this->m_Head, other.m_Head);
+		std::swap(this->m_Size, other.m_Size);
+	}
+
 	~FList()
 	{
 		clear();
@@ -323,23 +329,15 @@ public:
 	inline iterator end() { return iterator(nullptr); }
 	inline const_iterator cend() const { return const_iterator(nullptr); }
 
-	void PrintList()
-	{
-		FListNode_t<T>* current = m_Head;
-		while (current != nullptr)
-		{
-			std::cout << " -> " << current->m_Data;
-			current = current->m_Next;
-		}
-	}
-
 	// Copy
 	FList<T>& operator=(const FList<T>& other)
 	{
 		if (this == &other)
 			return *this;
 
-		FListNode_t<T>* temp = other.front();
+		clear();
+
+		FListNode_t<T>* temp = other.m_Head;
 		while (temp != nullptr)
 		{
 			this->push_front(temp->m_Data);
@@ -352,10 +350,23 @@ public:
 	// Assign
 	FList<T>& operator=(std::initializer_list<T> ilist)
 	{
+		clear();
+
 		for (const auto& it : ilist)
 		{
 			push_front(it);
 		}
+		return *this;
+	}
+
+	// Move
+	FList<T>& operator=(FList<T>&& other)
+	{
+		clear();
+
+		std::swap(this->m_Head, other.m_Head);
+		std::swap(this->m_Size, other.m_Size);
+
 		return *this;
 	}
 
