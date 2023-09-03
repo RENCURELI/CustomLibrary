@@ -214,14 +214,6 @@ public:
 template<typename T>
 std::ptrdiff_t operator-(const DeQueIterator<T>& lhs, const DeQueConstIterator<T>& rhs) { return lhs.m_Offset - rhs.m_Offset; }
 
-#pragma region ConstReverseIterator
-
-#pragma endregion ConstReverseIterator
-
-#pragma region ReverseIterator
-
-#pragma endregion ReverseIterator
-
 template<typename T>
 class DeQue
 {
@@ -234,6 +226,8 @@ public:
 	using map_type = T**;
 	using const_iterator = DeQueConstIterator<DeQue<T>>;
 	using iterator = DeQueIterator<DeQue<T>>;
+	using reverse_iterator = std::reverse_iterator<iterator>;
+	using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
 	static const size_t BLOCK_SIZE = 8;
 	size_t m_Size = 0; // The number of elements stored in the deque
@@ -867,6 +861,10 @@ public:
 	iterator end() { return iterator(this, m_Offset + m_Size); }
 	const_iterator cbegin() const { return const_iterator(this, m_Offset); }
 	const_iterator cend() const { return const_iterator(this, m_Offset + m_Size); }
+	reverse_iterator rbegin() { return reverse_iterator(begin()); }
+	reverse_iterator rend() { return reverse_iterator(end()); }
+	const_reverse_iterator crbegin() const { return const_reverse_iterator(cbegin()); }
+	const_reverse_iterator crend() const { return const_reverse_iterator(cend()); }
 
 	size_t get_block(size_t offset) const
 	{

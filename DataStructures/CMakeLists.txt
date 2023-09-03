@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.26)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-add_library(DataStructures 
+add_library(DataStructures STATIC 
 Source/main.cpp
 include/Array.hpp
 include/DeQue.hpp

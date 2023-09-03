@@ -197,7 +197,8 @@ public:
 	using reverse_iterator = std::reverse_iterator<iterator>;
 	using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 	// size_type would be the unsigned version of the allocator_traits::difference_type ( I currently don't have an allocator or allocator_traits )
-	//using size_type = std::make_unsigned<const_iterator::difference_type>; // doesn't seem to work yet
+	using size_type = size_t; // As mentionned above, this would come from allocator traits
+
 public:
 	// Default constructor creating a 4 item vector
 	Vector() 
@@ -235,7 +236,7 @@ public:
 		memcpy_s(m_Buffer, sizeof(T) * m_Size, other.m_Buffer, sizeof(T) * other.m_Size);
 	}
 
-	Vector(size_t count, T data)
+	Vector(size_type count, T data)
 	{
 		if (count <= 0)
 		{
@@ -246,13 +247,13 @@ public:
 		m_Size = m_Capacity;
 		m_Buffer = new T[count];
 
-		for (size_t i = 0; i < count; i++)
+		for (size_type i = 0; i < count; i++)
 		{
 			m_Buffer[i] = data;
 		}
 	}
 
-	Vector(size_t count)
+	Vector(size_type count)
 	{
 		if (count <= 0)
 		{
@@ -327,7 +328,7 @@ public:
 	}
 
 	// would replace size_t with the hypothetical size_type
-	iterator insert(const_iterator pos, size_t count, const T& value)
+	iterator insert(const_iterator pos, size_type count, const T& value)
 	{
 		if (pos > cend())
 			throw std::out_of_range("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
@@ -346,8 +347,8 @@ public:
 		}
 		else
 		{
-			size_t posOffset = pos - begin();
-			size_t newSize = m_Size + count;
+			size_type posOffset = pos - begin();
+			size_type newSize = m_Size + count;
 			if (newSize > m_Capacity)
 			{
 				reserve(newSize);
@@ -397,10 +398,10 @@ public:
 		}
 		else
 		{
-			size_t posOffset = pos - begin();
-			size_t count = last - first;
-			size_t newSize = m_Size + count;
-			size_t oldSize = m_Size;
+			size_type posOffset = pos - begin();
+			size_type count = last - first;
+			size_type newSize = m_Size + count;
+			size_type oldSize = m_Size;
 			if (newSize > m_Capacity)
 			{
 				reserve(newSize * 2);
@@ -433,7 +434,7 @@ public:
 		return insert(pos, ilist.begin(), ilist.end());
 	}
 
-	T& at(const size_t index)
+	T& at(const size_type index)
 	{
 		if (m_Size <= 0)
 			throw std::runtime_error("[ERROR] Trying to access empty container");
@@ -442,7 +443,7 @@ public:
 		return m_Buffer[index];
 	}
 
-	const T& at(const size_t index) const
+	const T& at(const size_type index) const
 	{
 		if (m_Size <= 0)
 			throw std::runtime_error("[ERROR] Trying to access empty container");
@@ -451,10 +452,10 @@ public:
 		return m_Buffer[index];
 	}
 
-	void assign(size_t count, T val)
+	void assign(size_type count, T val)
 	{
 		clear();
-		size_t i = 0;
+		size_type i = 0;
 		do
 		{
 			push_back(val);
@@ -516,7 +517,7 @@ public:
 		// if last is the last element of the vector we don't move the data
 		if (last <= end() - 1)
 		{
-			size_t elemsToMove = end() - last;
+			size_type elemsToMove = end() - last;
 			for (int i = 0; i < elemsToMove; i++)
 			{
 				*(first + i) = std::move(*(last + i));
@@ -533,9 +534,9 @@ public:
 	inline T& back() { return m_Size > 0 ? this->m_Buffer[m_Size - 1] : throw std::runtime_error("[ERROR] Trying to access empty container"); }
 	inline const T* data() const { return m_Buffer; }
 	inline T* data() { return m_Buffer; }
-	inline size_t size() const { return m_Size; }
-	inline size_t max_size() const { return std::numeric_limits<size_t>::max(); }
-	inline size_t capacity() const { return m_Capacity; }
+	inline size_type size() const { return m_Size; }
+	inline size_type max_size() const { return std::numeric_limits<size_t>::max(); }
+	inline size_type capacity() const { return m_Capacity; }
 	inline bool empty() const { return m_Size == 0; }
 	inline iterator begin() { return iterator(m_Buffer); }
 	inline const_iterator cbegin() const { return const_iterator(m_Buffer); }
@@ -593,18 +594,18 @@ public:
 		return *this;
 	}
 
-	T& operator[](size_t pos)
+	T& operator[](size_type pos)
 	{
 		return m_Size > 0 ? m_Buffer[pos] : throw std::runtime_error("[ERROR] Trying to access empty container");
 	}
 
-	const T& operator[](size_t pos) const
+	const T& operator[](size_type pos) const
 	{
 		return m_Size > 0 ? m_Buffer[pos] : throw std::runtime_error("[ERROR] Trying to access empty container");
 	}
 
 	// resize and move data from old position to new
-	void resize(size_t count)
+	void resize(size_type count)
 	{
 		if (count < m_Size)
 		{
@@ -616,7 +617,7 @@ public:
 		reserve(count);
 	}
 
-	void resize(size_t count, const T& value)
+	void resize(size_type count, const T& value)
 	{
 		if (count < m_Size)
 		{
@@ -627,7 +628,7 @@ public:
 		
 		reserve(count);
 
-		size_t i = m_Size; // we append value after the already present elements
+		size_type i = m_Size; // we append value after the already present elements
 		do
 		{
 			push_back(value);
@@ -636,7 +637,7 @@ public:
 	}
 
 	// If size is greater than the current capacity, new storage is allocated, otherwise the function does nothing. -> cppreference
-	void reserve(size_t count)
+	void reserve(size_type count)
 	{
 		if (count <= m_Capacity)
 			return;
@@ -649,7 +650,7 @@ public:
 			if (m_Capacity < m_Size)
 				m_Size = m_Capacity;
 
-			for (size_t i = 0; i < m_Size; i++)
+			for (size_type i = 0; i < m_Size; i++)
 			{
 				newBuffer[i] = m_Buffer[i];
 			}
@@ -676,8 +677,8 @@ private:
 	}
 
 private:
-	size_t m_Capacity; // The capacity of the vector
-	size_t m_Size; // The number of elements stored in vector
+	size_type m_Capacity; // The capacity of the vector
+	size_type m_Size; // The number of elements stored in vector
 
 	T* m_Buffer; // pointer to the currently allocated array
 };

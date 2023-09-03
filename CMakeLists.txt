@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.26)
-project(Libraries)
+project(Libraries CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -14,7 +14,7 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 add_subdirectory(DataStructures)
-#add_subdirectory(Algorithms)
+add_subdirectory(Algorithms)
 #add_subdirectory(Maths)
 add_subdirectory(TST_DataStructures)
 
@@ -30,11 +30,16 @@ TST_DataStructures/ContainerTests/StackTest.hpp
 TST_DataStructures/ContainerTests/VectorTest.hpp
 )
 
+set_target_properties(DataStructures PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(Libraries PUBLIC DataStructures)
-#target_link_libraries(Libraries PUBLIC Algorithms)
+
+set_target_properties(Algorithms PROPERTIES LINKER_LANGUAGE CXX)
+target_link_libraries(Libraries PUBLIC Algorithms)
+
 #target_link_libraries(Libraries PUBLIC Maths)
 target_link_libraries(Libraries PUBLIC GTest::gtest_main)
 
 include(GoogleTest)
 
 target_include_directories(Libraries PUBLIC DataStructures/include)
+target_include_directories(Libraries INTERFACE Algorithms/include)

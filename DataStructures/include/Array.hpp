@@ -190,8 +190,6 @@ struct Array
  	using const_iterator = ArrayConstIterator<Array<T, N>>;
  	using reverse_iterator = std::reverse_iterator<iterator>;
  	using const_reverse_iterator = std::reverse_iterator<const_iterator>;
-	// size_type would be the unsigned version of the allocator_traits::difference_type ( I currently don't have an allocator or allocator_traits )
-	//using size_type = std::make_unsigned<const_iterator::difference_type>;
 
 	T values[N];
 
