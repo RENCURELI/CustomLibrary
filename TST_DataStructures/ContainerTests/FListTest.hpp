@@ -25,11 +25,29 @@ TEST(FListTest, Constructor)
 	EXPECT_EQ(copyConstruct.size(), 3);
 	EXPECT_EQ(copyConstruct.empty(), false);
 
-	FList<int> moveConstructor = std::move(copyConstruct);
+	FList<int> moveConstruct = std::move(copyConstruct);
 	EXPECT_EQ(copyConstruct.size(), 0);
-	EXPECT_EQ(moveConstructor.size(), 3);
+	EXPECT_EQ(moveConstruct.size(), 3);
 	EXPECT_EQ(copyConstruct.empty(), true);
-	EXPECT_EQ(moveConstructor.empty(), false);
+	EXPECT_EQ(moveConstruct.empty(), false);
+
+	// Iterator Constructor
+	FList<int> itConstruct = FList<int>(moveConstruct.begin(), moveConstruct.end());
+	EXPECT_EQ(itConstruct.size(), 3);
+	EXPECT_EQ(itConstruct.empty(), false);
+	EXPECT_EQ(itConstruct.front(), 3);
+
+	// Count default Constructor
+	FList<int> countDefConstruct = FList<int>(5);
+	EXPECT_EQ(countDefConstruct.size(), 5);
+	EXPECT_EQ(countDefConstruct.empty(), false);
+	EXPECT_EQ(countDefConstruct.front(), 0);
+
+	// Count Val Constructor
+	FList<int> countValConstruct = FList<int>(5, -14);
+	EXPECT_EQ(countValConstruct.size(), 5);
+	EXPECT_EQ(countValConstruct.empty(), false);
+	EXPECT_EQ(countValConstruct.front(), -14);
 }
 
 TEST(FListTest, Front)

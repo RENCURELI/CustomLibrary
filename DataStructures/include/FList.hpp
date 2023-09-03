@@ -92,6 +92,32 @@ public:
 
 public:
 	FList() {};
+
+	FList(size_t count, const T& value)
+	{
+		for (; count > 0; --count)
+		{
+			push_front(value);
+		}
+	}
+
+	FList(size_t count)
+	{
+		for (; count > 0; --count)
+		{
+			push_front(T());
+		}
+	}
+
+	template<std::input_iterator InputIt>
+	FList(InputIt first, InputIt last)
+	{
+		for (; first != last; ++first)
+		{
+			push_front(*first);
+		}
+	}
+
 	FList(std::initializer_list<T> l)
 	{
 		for (const auto& it : l)

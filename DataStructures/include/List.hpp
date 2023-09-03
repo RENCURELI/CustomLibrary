@@ -127,6 +127,32 @@ public:
 
 public:
 	List() {};
+
+	List(size_t count, const T& value)
+	{
+		for (; count > 0; --count)
+		{
+			push_back(value);
+		}
+	}
+
+	List(size_t count)
+	{
+		for (; count > 0; --count)
+		{
+			push_back(T());
+		}
+	}
+
+	template<std::input_iterator InputIt>
+	List(InputIt first, InputIt last)
+	{
+		for (; first != last; ++first)
+		{
+			push_back(*first);
+		}
+	}
+
 	List(std::initializer_list<T> l)
 	{
 		for (const auto& it : l)

@@ -33,6 +33,24 @@ TEST(ListTest, Constructor)
 	EXPECT_EQ(copyConstruct.size(), 0);
 	EXPECT_EQ(moveConstruct.empty(), false);
 	EXPECT_EQ(copyConstruct.empty(), true);
+
+	// Iterator Constructor
+	List<int> itConstruct = List<int>(moveConstruct.begin(), moveConstruct.end());
+	EXPECT_EQ(itConstruct.size(), 3);
+	EXPECT_EQ(itConstruct.empty(), false);
+	EXPECT_EQ(itConstruct.front(), 1);
+
+	// Count default Constructor
+	List<int> countDefConstruct = List<int>(5);
+	EXPECT_EQ(countDefConstruct.size(), 5);
+	EXPECT_EQ(countDefConstruct.empty(), false);
+	EXPECT_EQ(countDefConstruct.front(), 0);
+
+	// Count Val Constructor
+	List<int> countValConstruct = List<int>(5, -14);
+	EXPECT_EQ(countValConstruct.size(), 5);
+	EXPECT_EQ(countValConstruct.empty(), false);
+	EXPECT_EQ(countValConstruct.front(), -14);
 }
 
 TEST(ListTest, FrontBack)
