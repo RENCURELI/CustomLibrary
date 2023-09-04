@@ -73,4 +73,15 @@ TEST(ArrayTest, Assignment)
 	EXPECT_FALSE(std::find(testArray.begin(), testArray.end(), 5) != testArray.end());
 }
 
+TEST(ArrayTest, Comparison)
+{
+	Array<int, 5> firstArray{1, 2, 3, 4, 5};
+	Array<int, 5> equalArray{1, 2, 3, 4, 5};
+
+	EXPECT_TRUE(firstArray == equalArray);
+
+	Array<int, 5> diffVal{1, 2, -3, 4, 5};
+	EXPECT_FALSE(firstArray == diffVal);
+}
+
 #pragma endregion ArrayTests

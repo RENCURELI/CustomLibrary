@@ -3,21 +3,24 @@
 #include <cstddef>
 #include <stdexcept>
 #include <iterator>
+#include <array>
 
 #pragma region ConstIterator
-template<typename Array>
+template<typename T, size_t Size>
 class ArrayConstIterator
 {
 public:
 	using iterator_concept = std::contiguous_iterator_tag;
-	using value_type = typename Array::value_type;
-	using pointer = Array::const_pointer;
+	using value_type = T;
+	using pointer = const value_type*;
 	using reference = const value_type&;
 	using difference_type = std::ptrdiff_t;
 
-	using PtrType = typename Array::pointer;
+	using PtrType = pointer;
 
 	ArrayConstIterator(PtrType ptr) : m_Ptr(ptr) {}
+
+	explicit ArrayConstIterator(PtrType ptr, size_t offset) : m_Ptr(ptr + offset) {}
 
 	// preincrement
 	ArrayConstIterator& operator++()
@@ -96,16 +99,23 @@ public:
 #pragma endregion ConstIterator
 
 #pragma region Iterator
-template<typename Array>
-class ArrayIterator : public ArrayConstIterator<Array>
+template<typename T, size_t Size>
+class ArrayIterator : public ArrayConstIterator<T, Size>
 {
 public:
-	using value_type = typename Array::value_type;
-	using pointer = Array::pointer;
+	using value_type = T;
+	using pointer = value_type*;
 	using reference = value_type&;
 	using difference_type = std::ptrdiff_t;
-	using BaseIt = ArrayConstIterator<Array>;
+	using BaseIt = ArrayConstIterator<T, Size>;
+
+	using PtrType = typename pointer;
+
 public:
+	ArrayIterator(PtrType ptr) : BaseIt(ptr) {}
+
+	explicit ArrayIterator(PtrType ptr, size_t offset) : BaseIt(ptr + offset) {}
+
 	// preincrement
 	ArrayIterator& operator++()
 	{
@@ -186,8 +196,8 @@ struct Array
  	using value_type = T;
  	using pointer = T*;
  	using const_pointer = const T*;
- 	using iterator = ArrayIterator<Array<T, N>>;
- 	using const_iterator = ArrayConstIterator<Array<T, N>>;
+ 	using iterator = ArrayIterator<T, N>;
+ 	using const_iterator = ArrayConstIterator<T, N>;
  	using reverse_iterator = std::reverse_iterator<iterator>;
  	using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
@@ -238,8 +248,8 @@ struct Array
 	inline const_iterator cbegin() const { return const_iterator(values); }
 	inline reverse_iterator rbegin() { return reverse_iterator(end()); }
 	inline const_reverse_iterator crbegin() const { return const_reverse_iterator(cend()); }
-	inline iterator end() { return iterator(values + N); }
-	inline const_iterator cend() const { return const_iterator(values + N); }
+	inline iterator end() { return iterator(values, size()); }
+	inline const_iterator cend() const { return const_iterator(values, size()); }
 	inline reverse_iterator rend() { return reverse_iterator(begin()); }
 	inline const_reverse_iterator crend() const { return const_reverse_iterator(cbegin()); }
 
@@ -264,3 +274,9 @@ struct Array
 		}
 	}
 };
+
+template<class T, std::size_t N>
+bool operator==(const Array<T, N>& lhs, const Array<T, N>& rhs)
+{
+	return std::equal(lhs.cbegin(), lhs.cend(), rhs.cbegin());
+}

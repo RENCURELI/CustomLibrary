@@ -13,12 +13,9 @@ public:
 
 	explicit Stack(const Container& cont) : m_Container(cont) {}
 
-	Stack(const Stack<T>& other)
-	{
-		m_Container = other.GetContainer();
-	}
+	explicit Stack(Container&& cont) : m_Container(std::move(cont)) {}
 
-	// TODO : Missing constructors
+	// For stack copy and stack move, constructors are implicitly declared
 
 	~Stack() {}
 
@@ -37,11 +34,7 @@ public:
 		m_Container.pop_back();
 	}
 
-	Stack& operator=(const Stack& other)
-	{
-		m_Container = other.GetContainer();
-		return *this;
-	}
+	// operator= is implicitly declared for both copy and move
 
 	const Container& GetContainer() const
 	{
