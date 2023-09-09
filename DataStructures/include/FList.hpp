@@ -1,6 +1,6 @@
 #pragma once
 #include "FListNode.hpp"
-#include <iostream>
+#include <compare>
 #include <initializer_list>
 #include <stdexcept>
 #include <iterator>
@@ -406,3 +406,20 @@ private:
 	FListNode_t<T>* m_Head = nullptr;
 	size_t m_Size = 0;
 };
+
+template<class T>
+bool operator==(const FList<T>& lhs, const FList<T>& rhs)
+{
+	if (lhs.size() != rhs.size())
+	{
+		return false;
+	}
+
+	return std::equal(lhs.cbegin(), lhs.cend(), rhs.cbegin());
+}
+
+template <class T>
+constexpr auto operator<=>(const FList<T>& lhs, const FList<T>& rhs)
+{
+	return std::lexicographical_compare_three_way(lhs.cbegin(), lhs.cend(), rhs.cbegin(), rhs.cend());
+}

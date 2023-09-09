@@ -264,4 +264,18 @@ TEST(VectorTest, AssignMethods)
 	EXPECT_EQ(testVec.back(), 1);
 }
 
+TEST(VectorTest, Comparison)
+{
+	Vector<int> firstVector{1, 2, 3, 4, 5};
+	Vector<int> equalVector{1, 2, 3, 4, 5};
+
+	EXPECT_TRUE(firstVector == equalVector);
+
+	Vector<int> diffVector{1, 2, -3, 4, 5};
+	EXPECT_FALSE(firstVector == diffVector);
+
+	EXPECT_EQ(firstVector <=> equalVector, std::strong_ordering::equal);
+	EXPECT_EQ(firstVector <=> diffVector, std::strong_ordering::greater);
+}
+
 #pragma endregion VectorTests

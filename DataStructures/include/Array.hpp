@@ -1,9 +1,9 @@
 #pragma once
 #include <iostream>
 #include <cstddef>
+#include <compare>
 #include <stdexcept>
 #include <iterator>
-#include <array>
 
 #pragma region ConstIterator
 template<typename T, size_t Size>
@@ -279,4 +279,10 @@ template<class T, std::size_t N>
 bool operator==(const Array<T, N>& lhs, const Array<T, N>& rhs)
 {
 	return std::equal(lhs.cbegin(), lhs.cend(), rhs.cbegin());
+}
+
+template <class T, std::size_t N>
+constexpr auto operator<=>(const Array<T, N>& lhs, const Array<T, N>& rhs)
+{
+	return std::lexicographical_compare_three_way(lhs.cbegin(), lhs.cend(), rhs.cbegin(), rhs.cend());
 }

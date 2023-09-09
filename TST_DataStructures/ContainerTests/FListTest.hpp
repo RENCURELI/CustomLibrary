@@ -204,4 +204,18 @@ TEST(FListTest, Assingment)
 	EXPECT_TRUE(std::find(testList.begin(), testList.end(), 10) != testList.end());
 }
 
+TEST(FListTest, Comparison)
+{
+	FList<int> firstList{1, 2, 3, 4, 5};
+	FList<int> equalList{1, 2, 3, 4, 5};
+
+	EXPECT_TRUE(firstList == equalList);
+
+	FList<int> diffList{1, 2, -3, 4, 5};
+	EXPECT_FALSE(firstList == diffList);
+
+	EXPECT_EQ(firstList <=> equalList, std::strong_ordering::equal);
+	EXPECT_EQ(firstList <=> diffList, std::strong_ordering::greater);
+}
+
 #pragma endregion FListTests

@@ -1,6 +1,7 @@
 #pragma once
 #include <climits>
 #include <cstring>
+#include <compare>
 #include <iterator>
 #include <memory>
 #include <stdexcept>
@@ -941,3 +942,20 @@ private:
 		other.m_Size = 0;
 	}
 };
+
+template<class T>
+bool operator==(const DeQue<T>& lhs, const DeQue<T>& rhs)
+{
+	if (lhs.size() != rhs.size())
+	{
+		return false;
+	}
+
+	return std::equal(lhs.cbegin(), lhs.cend(), rhs.cbegin());
+}
+
+template <class T>
+constexpr auto operator<=>(const DeQue<T>& lhs, const DeQue<T>& rhs)
+{
+	return std::lexicographical_compare_three_way(lhs.cbegin(), lhs.cend(), rhs.cbegin(), rhs.cend());
+}

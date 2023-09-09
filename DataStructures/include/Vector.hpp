@@ -3,6 +3,7 @@
 #include <iostream>
 #include <initializer_list>
 #include <cstddef>
+#include <compare>
 #include <stdexcept>
 #include <string>
 #include <memory>
@@ -682,3 +683,20 @@ private:
 
 	T* m_Buffer; // pointer to the currently allocated array
 };
+
+template<class T>
+bool operator==(const Vector<T>& lhs, const Vector<T>& rhs)
+{
+	if (lhs.size() != rhs.size())
+	{
+		return false;
+	}
+
+	return std::equal(lhs.cbegin(), lhs.cend(), rhs.cbegin());
+}
+
+template<class T>
+constexpr auto operator<=>(const Vector<T>& lhs, const Vector<T>& rhs)
+{
+	return std::lexicographical_compare_three_way(lhs.cbegin(), lhs.cend(), rhs.cbegin(), rhs.cend());
+}

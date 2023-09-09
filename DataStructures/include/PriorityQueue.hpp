@@ -81,3 +81,15 @@ protected:
 	Container m_Container;
 	Compare m_Compare;
 };
+
+template<class T, class Cont>
+bool operator==(const PriorityQueue<T, Cont>& lhs, const PriorityQueue<T, Cont>& rhs)
+{
+	return lhs.GetContainer() == rhs.GetContainer();
+}
+
+template <class T, class Cont>
+constexpr auto operator<=>(const PriorityQueue<T, Cont>& lhs, const PriorityQueue<T, Cont>& rhs)
+{
+	return lhs.GetContainer() <=> rhs.GetContainer();
+}

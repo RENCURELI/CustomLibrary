@@ -132,4 +132,20 @@ TEST(PriorityQueueTest, Assignment)
 
 }
 
+TEST(PriorityQueueTest, Comparison)
+{
+	Vector<int> testVec = { 1, 2, 3, 4, 5 };
+	PriorityQueue<int> firstQueue = PriorityQueue<int>(std::less<int>(), testVec);
+	PriorityQueue<int> equalQueue = PriorityQueue<int>(std::less<int>(), testVec);
+
+	EXPECT_TRUE(firstQueue == equalQueue);
+
+	Vector<int> otherVec = { 1, 2, -3, 4, 5 };
+	PriorityQueue<int> diffQueue = PriorityQueue<int>(std::less<int>(), otherVec);
+	EXPECT_FALSE(firstQueue == diffQueue);
+
+	EXPECT_EQ(firstQueue <=> equalQueue, std::strong_ordering::equal);
+	EXPECT_EQ(firstQueue <=> diffQueue, std::strong_ordering::greater);
+}
+
 #pragma endregion PriorityQueueTests

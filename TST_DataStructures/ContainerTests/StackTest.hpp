@@ -208,4 +208,20 @@ TEST(StackTest, Assignment)
 	EXPECT_EQ(otherListTest.size(), 100);
 }
 
+TEST(StackTest, Comparison)
+{
+	Vector<int> testVec = { 1, 2, 3, 4, 5 };
+	Stack<int, Vector<int>> firstStack = Stack<int, Vector<int>>(testVec);
+	Stack<int, Vector<int>> equalStack = Stack<int, Vector<int>>(testVec);
+
+	EXPECT_TRUE(firstStack == equalStack);
+
+	Vector<int> otherVec = { 1, 2, -3, 4, 5 };
+	Stack<int, Vector<int>> diffStack = Stack<int, Vector<int>>(otherVec);
+	EXPECT_FALSE(firstStack == diffStack);
+
+	EXPECT_EQ(firstStack <=> equalStack, std::strong_ordering::equal);
+	EXPECT_EQ(firstStack <=> diffStack, std::strong_ordering::greater);
+}
+
 #pragma endregion StackTests

@@ -1,6 +1,6 @@
 #pragma once
 #include "ListNode.hpp"
-#include <iostream>
+#include <compare>
 #include <initializer_list>
 #include <stdexcept>
 #include <iterator>
@@ -615,3 +615,20 @@ private:
 	ListNode_t<T>* m_Tail = nullptr;
 	size_t m_Size = 0;
 };
+
+template<class T>
+bool operator==(const List<T>& lhs, const List<T>& rhs)
+{
+	if (lhs.size() != rhs.size())
+	{
+		return false;
+	}
+
+	return std::equal(lhs.cbegin(), lhs.cend(), rhs.cbegin());
+}
+
+template <class T>
+constexpr auto operator<=>(const List<T>& lhs, const List<T>& rhs)
+{
+	return std::lexicographical_compare_three_way(lhs.cbegin(), lhs.cend(), rhs.cbegin(), rhs.cend());
+}

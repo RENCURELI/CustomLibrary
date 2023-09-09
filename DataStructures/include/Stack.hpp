@@ -44,3 +44,15 @@ public:
 protected:
 	Container m_Container;
 };
+
+template<class T, class Cont>
+bool operator==(const Stack<T, Cont>& lhs, const Stack<T, Cont>& rhs)
+{
+	return lhs.GetContainer() == rhs.GetContainer();
+}
+
+template <class T, class Cont>
+constexpr auto operator<=>(const Stack<T, Cont>& lhs, const Stack<T, Cont>& rhs)
+{
+	return lhs.GetContainer() <=> rhs.GetContainer();
+}

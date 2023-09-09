@@ -53,3 +53,15 @@ public:
 protected:
 	Container m_Container;
 };
+
+template<class T, class Cont>
+bool operator==(const Queue<T, Cont>& lhs, const Queue<T, Cont>& rhs)
+{
+	return lhs.GetContainer() == rhs.GetContainer();
+}
+
+template <class T, class Cont>
+constexpr auto operator<=>(const Queue<T, Cont>& lhs, const Queue<T, Cont>& rhs)
+{
+	return lhs.GetContainer() <=> rhs.GetContainer();
+}

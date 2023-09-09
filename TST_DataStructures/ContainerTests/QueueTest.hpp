@@ -112,4 +112,20 @@ TEST(QueueTest, Assignment)
 	EXPECT_EQ(otherListTest.size(), 100);
 }
 
+TEST(QueueTest, Comparison)
+{
+	Vector<int> testVec = { 1, 2, 3, 4, 5 };
+	Queue<int, Vector<int>> firstQueue = Queue<int, Vector<int>>(testVec);
+	Queue<int, Vector<int>> equalQueue = Queue<int, Vector<int>>(testVec);
+
+	EXPECT_TRUE(firstQueue == equalQueue);
+
+	Vector<int> otherVec = { 1, 2, -3, 4, 5 };
+	Queue<int, Vector<int>> diffQueue = Queue<int, Vector<int>>(otherVec);
+	EXPECT_FALSE(firstQueue == diffQueue);
+
+	EXPECT_EQ(firstQueue <=> equalQueue, std::strong_ordering::equal);
+	EXPECT_EQ(firstQueue <=> diffQueue, std::strong_ordering::greater);
+}
+
 #pragma endregion QueueTests

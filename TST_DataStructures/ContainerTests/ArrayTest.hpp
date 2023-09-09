@@ -80,8 +80,11 @@ TEST(ArrayTest, Comparison)
 
 	EXPECT_TRUE(firstArray == equalArray);
 
-	Array<int, 5> diffVal{1, 2, -3, 4, 5};
-	EXPECT_FALSE(firstArray == diffVal);
+	Array<int, 5> diffArray{1, 2, -3, 4, 5};
+	EXPECT_FALSE(firstArray == diffArray);
+
+	EXPECT_EQ(firstArray <=> equalArray, std::strong_ordering::equal);
+	EXPECT_EQ(firstArray <=> diffArray, std::strong_ordering::greater);
 }
 
 #pragma endregion ArrayTests

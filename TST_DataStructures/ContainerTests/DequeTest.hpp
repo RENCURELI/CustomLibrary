@@ -296,3 +296,17 @@ TEST(DequeTest, Assignment)
 	EXPECT_FALSE(std::find(thisDeque.begin(), thisDeque.end(), 103) != thisDeque.end());
 	EXPECT_TRUE(std::find(thisDeque.begin(), thisDeque.end(), 5) != thisDeque.end());
 }
+
+TEST(DequeTest, Comparison)
+{
+	DeQue<int> firstDeque{1, 2, 3, 4, 5};
+	DeQue<int> equalDeque{1, 2, 3, 4, 5};
+
+	EXPECT_TRUE(firstDeque == equalDeque);
+
+	DeQue<int> diffDeque{1, 2, -3, 4, 5};
+	EXPECT_FALSE(firstDeque == diffDeque);
+
+	EXPECT_EQ(firstDeque <=> equalDeque, std::strong_ordering::equal);
+	EXPECT_EQ(firstDeque <=> diffDeque, std::strong_ordering::greater);
+}
