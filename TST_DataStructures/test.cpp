@@ -13,6 +13,8 @@
 #include "ContainerTests/VectorTest.hpp"
 #include "ContainerTests/DequeTest.hpp"
 
+#include "NMSequenceOperationsTests/FindTest.hpp"
+
 int main(int argc, char** argv)
 {
 	::testing::InitGoogleTest(&argc, argv);

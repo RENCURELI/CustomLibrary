@@ -28,6 +28,7 @@ TST_DataStructures/ContainerTests/QueueTest.hpp
 TST_DataStructures/ContainerTests/PriorityQueueTest.hpp
 TST_DataStructures/ContainerTests/StackTest.hpp
 TST_DataStructures/ContainerTests/VectorTest.hpp
+TST_DataStructures/NMSequenceOperationsTests/FindTest.hpp
 )
 
 set_target_properties(DataStructures PROPERTIES LINKER_LANGUAGE CXX)
