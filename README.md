@@ -1,7 +1,7 @@
 # CustomLibrary
 Creating a Data Structure and Algorithm library
 
-Done :
+Done Data Structures :
   - Forward List
   - Doubly Linked List
   - Array
@@ -9,9 +9,12 @@ Done :
   - Stack
   - Deque
 
+Done Algorithms :
+
 In Progress :
   - Queue
   - Priority Queue
+  - Find
 
 TODO Data Structures :
   - Allocators ( yes, I'm starting to get sidetracked, but I'm curious )
@@ -22,7 +25,6 @@ TODO Data Structures :
   - Graphs ( Binary tree, Heap, etc... )
 
 TODO Algorithms :
-  - Find
   - Sort
   - Dijkstra
   - A*
