@@ -79,9 +79,9 @@ InputIt FindIf(InputIt first, InputIt last, UnaryPredicate p)
 		{
 			return first;
 		}
-
-		return last;
 	}
+
+	return last;
 }
 
 template<std::input_iterator InputIt, class UnaryPredicate>
@@ -93,7 +93,7 @@ InputIt FindIfNot(InputIt first, InputIt last, UnaryPredicate p)
 		{
 			return first;
 		}
-
-		return last;
 	}
+
+	return last;
 }

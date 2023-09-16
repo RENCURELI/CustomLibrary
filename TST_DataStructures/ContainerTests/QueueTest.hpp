@@ -10,22 +10,115 @@
 // ==============   QUEUE TESTS   =================
 // ================================================
 
-TEST(QueueTest, Constructor)
+TEST(QueueTest, VectorConstructor)
 {
-	// Container = Vector
+	// Default Vector
 	Queue<int, Vector<int>> vecQueue;
 	EXPECT_EQ(vecQueue.size(), 0);
 	EXPECT_EQ(vecQueue.empty(), true);
 
-	// Container = List
+	for (int i = 0; i < 100; ++i)
+	{
+		vecQueue.push(i);
+	}
+
+	EXPECT_EQ(vecQueue.size(), 100);
+	EXPECT_EQ(vecQueue.empty(), false);
+
+	// Copy ( implicit )
+	Queue<int, Vector<int>> copyConstruct = vecQueue;
+	EXPECT_EQ(copyConstruct.size(), 100);
+	EXPECT_EQ(copyConstruct.empty(), false);
+
+	// Move ( implicit )
+	Queue<int, Vector<int>> moveConstruct = std::move(vecQueue);
+	EXPECT_EQ(moveConstruct.size(), 100);
+	EXPECT_EQ(moveConstruct.empty(), false);
+
+	// Copy ( explicit )
+	Vector<int> testVec = { 1, 2, 3, 4, 5 };
+	Queue<int, Vector<int>> copyExplicit = Queue<int, Vector<int>>(testVec);
+	EXPECT_EQ(copyExplicit.size(), 5);
+	EXPECT_EQ(copyExplicit.empty(), false);
+
+	// Move ( explicit )
+	Queue<int, Vector<int>> moveExplicit = Queue<int, Vector<int>>(std::move(testVec));
+	EXPECT_EQ(moveExplicit.size(), 5);
+	EXPECT_EQ(moveExplicit.empty(), false);
+}
+
+TEST(QueueTest, ListConstructor)
+{
+	// Default List
 	Queue<int, List<int>> listQueue;
 	EXPECT_EQ(listQueue.size(), 0);
 	EXPECT_EQ(listQueue.empty(), true);
 
-	// Container = DeQue
+	for (int i = 0; i < 100; ++i)
+	{
+		listQueue.push(i);
+	}
+
+	EXPECT_EQ(listQueue.size(), 100);
+	EXPECT_EQ(listQueue.empty(), false);
+
+	// Copy ( implicit )
+	Queue<int, List<int>> copyConstruct = listQueue;
+	EXPECT_EQ(copyConstruct.size(), 100);
+	EXPECT_EQ(copyConstruct.empty(), false);
+
+	// Move ( implicit )
+	Queue<int, List<int>> moveConstruct = std::move(listQueue);
+	EXPECT_EQ(moveConstruct.size(), 100);
+	EXPECT_EQ(moveConstruct.empty(), false);
+
+	// Copy ( explicit )
+	List<int> testList = { 1, 2, 3, 4, 5 };
+	Queue<int, List<int>> copyExplicit = Queue<int, List<int>>(testList);
+	EXPECT_EQ(copyExplicit.size(), 5);
+	EXPECT_EQ(copyExplicit.empty(), false);
+
+	// Move ( explicit )
+	Queue<int, List<int>> moveExplicit = Queue<int, List<int>>(std::move(testList));
+	EXPECT_EQ(moveExplicit.size(), 5);
+	EXPECT_EQ(moveExplicit.empty(), false);
+}
+
+TEST(QueueTest, DequeConstructor)
+{
+	// Default DeQue
 	Queue<int, DeQue<int>> dequeQueue;
 	EXPECT_EQ(dequeQueue.size(), 0);
 	EXPECT_EQ(dequeQueue.empty(), true);
+
+	for (int i = 0; i < 100; ++i)
+	{
+		dequeQueue.push(i);
+	}
+
+	EXPECT_EQ(dequeQueue.size(), 100);
+	EXPECT_EQ(dequeQueue.empty(), false);
+
+	// Copy ( implicit )
+	Queue<int, DeQue<int>> copyConstruct = dequeQueue;
+	EXPECT_EQ(copyConstruct.size(), 100);
+	EXPECT_EQ(copyConstruct.empty(), false);
+
+	// Move ( implicit )
+	Queue<int, DeQue<int>> moveConstruct = std::move(dequeQueue);
+	EXPECT_EQ(moveConstruct.size(), 100);
+	EXPECT_EQ(moveConstruct.empty(), false);
+
+	// Copy ( explicit )
+	DeQue<int> testDeque = { 1, 2, 3, 4, 5 };
+	Queue<int, DeQue<int>> copyExplicit = Queue<int, DeQue<int>>(testDeque);
+	EXPECT_EQ(copyExplicit.size(), 5);
+	EXPECT_EQ(copyExplicit.empty(), false);
+
+	// Move ( explicit )
+	Queue<int, DeQue<int>> moveExplicit = Queue<int, DeQue<int>>(std::move(testDeque));
+	EXPECT_EQ(moveExplicit.size(), 5);
+	EXPECT_EQ(moveExplicit.empty(), false);
 }
 
 TEST(QueueTest, PushPop)

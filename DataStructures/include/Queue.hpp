@@ -13,20 +13,13 @@ public:
 
 	explicit Queue(const Container& cont) : m_Container(cont) {}
 
-	Queue(const Queue& other)
-	{
-		m_Container = other.GetContainer();
-	}
+	explicit Queue(Container&& cont) : m_Container(std::move(cont)) {}
 
-	// TODO : Missing constructors
+	// For stack copy and stack move, constructors are implicitly declared
 
 	~Queue() {}
 
-	Queue& operator=(const Queue& other)
-	{
-		m_Container = other.GetContainer();
-		return *this;
-	}
+	// operator= is implicitly declared
 
 	inline T& front() { return m_Container.front(); }
 	inline const T& front() const { return m_Container.front(); }

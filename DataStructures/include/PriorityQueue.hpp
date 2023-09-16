@@ -18,16 +18,19 @@ public:
 	explicit PriorityQueue(const Compare& compare)
 		: m_Compare(compare), m_Container() {}
 
-	PriorityQueue(const Compare& compare, const Container& cont)
+	explicit PriorityQueue(const Compare& compare, const Container& cont)
 		: m_Compare(compare), m_Container(cont)
 	{
 		std::make_heap(m_Container.begin(), m_Container.end(), m_Compare);
 	}
 
-// 	PriorityQueue(PriorityQueue&& other)
-// 	{
-// 
-// 	}
+	PriorityQueue(const Compare& compare, Container&& cont)
+		: m_Compare(compare), m_Container(std::move(cont))
+	{
+		std::make_heap(m_Container.begin(), m_Container.end(), m_Compare);
+	}
+
+	// For Priority queue copy and Priority queue move, constructors are implicitly declared
 
 	template<std::input_iterator InputIt>
 	PriorityQueue(InputIt first, InputIt last, const Compare& compare = Compare())
@@ -47,12 +50,7 @@ public:
 
 	~PriorityQueue() {}
 
-	PriorityQueue& operator=(const PriorityQueue& other)
-	{
-		m_Container = other.m_Container;
-		m_Compare = other.m_Compare;
-		return *this;
-	}
+	// operator= is implicitly declared
 
 	inline const T& top() const { return m_Container.front(); }
 	inline bool empty() const { return m_Container.empty(); }
