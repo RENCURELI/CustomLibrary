@@ -8,13 +8,14 @@ Done Data Structures :
   - Vector
   - Stack
   - Deque
-
-Done Algorithms :
-
-In Progress :
   - Queue
   - Priority Queue
+    
+Done Algorithms :
   - Find
+    
+In Progress :
+  - Sort
 
 TODO Data Structures :
   - Allocators ( yes, I'm starting to get sidetracked, but I'm curious )
@@ -25,7 +26,6 @@ TODO Data Structures :
   - Graphs ( Binary tree, Heap, etc... )
 
 TODO Algorithms :
-  - Sort
   - Dijkstra
   - A*
   - To Be Determined ( Not sure what algorithms could be useful )
