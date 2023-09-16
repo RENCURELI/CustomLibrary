@@ -129,7 +129,32 @@ TEST(PriorityQueueTest, Accessors)
 
 TEST(PriorityQueueTest, Assignment)
 {
+	// Container = Vector
+	PriorityQueue<int, Vector<int>> test;
+	for (int i = 0; i < 100; ++i)
+	{
+		test.push(i);
+	}
 
+	EXPECT_EQ(test.size(), 100);
+
+	PriorityQueue<int, Vector<int>> otherTest;
+	EXPECT_TRUE(otherTest.empty() == true);
+
+	otherTest = test;
+	EXPECT_EQ(otherTest.size(), 100);
+
+	// Container = DeQue
+	PriorityQueue<int, DeQue<int>> dequeTest;
+	for (int i = 0; i < 100; ++i)
+	{
+		dequeTest.push(i);
+	}
+	PriorityQueue<int, DeQue<int>> otherDequeTest;
+	EXPECT_TRUE(otherDequeTest.empty() == true);
+
+	otherDequeTest = dequeTest;
+	EXPECT_EQ(otherDequeTest.size(), 100);
 }
 
 TEST(PriorityQueueTest, Comparison)
