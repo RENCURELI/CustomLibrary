@@ -29,6 +29,7 @@ TST_DataStructures/ContainerTests/PriorityQueueTest.hpp
 TST_DataStructures/ContainerTests/StackTest.hpp
 TST_DataStructures/ContainerTests/VectorTest.hpp
 TST_DataStructures/NMSequenceOperationsTests/FindTest.hpp
+TST_DataStructures/SortingOperationsTests/SortTest.hpp
 )
 
 set_target_properties(DataStructures PROPERTIES LINKER_LANGUAGE CXX)
@@ -42,5 +43,5 @@ target_link_libraries(Libraries PUBLIC GTest::gtest_main)
 
 include(GoogleTest)
 
-target_include_directories(Libraries PUBLIC DataStructures/include)
+target_include_directories(Libraries INTERFACE DataStructures/include)
 target_include_directories(Libraries INTERFACE Algorithms/include)

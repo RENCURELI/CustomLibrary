@@ -1,4 +1,7 @@
 // For all Non-Modifying Sequence Operations -> https://en.cppreference.com/w/cpp/algorithm#Non-modifying_sequence_operations
+
+#pragma once
+
 #include <iterator>
 #include <future>
 #include <functional>

@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_library(Algorithms INTERFACE 
 include/NonModifyingSequenceOperations.hpp
+include/SortingOperations.hpp
 )
 
 target_include_directories(Algorithms INTERFACE include)

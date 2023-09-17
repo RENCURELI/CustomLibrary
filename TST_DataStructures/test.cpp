@@ -15,6 +15,8 @@
 
 #include "NMSequenceOperationsTests/FindTest.hpp"
 
+#include "SortingOperationsTests/SortTest.hpp"
+
 int main(int argc, char** argv)
 {
 	::testing::InitGoogleTest(&argc, argv);
