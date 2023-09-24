@@ -297,4 +297,115 @@ TEST(ListTest, Comparison)
 	EXPECT_EQ(firstList <=> diffList, std::strong_ordering::greater);
 }
 
+TEST(ListTest, Operations)
+{
+	// Unique
+	List<int> firstList{1, 2, 3, 4, 5};
+	List<int> secondList{1, 2, 2, 4, 5};
+	List<int> thirdList{1, 2, 2, 2, 5};
+
+	EXPECT_EQ(std::count(firstList.begin(), firstList.end(), 2), 1);
+	EXPECT_EQ(std::count(secondList.begin(), secondList.end(), 2), 2);
+	EXPECT_EQ(std::count(thirdList.begin(), thirdList.end(), 2), 3);
+
+	EXPECT_EQ(firstList.size(), 5);
+	EXPECT_EQ(secondList.size(), 5);
+	EXPECT_EQ(thirdList.size(), 5);
+
+	firstList.unique();
+	secondList.unique();
+	thirdList.unique();
+
+	EXPECT_EQ(std::count(firstList.begin(), firstList.end(), 2), 1);
+	EXPECT_EQ(std::count(secondList.begin(), secondList.end(), 2), 1);
+	EXPECT_EQ(std::count(thirdList.begin(), thirdList.end(), 2), 1);
+
+	EXPECT_EQ(firstList.size(), 5);
+	EXPECT_EQ(secondList.size(), 4);
+	EXPECT_EQ(thirdList.size(), 3);
+
+	// Unique ( with Predicate )
+
+	List<int> fourthList{1, 2, 3, 4, 5};
+	List<int> fithList{1, 2, 2, 4, 5};
+	List<int> sixthList{1, 2, 2, 2, 5};
+
+	auto predicate = [mod = 2](int x, int y)
+	{
+		return (x % mod) == (y % mod);
+	};
+
+	EXPECT_EQ(std::count(fourthList.begin(), fourthList.end(), 2), 1);
+	EXPECT_EQ(std::count(fithList.begin(), fithList.end(), 2), 2);
+	EXPECT_EQ(std::count(sixthList.begin(), sixthList.end(), 2), 3);
+
+	EXPECT_EQ(fourthList.size(), 5);
+	EXPECT_EQ(fithList.size(), 5);
+	EXPECT_EQ(sixthList.size(), 5);
+
+	fourthList.unique(predicate);
+	fithList.unique(predicate);
+	sixthList.unique(predicate);
+
+	EXPECT_EQ(std::count(fourthList.begin(), fourthList.end(), 2), 1);
+	EXPECT_EQ(std::count(fithList.begin(), fithList.end(), 2), 1);
+	EXPECT_EQ(std::count(fithList.begin(), fithList.end(), 4), 0);
+	EXPECT_EQ(std::count(sixthList.begin(), sixthList.end(), 2), 1);
+
+	EXPECT_EQ(fourthList.size(), 5);
+	EXPECT_EQ(fithList.size(), 3);
+	EXPECT_EQ(sixthList.size(), 3);
+
+	// List splice(const_iterator pos, List<T>&& other)
+
+	firstList.clear();
+	firstList = { 1, 2, 3, 4, 5, 6, 7 };
+
+	EXPECT_EQ(firstList.size(), 7);
+	EXPECT_FALSE(std::find(firstList.begin(), firstList.end(), -3) != firstList.end());
+
+	secondList.clear();
+	secondList = { -1, -2, -3, -4 };
+
+	EXPECT_EQ(secondList.size(), 4);
+
+	auto it = firstList.begin();
+	std::advance(it, 6);
+	firstList.splice(it, std::move(secondList));
+
+	EXPECT_EQ(firstList.size(), 11);
+	EXPECT_EQ(secondList.size(), 0);
+	EXPECT_TRUE(secondList.begin().m_Ptr == nullptr);
+
+	EXPECT_TRUE(std::find(firstList.begin(), firstList.end(), -3) != firstList.end());
+
+	// List merge ( already sorted )
+
+	firstList.clear();
+	firstList = { 10, 20, 30, 40, 50, 60, 70 };
+
+	EXPECT_EQ(firstList.size(), 7);
+	EXPECT_FALSE(std::find(firstList.begin(), firstList.end(), 23) != firstList.end());
+
+	secondList.clear();
+	secondList = { 15, 21, 23, 74 };
+
+	EXPECT_EQ(secondList.size(), 4);
+
+	firstList.merge(std::move(secondList));
+
+	EXPECT_EQ(firstList.size(), 11);
+	EXPECT_EQ(secondList.size(), 0);
+	EXPECT_TRUE(std::find(firstList.begin(), firstList.end(), 23) != firstList.end());
+
+
+	// List Sort
+// 	firstList.clear();
+// 	firstList = { 5, 3, 1, 12, 4, 8, 9 };
+// 
+// 	firstList.sort();
+// 
+// 	EXPECT_TRUE(std::is_sorted(firstList.begin(), firstList.end()) == true);
+}
+
 #pragma endregion ListTests
