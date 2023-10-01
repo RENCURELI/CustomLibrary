@@ -583,8 +583,7 @@ public:
 			return;
 		}
 
-		auto it = begin();
-		for (; it != end(); ++it)
+		for (iterator it = begin(); it != end(); ++it)
 		{
 			if (other.empty())
 			{
@@ -594,10 +593,8 @@ public:
 			ListNode<T>* newHead = other.m_Head->m_Next;
 			if (comp(it.m_Ptr, other.m_Head))
 			{
-				other.m_Head->m_Next = it.m_Ptr->m_Next;
 				it.m_Ptr->m_Next = other.m_Head;
 				other.m_Head->m_Previous = it.m_Ptr;
-
 			}
 			else
 			{
@@ -633,7 +630,7 @@ public:
 	template<class Compare>
 	void sort(Compare comp)
 	{
-		//MergeSort(&m_Head, m_Size, comp);
+		MergeSort(this, comp);
 	}
 
 	void sort()
@@ -650,7 +647,7 @@ public:
 		}
 
 		iterator current = begin();
-		for (; current != end();)
+		while(current != end())
 		{
 			ListNode<T>* curNode = current.m_Ptr;
 			if (curNode->m_Next != nullptr && p(curNode->m_Data, curNode->m_Next->m_Data))
@@ -739,82 +736,26 @@ private:
 		return iterator(ptr);
 	}
 
-	// Code not from me, trying to redo on my own after implementing merge and splice
-//	template<class Compare>
-// 	void MergeSort(ListNode<T>** first, size_t size, Compare comp)
-// 	{
-// 		ListNode<T>* head = *first;
-// 		ListNode<T>* a;
-// 		ListNode<T>* b;
-// 
-// 		/* Base case -- length 0 or 1 */
-// 		if ((head == NULL) || (head->m_Next == NULL)) {
-// 			return;
-// 		}
-// 
-// 		/* Split head into 'a' and 'b' sublists */
-// 		FrontBackSplit(head, &a, &b);
-// 
-// 		/* Recursively sort the sublists */
-// 		MergeSort(&a, size, comp);
-// 		MergeSort(&b, size, comp);
-// 
-// 		/* answer = merge the two sorted lists together */
-// 		*first = SortedMerge(a, b);
-// 	}
-// 
-// 	/* See https:// www.geeksforgeeks.org/?p=3622 for details of this
-// function */
-// 	ListNode<T>* SortedMerge(ListNode<T>* a, ListNode<T>* b)
-// 	{
-// 		ListNode<T>* result = NULL;
-// 
-// 		/* Base cases */
-// 		if (a == NULL)
-// 			return (b);
-// 		else if (b == NULL)
-// 			return (a);
-// 
-// 		/* Pick either a or b, and recur */
-// 		if (a->m_Data <= b->m_Data) {
-// 			result = a;
-// 			result->m_Next = SortedMerge(a->m_Next, b);
-// 		}
-// 		else {
-// 			result = b;
-// 			result->m_Next = SortedMerge(a, b->m_Next);
-// 		}
-// 		return (result);
-// 	}
-// 
-// 	/* UTILITY FUNCTIONS */
-// 	/* Split the nodes of the given list into front and back halves,
-// 		and return the two lists using the reference parameters.
-// 		If the length is odd, the extra node should go in the front list.
-// 		Uses the fast/slow pointer strategy. */
-// 	void FrontBackSplit(ListNode<T>* source,
-// 		ListNode<T>** frontRef, ListNode<T>** backRef)
-// 	{
-// 		ListNode<T>* fast;
-// 		ListNode<T>* slow;
-// 		slow = source;
-// 		fast = source->m_Next;
-// 
-// 		/* Advance 'fast' two nodes, and advance 'slow' one node */
-// 		while (fast != NULL) {
-// 			fast = fast->m_Next;
-// 			if (fast != NULL) {
-// 				slow = slow->m_Next;
-// 				fast = fast->m_Next;
-// 			}
-// 		}
-// 
-// 		/* 'slow' is before the midpoint in the list, so split it in two
-// 		at that point. */
-// 		*frontRef = source;
-// 		*backRef = slow->m_Next;
-// 		slow->m_Next = NULL;
-// 	}
+	template<class Compare>
+	List<T>* MergeSort(List<T>* start, Compare comp)
+	{
+		if (start == nullptr || start->empty() || start->size() == 1)
+		{
+			return start;
+		}
+
+		iterator startPoint = start->begin();
+		iterator rightStart = std::next(start->begin(), start->size() / 2);
+		List<T>* leftHalf = new List<T>(startPoint, rightStart);
+		List<T>* rightHalf = new List<T>(rightStart, start->end());
+
+		leftHalf = MergeSort(leftHalf, comp);
+		rightHalf = MergeSort(rightHalf, comp);
+
+		leftHalf->merge(std::move(*rightHalf));
+
+		return leftHalf;
+	}
 
 private:
 	ListNode_t<T>* m_Head = nullptr;

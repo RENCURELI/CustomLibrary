@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <string>
+#include <list>
 
 #include "List.hpp"
 
@@ -386,26 +387,33 @@ TEST(ListTest, Operations)
 
 	EXPECT_EQ(firstList.size(), 7);
 	EXPECT_FALSE(std::find(firstList.begin(), firstList.end(), 23) != firstList.end());
+	EXPECT_TRUE(std::is_sorted(firstList.begin(), firstList.end()));
 
 	secondList.clear();
 	secondList = { 15, 21, 23, 74 };
 
 	EXPECT_EQ(secondList.size(), 4);
+	EXPECT_TRUE(std::is_sorted(secondList.begin(), secondList.end()));
 
 	firstList.merge(std::move(secondList));
 
 	EXPECT_EQ(firstList.size(), 11);
 	EXPECT_EQ(secondList.size(), 0);
 	EXPECT_TRUE(std::find(firstList.begin(), firstList.end(), 23) != firstList.end());
+	EXPECT_TRUE(std::is_sorted(firstList.begin(), firstList.end()));
 
+
+// 	std::list<int> test = { 4, 9, 1, 3, 2 };
+// 	test.sort();
+// 	EXPECT_EQ(test.front(), 1);
 
 	// List Sort
-// 	firstList.clear();
-// 	firstList = { 5, 3, 1, 12, 4, 8, 9 };
-// 
-// 	firstList.sort();
-// 
-// 	EXPECT_TRUE(std::is_sorted(firstList.begin(), firstList.end()) == true);
+//	firstList.clear();
+//	firstList = { 5, 3, 1, 12, 4, 8, 9 };
+//
+//	firstList.sort();
+//
+//	EXPECT_TRUE(std::is_sorted(firstList.begin(), firstList.end()) == true);
 }
 
 #pragma endregion ListTests
