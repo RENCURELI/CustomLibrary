@@ -628,10 +628,10 @@ public:
 			}
 
 			ListNode<T>* newHead = other.m_Head->m_Next;
-			if (comp(it.m_Ptr, other.m_Head))
+			// To improve, could possibly handle the first path properly and get rid of "else" path
+			if (comp(it.m_Ptr->m_Data, other.m_Head->m_Data))
 			{
-				it.m_Ptr->m_Next = other.m_Head;
-				other.m_Head->m_Previous = it.m_Ptr;
+				continue;
 			}
 			else
 			{
@@ -642,6 +642,12 @@ public:
 				{
 					it.m_Ptr->m_Previous->m_Next = other.m_Head;
 				}
+
+				it.m_Ptr->m_Previous = other.m_Head;
+
+				// other.cur < other.cur.next < this.cur
+				// Roll back iterator to newly inserted value
+				--it;
 			}
 
 			--other.m_Size;
@@ -655,7 +661,12 @@ public:
 			m_Tail->m_Next = other.m_Head;
 		}
 
+		// Make sure other is properly emptied
+		other.m_Head = nullptr;
+		other.m_Tail = nullptr;
+
 		m_Size += other.size();
+		other.m_Size = 0;
 	}
 
 	void merge(List<T>&& other)
