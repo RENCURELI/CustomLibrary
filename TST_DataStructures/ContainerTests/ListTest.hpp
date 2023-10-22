@@ -300,7 +300,10 @@ TEST(ListTest, Comparison)
 
 TEST(ListTest, Operations)
 {
+	// =====================================================================
 	// Unique
+	// =====================================================================
+
 	List<int> firstList{1, 2, 3, 4, 5};
 	List<int> secondList{1, 2, 2, 4, 5};
 	List<int> thirdList{1, 2, 2, 2, 5};
@@ -325,7 +328,9 @@ TEST(ListTest, Operations)
 	EXPECT_EQ(secondList.size(), 4);
 	EXPECT_EQ(thirdList.size(), 3);
 
+	// =====================================================================
 	// Unique ( with Predicate )
+	// =====================================================================
 
 	List<int> fourthList{1, 2, 3, 4, 5};
 	List<int> fithList{1, 2, 2, 4, 5};
@@ -357,7 +362,9 @@ TEST(ListTest, Operations)
 	EXPECT_EQ(fithList.size(), 3);
 	EXPECT_EQ(sixthList.size(), 3);
 
+	// =====================================================================
 	// List splice(const_iterator pos, List<T>&& other)
+	// =====================================================================
 
 	firstList.clear();
 	firstList = { 1, 2, 3, 4, 5, 6, 7 };
@@ -380,7 +387,36 @@ TEST(ListTest, Operations)
 
 	EXPECT_TRUE(std::find(firstList.begin(), firstList.end(), -3) != firstList.end());
 
+	// =====================================================================
+	// List splice(const_iterator pos, List<T>&& other, const_iterator it)
+	// =====================================================================
+
+	firstList.clear();
+	firstList = { 1, 2, 3, 4, 5, 6, 7 };
+
+	EXPECT_EQ(firstList.size(), 7);
+	EXPECT_FALSE(std::find(firstList.begin(), firstList.end(), -3) != firstList.end());
+
+	secondList.clear();
+	secondList = { -1, -2, -3, -4 };
+
+	EXPECT_EQ(secondList.size(), 4);
+
+	it = firstList.begin();
+	auto secondIt = secondList.begin();
+	std::advance(it, 6);
+	firstList.splice(it, std::move(secondList), secondIt);
+
+	EXPECT_EQ(firstList.size(), 8);
+	EXPECT_EQ(secondList.size(), 3);
+	EXPECT_EQ(secondList.front(), -2);
+
+	EXPECT_FALSE(std::find(firstList.begin(), firstList.end(), -3) != firstList.end());
+	EXPECT_TRUE(std::find(firstList.begin(), firstList.end(), -1) != firstList.end());
+
+	// =====================================================================
 	// List merge ( already sorted )
+	// =====================================================================
 
 	firstList.clear();
 	firstList = { 10, 20, 30, 40, 50, 60, 70 };
@@ -408,12 +444,12 @@ TEST(ListTest, Operations)
 // 	EXPECT_EQ(test.front(), 1);
 
 	// List Sort
-//	firstList.clear();
-//	firstList = { 5, 3, 1, 12, 4, 8, 9 };
-//
-//	firstList.sort();
-//
-//	EXPECT_TRUE(std::is_sorted(firstList.begin(), firstList.end()) == true);
+// 	firstList.clear();
+// 	firstList = { 5, 3, 1, 12, 4, 8, 9 };
+// 
+// 	firstList.sort();
+// 
+// 	EXPECT_TRUE(std::is_sorted(firstList.begin(), firstList.end()) == true);
 }
 
 #pragma endregion ListTests

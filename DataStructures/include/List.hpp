@@ -567,7 +567,44 @@ public:
 
 	void splice(const_iterator pos, List<T>&& other, const_iterator it)
 	{
+		if (pos == nullptr)
+		{
+			return;
+		}
 
+		if (std::addressof(other) == this || it == nullptr)
+		{
+			return;
+		}
+
+		// Reroute pointers from nodes before and after 'it' in 'other' list
+		if (it.m_Ptr->m_Previous != nullptr)
+		{
+			it.m_Ptr->m_Previous->m_Next = it.m_Ptr->m_Next;
+		}
+		// We assume that if previous is nullptr, we are looking at the head node
+		else
+		{
+			other.m_Head = it.m_Ptr->m_Next;
+		}
+
+		if (it.m_Ptr->m_Next != nullptr)
+		{
+			it.m_Ptr->m_Next->m_Previous = it.m_Ptr->m_Previous;
+		}
+		// We assume that if next is nullptr, we are looking at the tail node
+		else
+		{
+			other.m_Tail = it.m_Ptr->m_Previous;
+		}
+
+		// Inserting 'it' into this list
+		pos.m_Ptr->m_Previous->m_Next = it.m_Ptr;
+		it.m_Ptr->m_Next = pos.m_Ptr;
+		it.m_Ptr->m_Previous = pos.m_Ptr->m_Previous;
+
+		++m_Size;
+		--other.m_Size;
 	}
 
 	void splice(const_iterator pos, List<T>&& other, const_iterator first, const_iterator last)
@@ -630,7 +667,7 @@ public:
 	template<class Compare>
 	void sort(Compare comp)
 	{
-		MergeSort(this, comp);
+		MergeSort(m_Head, comp);
 	}
 
 	void sort()
@@ -737,24 +774,72 @@ private:
 	}
 
 	template<class Compare>
-	List<T>* MergeSort(List<T>* start, Compare comp)
+	ListNode_t<T>* MergeSort(ListNode_t<T>* start, Compare comp)
 	{
-		if (start == nullptr || start->empty() || start->size() == 1)
+		// We only have one node, return it
+		if (start->m_Next == nullptr)
 		{
 			return start;
 		}
 
-		iterator startPoint = start->begin();
-		iterator rightStart = std::next(start->begin(), start->size() / 2);
-		List<T>* leftHalf = new List<T>(startPoint, rightStart);
-		List<T>* rightHalf = new List<T>(rightStart, start->end());
+		// Split the list in two
+		ListNode_t<T>* midPoint = DivideList(start);
+		ListNode_t<T>* secondHalf = midPoint->m_Next;
+		midPoint->m_Next = nullptr;
+		secondHalf->m_Previous = nullptr;
 
-		leftHalf = MergeSort(leftHalf, comp);
-		rightHalf = MergeSort(rightHalf, comp);
+		return FinalMerge(MergeSort(midPoint, comp), MergeSort(secondHalf, comp), comp);
+	}
 
-		leftHalf->merge(std::move(*rightHalf));
+	template<class Compare>
+	ListNode_t<T>* FinalMerge(ListNode_t<T>* start, ListNode_t<T>* mid, Compare comp)
+	{
+		ListNode_t<T>* firstHalf = new ListNode_t<T>(T());
+		ListNode_t<T>* secondHalf = new ListNode_t<T>(T());
 
-		return leftHalf;
+		firstHalf = secondHalf;
+
+		while (start != nullptr && mid != nullptr)
+		{
+			if (comp(start->m_Data, mid->m_Data))
+			{
+				secondHalf->m_Next = start;
+				start = start->m_Next;
+			}
+			else
+			{
+				secondHalf->m_Next = mid;
+				mid = mid->m_Next;
+			}
+			secondHalf = secondHalf->m_Next;
+		}
+
+		if (start != nullptr)
+		{
+			secondHalf->m_Next = start;
+		}
+
+		if (mid != nullptr)
+		{
+			secondHalf->m_Next = mid;
+		}
+
+		return firstHalf->m_Next;
+	}
+
+	// We return the mid point of the list
+	ListNode_t<T>* DivideList(ListNode_t<T>* head)
+	{
+		ListNode_t<T>* slowPtr = head;
+		ListNode_t<T>* fastPtr = head;
+
+		do
+		{
+			slowPtr = slowPtr->m_Next;
+			fastPtr = fastPtr->m_Next->m_Next;
+		} while (fastPtr != nullptr && fastPtr->m_Next != nullptr);
+
+		return slowPtr;
 	}
 
 private:
