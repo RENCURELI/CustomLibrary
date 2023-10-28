@@ -788,7 +788,7 @@ private:
 	ListNode_t<T>* MergeSort(ListNode_t<T>* start, Compare comp)
 	{
 		// We only have one node, return it
-		if (start->m_Next == nullptr)
+		if (start == nullptr || start->m_Next == nullptr)
 		{
 			return start;
 		}
@@ -797,9 +797,12 @@ private:
 		ListNode_t<T>* midPoint = DivideList(start);
 		ListNode_t<T>* secondHalf = midPoint->m_Next;
 		midPoint->m_Next = nullptr;
-		secondHalf->m_Previous = nullptr;
+		if (secondHalf != nullptr)
+		{
+			secondHalf->m_Previous = nullptr;
+		}
 
-		return FinalMerge(MergeSort(midPoint, comp), MergeSort(secondHalf, comp), comp);
+		return FinalMerge(MergeSort(start, comp), MergeSort(secondHalf, comp), comp);
 	}
 
 	template<class Compare>
@@ -842,13 +845,13 @@ private:
 	ListNode_t<T>* DivideList(ListNode_t<T>* head)
 	{
 		ListNode_t<T>* slowPtr = head;
-		ListNode_t<T>* fastPtr = head;
+		ListNode_t<T>* fastPtr = head->m_Next;
 
-		do
+		while (fastPtr != nullptr && fastPtr->m_Next != nullptr)
 		{
 			slowPtr = slowPtr->m_Next;
 			fastPtr = fastPtr->m_Next->m_Next;
-		} while (fastPtr != nullptr && fastPtr->m_Next != nullptr);
+		}
 
 		return slowPtr;
 	}

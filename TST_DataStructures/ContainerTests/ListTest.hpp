@@ -438,18 +438,13 @@ TEST(ListTest, Operations)
 	EXPECT_TRUE(std::find(firstList.begin(), firstList.end(), 23) != firstList.end());
 	EXPECT_TRUE(std::is_sorted(firstList.begin(), firstList.end()));
 
-
-// 	std::list<int> test = { 4, 9, 1, 3, 2 };
-// 	test.sort();
-// 	EXPECT_EQ(test.front(), 1);
-
 	// List Sort
-// 	firstList.clear();
-// 	firstList = { 5, 3, 1, 12, 4, 8, 9 };
-// 
-// 	firstList.sort();
-// 
-// 	EXPECT_TRUE(std::is_sorted(firstList.begin(), firstList.end()) == true);
+	firstList.clear();
+	firstList = { 5, 3, 1, 12, 4, 8, 9 };
+
+	firstList.sort();
+
+	EXPECT_TRUE(std::is_sorted(firstList.begin(), firstList.end()) == true);
 }
 
 #pragma endregion ListTests
