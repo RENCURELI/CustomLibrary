@@ -678,7 +678,7 @@ public:
 	template<class Compare>
 	void sort(Compare comp)
 	{
-		MergeSort(m_Head, comp);
+		m_Head = MergeSort(m_Head, comp);
 	}
 
 	void sort()
