@@ -607,9 +607,60 @@ public:
 		--other.m_Size;
 	}
 
+	// WIP -> will probably need to refactor
 	void splice(const_iterator pos, List<T>&& other, const_iterator first, const_iterator last)
 	{
+		if (pos == nullptr)
+		{
+			return;
+		}
 
+		// For now, do nothing, but according to standard -> constant time operation, so it must be legit
+		if (std::addressof(other) == this)
+		{
+
+			return;
+		}
+
+		if (pos.m_Ptr->m_Previous != nullptr)
+		{
+			pos.m_Ptr->m_Previous->m_Next = first.m_Ptr;
+		}
+		else
+		{
+			m_Head = first.m_Ptr; // We assume we are at the head if we don't have a previous node
+		}
+
+		if (first.m_Ptr->m_Previous != nullptr)
+		{
+			first.m_Ptr->m_Previous->m_Next = last.m_Ptr; // We link to last as we splice [first, last)
+		}
+		else
+		{
+			other.m_Head = last.m_Ptr; // We update the head of "other"
+		}
+
+		// If we are not on the end() iterator, we plug it back
+		if (last.m_Ptr != nullptr)
+		{
+			last.m_Ptr->m_Previous = first.m_Ptr->m_Previous;
+		}
+		else
+		{
+			other.m_Tail = first.m_Ptr->m_Previous;
+		}
+
+		first.m_Ptr->m_Previous = pos.m_Ptr->m_Previous;
+
+		size_t i = 0;
+		for (; first != last; ++first)
+		{
+			++i;
+		}
+
+		// We update the size
+		other.m_Size -= i;
+		m_Size += i;
 	}
 
 	template<class Compare>
