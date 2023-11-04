@@ -56,3 +56,40 @@ TEST(SortTest, CustomPredicate)
 }
 
 #pragma endregion SortTests
+
+#pragma region IsSortedUntilTests
+// ================================================
+// =========   IS SORTED UNTIL TESTS   ============
+// ================================================
+
+TEST(IsSortedUntilTest, DefaultPredicate)
+{
+	std::vector<int> firstVec = { 0, 1, 2, 3, 4, 1, 2 }; // Sorted until 4
+	std::vector<int> secondVec = { 0, -1, -2, -3, -4 }; // Not sorted using std::less
+	std::vector<int> thirdVec = { 0, 1, 2, 3, 4, 5 }; // Sorted until end()
+
+	auto it = IsSortedUntil(firstVec.begin(), firstVec.end());
+	EXPECT_EQ(*it, 1);
+
+	it = std::is_sorted_until(firstVec.begin(), firstVec.end());
+	EXPECT_EQ(*it, 1);
+
+	it = IsSortedUntil(secondVec.begin(), secondVec.end());
+	EXPECT_TRUE(it == std::next(secondVec.begin()));
+
+	it = std::is_sorted_until(secondVec.begin(), secondVec.end());
+	EXPECT_TRUE(it == std::next(secondVec.begin()));
+
+	it = IsSortedUntil(thirdVec.begin(), thirdVec.end());
+	EXPECT_TRUE(it == thirdVec.end());
+
+	it = std::is_sorted_until(thirdVec.begin(), thirdVec.end());
+	EXPECT_TRUE(it == thirdVec.end());
+}
+
+TEST(IsSortedUntilTest, CustomPredicatePredicate)
+{
+
+}
+
+#pragma endregion IsSortedUntilTests
