@@ -15,13 +15,20 @@ Done Algorithms :
   - Find
     
 In Progress :
-  - Sort
+  - Sort ( forward_list still missing )
+  - FList :
+    - Splice_after
+    - Merge
+    - Sort
+    - Unique
 
 TODO Data Structures :
   - Allocators ( yes, I'm starting to get sidetracked, but I'm curious )
     - If Allocators are done -> Vector - Emplace
   - Set
+  - Unordered_Set
   - Map
+  - Unordered_Map
   - Tuple
   - Graphs ( Binary tree, Heap, etc... )
 
@@ -29,6 +36,10 @@ TODO Algorithms :
   - Dijkstra
   - A*
   - To Be Determined ( Not sure what algorithms could be useful )
+  - Reverse
+  - Remove
+  - Is_Sorted
+  - Is_Heap
   
 TODO Maths :
   - Vector ( 2, 3 and 4 )
