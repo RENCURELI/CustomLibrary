@@ -113,3 +113,42 @@ TEST(IsSortedUntilTest, CustomPredicatePredicate)
 }
 
 #pragma endregion IsSortedUntilTests
+
+#pragma region IsSortedTests
+// ================================================
+// ============   IS SORTED TESTS   ===============
+// ================================================
+
+TEST(IsSortedTest, DefaultPredicate)
+{
+	std::vector<int> firstVec = { 0, 1, 2, 3, 4, 1, 2 }; // Sorted until 4
+	std::vector<int> secondVec = { 0, -1, -2, -3, -4 }; // Not sorted using std::less
+	std::vector<int> thirdVec = { 0, 1, 2, 3, 4, 5 }; // Sorted until end()
+
+	EXPECT_FALSE(IsSorted(firstVec.begin(), firstVec.end()) == true);
+	EXPECT_FALSE(std::is_sorted(firstVec.begin(), firstVec.end()) == true);
+
+	EXPECT_FALSE(IsSorted(secondVec.begin(), secondVec.end()) == true);
+	EXPECT_FALSE(std::is_sorted(secondVec.begin(), secondVec.end()) == true);
+
+	EXPECT_TRUE(IsSorted(thirdVec.begin(), thirdVec.end()) == true);
+	EXPECT_TRUE(std::is_sorted(thirdVec.begin(), thirdVec.end()) == true);
+}
+
+TEST(IsSortedTest, CustomPredicate)
+{
+	std::vector<int> firstVec = { 4, 3, 2, 1, 0, 1, 5 }; // Sorted until 0
+	std::vector<int> secondVec = { 0, 1, 2, 3, 4 }; // Not sorted using std::greater
+	std::vector<int> thirdVec = { 5, 4, 3, 2, 1, 0 }; // Sorted until end()
+
+	EXPECT_FALSE(IsSorted(firstVec.begin(), firstVec.end(), std::greater<>{}) == true);
+	EXPECT_FALSE(std::is_sorted(firstVec.begin(), firstVec.end(), std::greater<>{}) == true);
+
+	EXPECT_FALSE(IsSorted(secondVec.begin(), secondVec.end(), std::greater<>{}) == true);
+	EXPECT_FALSE(std::is_sorted(secondVec.begin(), secondVec.end(), std::greater<>{}) == true);
+
+	EXPECT_TRUE(IsSorted(thirdVec.begin(), thirdVec.end(), std::greater<>{}) == true);
+	EXPECT_TRUE(std::is_sorted(thirdVec.begin(), thirdVec.end(), std::greater<>{}) == true);
+}
+
+#pragma endregion IsSortedTests

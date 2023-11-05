@@ -9,7 +9,8 @@
 // ==============   SORT   ==============
 // ======================================
 
-// Used when running async find on contiguous iterator containers
+// This is currently the implementation of sort_heap -> form the Heap Operations -> https://en.cppreference.com/w/cpp/algorithm#Heap_operations
+// Standard sort uses Introsort -> https://en.wikipedia.org/wiki/Introsort  ( TODO : Update Sort to use Introsort once HeapSort method is implemented )
 template<std::random_access_iterator RandomIt, class Compare>
 void Sort(RandomIt first, RandomIt last, Compare comp)
 {
@@ -32,18 +33,12 @@ void Sort(RandomIt first, RandomIt last)
 // ======================================
 
 
-
-// ======================================
-// ===========   IS SORTED   ============
-// ======================================
-
-
 // ======================================
 // ========   IS SORTED UNTIL   =========
 // ======================================
 
 template<std::forward_iterator ForwardIt, class Compare>
-ForwardIt IsSortedUntil(ForwardIt first, ForwardIt last, Compare comp)
+constexpr ForwardIt IsSortedUntil(ForwardIt first, ForwardIt last, Compare comp)
 {
 	if (first != last)
 	{
@@ -63,9 +58,24 @@ ForwardIt IsSortedUntil(ForwardIt first, ForwardIt last, Compare comp)
 	return last;
 }
 
+template<std::forward_iterator ForwardIt>
+constexpr ForwardIt IsSortedUntil(ForwardIt first, ForwardIt last)
+{
+	return IsSortedUntil(first, last, std::less<>{});
+}
+
+// ======================================
+// ===========   IS SORTED   ============
+// ======================================
+
+template<std::forward_iterator ForwardIt, class Compare>
+constexpr bool IsSorted(ForwardIt first, ForwardIt last, Compare comp)
+{
+	return IsSortedUntil(first, last, comp) == last;
+}
 
 template<std::forward_iterator ForwardIt>
-ForwardIt IsSortedUntil(ForwardIt first, ForwardIt last)
+constexpr bool IsSorted(ForwardIt first, ForwardIt last)
 {
-	return IsSortedUntil(first, last, std::less_equal<>{});
+	return IsSorted(first, last, std::less<>{});
 }
