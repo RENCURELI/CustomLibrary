@@ -89,7 +89,27 @@ TEST(IsSortedUntilTest, DefaultPredicate)
 
 TEST(IsSortedUntilTest, CustomPredicatePredicate)
 {
+	std::vector<int> firstVec = { 4, 3, 2, 1, 0, 1, 5 }; // Sorted until 0
+	std::vector<int> secondVec = { 0, 1, 2, 3, 4 }; // Not sorted using std::greater
+	std::vector<int> thirdVec = { 5, 4, 3, 2, 1, 0 }; // Sorted until end()
 
+	auto it = IsSortedUntil(firstVec.begin(), firstVec.end(), std::greater<>{});
+	EXPECT_EQ(*it, 1);
+
+	it = std::is_sorted_until(firstVec.begin(), firstVec.end(), std::greater<>{});
+	EXPECT_EQ(*it, 1);
+
+	it = IsSortedUntil(secondVec.begin(), secondVec.end(), std::greater<>{});
+	EXPECT_TRUE(it == std::next(secondVec.begin()));
+
+	it = std::is_sorted_until(secondVec.begin(), secondVec.end(), std::greater<>{});
+	EXPECT_TRUE(it == std::next(secondVec.begin()));
+
+	it = IsSortedUntil(thirdVec.begin(), thirdVec.end(), std::greater<>{});
+	EXPECT_TRUE(it == thirdVec.end());
+
+	it = std::is_sorted_until(thirdVec.begin(), thirdVec.end(), std::greater<>{});
+	EXPECT_TRUE(it == thirdVec.end());
 }
 
 #pragma endregion IsSortedUntilTests

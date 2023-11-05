@@ -615,12 +615,32 @@ public:
 			return;
 		}
 
-		// For now, do nothing, but according to standard -> constant time operation, so it must be legit
 		if (std::addressof(other) == this)
 		{
+			// We save the iterator before first element to splice
+			const_iterator firstPrev = first.m_Ptr->m_Previous;
+
+			// We reroute first to be after poses previous node
+			pos.m_Ptr->m_Previous->m_Next = first.m_Ptr;
+			first.m_Ptr->m_Previous = pos.m_Ptr->m_Previous;
+
+			// We make lasts previous node to be poses previous node
+			pos.m_Ptr->m_Previous = last.m_Ptr->m_Previous;
+			last.m_Ptr->m_Previous->m_Next = pos.m_Ptr;
+
+			// We make firsts original previous node to be lasts previous node
+			last.m_Ptr->m_Previous = firstPrev.m_Ptr;
+			last.m_Ptr->m_Previous->m_Next = last.m_Ptr;
 
 			return;
 		}
+
+		ptrdiff_t i = 0;
+		i = std::distance(first, last);
+
+		// We update the size
+		other.m_Size -= i;
+		m_Size += i;
 
 		if (pos.m_Ptr->m_Previous != nullptr)
 		{
@@ -643,6 +663,7 @@ public:
 		// If we are not on the end() iterator, we plug it back
 		if (last.m_Ptr != nullptr)
 		{
+			last.m_Ptr->m_Previous->m_Next = pos.m_Ptr;
 			last.m_Ptr->m_Previous = first.m_Ptr->m_Previous;
 		}
 		else
@@ -651,16 +672,6 @@ public:
 		}
 
 		first.m_Ptr->m_Previous = pos.m_Ptr->m_Previous;
-
-		size_t i = 0;
-		for (; first != last; ++first)
-		{
-			++i;
-		}
-
-		// We update the size
-		other.m_Size -= i;
-		m_Size += i;
 	}
 
 	template<class Compare>

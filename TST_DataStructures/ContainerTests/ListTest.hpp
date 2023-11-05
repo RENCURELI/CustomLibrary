@@ -298,6 +298,7 @@ TEST(ListTest, Comparison)
 	EXPECT_EQ(firstList <=> diffList, std::strong_ordering::greater);
 }
 
+// Might want to seperate Splice tests and improve coverage
 TEST(ListTest, Operations)
 {
 	// =====================================================================
@@ -413,6 +414,34 @@ TEST(ListTest, Operations)
 
 	EXPECT_FALSE(std::find(firstList.begin(), firstList.end(), -3) != firstList.end());
 	EXPECT_TRUE(std::find(firstList.begin(), firstList.end(), -1) != firstList.end());
+
+	// =====================================================================
+	// List splice(const_iterator pos, List<T>&& other, const_iterator first, const_iterator last)
+	// =====================================================================
+
+	firstList.clear();
+	firstList = { 1, 2, 3, 4, 5, 6, 7 };
+
+	EXPECT_EQ(firstList.size(), 7);
+	EXPECT_FALSE(std::find(firstList.begin(), firstList.end(), -3) != firstList.end());
+
+	secondList.clear();
+	secondList = { -1, -2, -3, -4 };
+
+	EXPECT_EQ(secondList.size(), 4);
+
+	it = firstList.begin();
+	secondIt = secondList.begin();
+	std::advance(it, 6);
+	std::advance(secondIt, 2);
+	firstList.splice(it, std::move(secondList), secondList.cbegin(), secondIt);
+
+	EXPECT_EQ(firstList.size(), 9);
+	EXPECT_EQ(secondList.size(), 2);
+	EXPECT_EQ(secondList.front(), -3);
+
+	EXPECT_FALSE(std::find(firstList.begin(), firstList.end(), -3) != firstList.end());
+	EXPECT_TRUE(std::find(firstList.begin(), firstList.end(), -2) != firstList.end());
 
 	// =====================================================================
 	// List merge ( already sorted )
