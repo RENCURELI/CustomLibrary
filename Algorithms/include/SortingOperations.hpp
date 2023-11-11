@@ -32,6 +32,30 @@ void Sort(RandomIt first, RandomIt last)
 // ==========   STABLE SORT   ===========
 // ======================================
 
+// The STL implementation is a Timsort -> https://en.wikipedia.org/wiki/Timsort
+// For now, it will be an insertion sort
+template<std::random_access_iterator RandomIt, class Compare>
+void StableSort(RandomIt first, RandomIt last, Compare comp)
+{
+	RandomIt oldFirst = first;
+	for (; first != last; ++first)
+	{
+		size_t len = std::distance(oldFirst, first);
+		size_t j = 1;
+		// first - ( j - 1 ) -> allows us to follow the currently evaluated element down the container until it falls into place
+		while (j <= len && comp(*(first - (j - 1)), *(first - j)))
+		{
+			std::swap(*(first - (j-1)), *(first - j));
+			++j;
+		}
+	}
+}
+
+template<std::random_access_iterator RandomIt>
+void StableSort(RandomIt first, RandomIt last)
+{
+	StableSort(first, last, std::less<>{});
+}
 
 // ======================================
 // ========   IS SORTED UNTIL   =========

@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <vector>
 #include <deque>
+#include <string>
 
 #pragma region SortTests
 // ================================================
@@ -56,6 +57,91 @@ TEST(SortTest, CustomPredicate)
 }
 
 #pragma endregion SortTests
+
+#pragma region StableSortTests
+// ================================================
+// ===========   STABLE SORT TESTS   ==============
+// ================================================
+
+TEST(StableSortTest, DefaultPredicate)
+{
+	struct Person 
+	{
+		int age;
+		std::string name;
+
+		bool operator==(const Person& rhs) const { return this->age == rhs.age; }
+		bool operator!=(const Person& rhs) const { return !(this->age == rhs.age); }
+		bool operator<(const Person& rhs) const { return this->age < rhs.age; }
+		bool operator>(const Person& rhs) const { return rhs.age < this->age; }
+		bool operator<=(const Person& rhs) const { return !(rhs.age < this->age); }
+		bool operator>=(const Person& rhs) const { return !(this->age < rhs.age); }
+	};
+
+	Person jimmy = { 10, "Jimmy" };
+	Person nicolas = { 8, "Nicolas" };
+	Person kevin = { 5, "Kevin" };
+	Person theo = { 10, "Theo" };
+	std::vector<Person> testVec = { jimmy, nicolas, kevin, theo };
+	std::vector<Person> otherVec = { jimmy, nicolas, kevin, theo };
+
+	EXPECT_EQ(testVec.front().name, "Jimmy");
+	EXPECT_EQ(testVec.back().name, "Theo");
+
+	EXPECT_EQ(otherVec.front().name, "Jimmy");
+	EXPECT_EQ(otherVec.back().name, "Theo");
+
+	StableSort(testVec.begin(), testVec.end());
+
+	EXPECT_EQ(testVec.front().name, "Kevin");
+	EXPECT_EQ(testVec.back().name, "Theo");
+
+	std::stable_sort(otherVec.begin(), otherVec.end());
+
+	EXPECT_EQ(otherVec.front().name, "Kevin");
+	EXPECT_EQ(otherVec.back().name, "Theo");
+}
+
+TEST(StableSortTest, CustomPredicate)
+{
+	struct Person
+	{
+		int age;
+		std::string name;
+
+		bool operator==(const Person& rhs) const { return this->age == rhs.age; }
+		bool operator!=(const Person& rhs) const { return !(this->age == rhs.age); }
+		bool operator<(const Person& rhs) const { return this->age < rhs.age; }
+		bool operator>(const Person& rhs) const { return rhs.age < this->age; }
+		bool operator<=(const Person& rhs) const { return !(rhs.age < this->age); }
+		bool operator>=(const Person& rhs) const { return !(this->age < rhs.age); }
+	};
+
+	Person jimmy = { 10, "Jimmy" };
+	Person nicolas = { 8, "Nicolas" };
+	Person kevin = { 5, "Kevin" };
+	Person theo = { 10, "Theo" };
+	std::vector<Person> testVec = { jimmy, nicolas, kevin, theo };
+	std::vector<Person> otherVec = { jimmy, nicolas, kevin, theo };
+
+	EXPECT_EQ(testVec.front().name, "Jimmy");
+	EXPECT_EQ(testVec.back().name, "Theo");
+
+	EXPECT_EQ(otherVec.front().name, "Jimmy");
+	EXPECT_EQ(otherVec.back().name, "Theo");
+
+	StableSort(testVec.begin(), testVec.end(), std::greater<>{});
+
+	EXPECT_EQ(testVec.front().name, "Jimmy");
+	EXPECT_EQ(testVec.back().name, "Kevin");
+
+	std::stable_sort(otherVec.begin(), otherVec.end(), std::greater<>{});
+
+	EXPECT_EQ(otherVec.front().name, "Jimmy");
+	EXPECT_EQ(otherVec.back().name, "Kevin");
+}
+
+#pragma endregion StableSortTests
 
 #pragma region IsSortedUntilTests
 // ================================================
