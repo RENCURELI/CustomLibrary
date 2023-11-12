@@ -103,3 +103,21 @@ constexpr bool IsSorted(ForwardIt first, ForwardIt last)
 {
 	return IsSorted(first, last, std::less<>{});
 }
+
+// ======================================
+// ==========   NTH ELEMENT   ===========
+// ======================================
+
+// Uses IntroSelect -> https://en.wikipedia.org/wiki/Introselect
+// First implementation will use median of medians -> https://en.wikipedia.org/wiki/Median_of_medians
+template<std::random_access_iterator RandomIt, class Compare>
+void NthElement(RandomIt first, RandomIt nth, RandomIt last, Compare comp)
+{
+
+}
+
+template<std::random_access_iterator RandomIt>
+void NthElement(RandomIt first, RandomIt nth, RandomIt last)
+{
+
+}
