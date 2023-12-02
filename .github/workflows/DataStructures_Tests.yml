@@ -12,9 +12,9 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Configure
-      run: cmake -DCMAKE_CXX_COMPILER=g++ -DCMAKE_C_COMPILER=gcc
-    - name: cmake build
-      run: cmake .
+      run: cmake . --version=3.28 -DCMAKE_CXX_COMPILER=g++ -DCMAKE_C_COMPILER=gcc
+    #- name: cmake build
+     # run: cmake .
     - name: cmake make
       run: cmake --build . --target ALL_BUILD
     - name: List Files
