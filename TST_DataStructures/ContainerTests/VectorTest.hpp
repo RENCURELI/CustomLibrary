@@ -202,7 +202,9 @@ TEST(VectorTest, Deletion)
 	EXPECT_THROW(testVec[0], std::exception);
 
 	for (int i = 0; i < 100; i++)
+	{
 		testVec.pop_back();
+	}
 	EXPECT_EQ(testVec.size(), 0);
 
 	testVec = { 1, 2, 3, 4, 5 };

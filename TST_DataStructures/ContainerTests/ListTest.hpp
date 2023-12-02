@@ -5,6 +5,7 @@
 #include <list>
 
 #include "List.hpp"
+#include "HelperFuncs.hpp"
 
 #pragma region ListTests
 // ================================================
@@ -205,8 +206,7 @@ TEST(ListTest, InsertAndRemove)
 	// iterator erase(const_iterator pos)
 	// =====================================================================
 	
-	testList.clear();
-	testList = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+	ClearAndFill(testList, { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
 
 	// iterator setup
 	it = testList.begin();
@@ -223,8 +223,7 @@ TEST(ListTest, InsertAndRemove)
 	// iterator erase(const_iterator first, const_iterator last)
 	// =====================================================================
 
-	testList.clear();
-	testList = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+	ClearAndFill(testList, { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 });
 
 	// iterator setup
 	it = testList.begin();
@@ -367,14 +366,12 @@ TEST(ListTest, Operations)
 	// List splice(const_iterator pos, List<T>&& other)
 	// =====================================================================
 
-	firstList.clear();
-	firstList = { 1, 2, 3, 4, 5, 6, 7 };
+	ClearAndFill(firstList, { 1, 2, 3, 4, 5, 6, 7 });
 
 	EXPECT_EQ(firstList.size(), 7);
 	EXPECT_FALSE(std::find(firstList.begin(), firstList.end(), -3) != firstList.end());
 
-	secondList.clear();
-	secondList = { -1, -2, -3, -4 };
+	ClearAndFill(secondList, { -1, -2, -3, -4 });
 
 	EXPECT_EQ(secondList.size(), 4);
 
@@ -392,14 +389,12 @@ TEST(ListTest, Operations)
 	// List splice(const_iterator pos, List<T>&& other, const_iterator it)
 	// =====================================================================
 
-	firstList.clear();
-	firstList = { 1, 2, 3, 4, 5, 6, 7 };
+	ClearAndFill(firstList, { 1, 2, 3, 4, 5, 6, 7 });
 
 	EXPECT_EQ(firstList.size(), 7);
 	EXPECT_FALSE(std::find(firstList.begin(), firstList.end(), -3) != firstList.end());
 
-	secondList.clear();
-	secondList = { -1, -2, -3, -4 };
+	ClearAndFill(secondList, { -1, -2, -3, -4 });
 
 	EXPECT_EQ(secondList.size(), 4);
 
@@ -419,14 +414,12 @@ TEST(ListTest, Operations)
 	// List splice(const_iterator pos, List<T>&& other, const_iterator first, const_iterator last)
 	// =====================================================================
 
-	firstList.clear();
-	firstList = { 1, 2, 3, 4, 5, 6, 7 };
+	ClearAndFill(firstList, { 1, 2, 3, 4, 5, 6, 7 });
 
 	EXPECT_EQ(firstList.size(), 7);
 	EXPECT_FALSE(std::find(firstList.begin(), firstList.end(), -3) != firstList.end());
 
-	secondList.clear();
-	secondList = { -1, -2, -3, -4 };
+	ClearAndFill(secondList, { -1, -2, -3, -4 });
 
 	EXPECT_EQ(secondList.size(), 4);
 
@@ -447,15 +440,13 @@ TEST(ListTest, Operations)
 	// List merge ( already sorted )
 	// =====================================================================
 
-	firstList.clear();
-	firstList = { 10, 20, 30, 40, 50, 60, 70 };
+	ClearAndFill(firstList, { 10, 20, 30, 40, 50, 60, 70 });
 
 	EXPECT_EQ(firstList.size(), 7);
 	EXPECT_FALSE(std::find(firstList.begin(), firstList.end(), 23) != firstList.end());
 	EXPECT_TRUE(std::is_sorted(firstList.begin(), firstList.end()));
 
-	secondList.clear();
-	secondList = { 15, 21, 23, 74 };
+	ClearAndFill(secondList, { 15, 21, 23, 74 });
 
 	EXPECT_EQ(secondList.size(), 4);
 	EXPECT_TRUE(std::is_sorted(secondList.begin(), secondList.end()));
@@ -471,8 +462,7 @@ TEST(ListTest, Operations)
 	// List sort ( using std::less )
 	// =====================================================================
 
-	firstList.clear();
-	firstList = { 5, 3, 1, 12, 4, 8, 9 };
+	ClearAndFill(firstList, { 5, 3, 1, 12, 4, 8, 9 });
 
 	firstList.sort();
 
@@ -484,8 +474,7 @@ TEST(ListTest, Operations)
 	// List sort ( using std::greater )
 	// =====================================================================
 
-	firstList.clear();
-	firstList = { 5, 3, 1, 12, 4, 8, 9 };
+	ClearAndFill(firstList, { 5, 3, 1, 12, 4, 8, 9 });
 
 	firstList.sort(std::greater<>{});
 

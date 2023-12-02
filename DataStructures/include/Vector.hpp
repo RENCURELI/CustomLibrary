@@ -202,14 +202,14 @@ public:
 
 public:
 	// Default constructor creating a 4 item vector
-	Vector() 
+	Vector() noexcept
 	{
 		m_Buffer = new T[4];
 		m_Capacity = 4;
 		m_Size = 0;
 	}
 
-	Vector(std::initializer_list<T> l)
+	constexpr Vector(std::initializer_list<T> l)
 	{
 		m_Capacity = l.size();
 		m_Size = 0; // Size will grow as we add elements
@@ -222,13 +222,15 @@ public:
 		}
 	}
 
-	Vector(const Vector& other)
+	constexpr Vector(const Vector& other)
 	{
 		m_Capacity = other.size(); // We "shrink to fit" the size
 
 		// Realign capacity to a multiple of 2 for now, would want to realign on proper 4 * 2 ^ n capacity later
 		if ((m_Capacity & 0) != 0)
+		{
 			m_Capacity++;
+		}
 
 		m_Size = m_Capacity;
 		m_Buffer = new T[m_Capacity];
@@ -237,7 +239,7 @@ public:
 		memcpy_s(m_Buffer, sizeof(T) * m_Size, other.m_Buffer, sizeof(T) * other.m_Size);
 	}
 
-	Vector(size_type count, T data)
+	constexpr Vector(size_type count, T data)
 	{
 		if (count <= 0)
 		{
@@ -254,7 +256,7 @@ public:
 		}
 	}
 
-	Vector(size_type count)
+	constexpr explicit Vector(size_type count)
 	{
 		if (count <= 0)
 		{
@@ -268,6 +270,18 @@ public:
 		memset(m_Buffer, 0, sizeof(T) * m_Capacity);
 	}
 
+	// Must write test cases
+	template<std::input_iterator InputIt>
+	constexpr Vector(InputIt first, InputIt last)
+	{
+		reserve(static_cast<size_t>(std::distance(first, last)));
+
+		for (; first != last; ++first)
+		{
+			push_back(*first);
+		}
+	}
+
 	constexpr Vector(Vector&& other)
 		: m_Buffer{ std::exchange(other.m_Buffer, nullptr) }
 	{
@@ -275,32 +289,45 @@ public:
 		m_Size = other.size();
 	}
 
-	~Vector()
+	constexpr ~Vector()
 	{
 		delete[] m_Buffer;
 	}
 
-	void push_back(const T& value)
+	// TODO add move version
+	constexpr void push_back(const T& value)
 	{
 		if (m_Size == m_Capacity)
+		{
 			reserve(m_Capacity * 2);
+		}
 		m_Buffer[m_Size] = value;
 		m_Size++;
 	}
 	
-	void pop_back()
+	constexpr void pop_back()
 	{
 		if (m_Size == 0)
+		{
 			return;
+		}
 
 		back().~T();
 		m_Size--;
 	}
 
-	iterator insert(const_iterator pos, const T& data)
+	// TODO implement swap
+	constexpr void swap(Vector& other)
+	{
+
+	}
+
+	constexpr iterator insert(const_iterator pos, const T& data)
 	{
 		if (pos > cend())
+		{
 			throw std::out_of_range("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
+		}
 
 		// End points to the block of memory just after the last value
 		if (pos == cend())
@@ -311,7 +338,9 @@ public:
 		{
 			// We resize if needed
 			if (m_Size + 1 > m_Capacity)
+			{
 				reserve(m_Capacity * 2);
+			}
 
 			// We move the data after pos
 			const_iterator it = cend();
@@ -329,20 +358,26 @@ public:
 	}
 
 	// would replace size_t with the hypothetical size_type
-	iterator insert(const_iterator pos, size_type count, const T& value)
+	constexpr iterator insert(const_iterator pos, size_type count, const T& value)
 	{
 		if (pos > cend())
+		{
 			throw std::out_of_range("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
+		}
 
 		if (count == 0)
+		{
 			return makeIterator(pos.m_Ptr);
+		}
 
 		if (pos == cend())
 		{
 			iterator returnIt = end();
 
 			for (int i = 0; i < count; i++)
+			{
 				push_back(value);
+			}
 
 			return returnIt;
 		}
@@ -381,13 +416,17 @@ public:
 
 	// inserts [first last)
 	template<std::input_iterator InputIt>
-	iterator insert(const_iterator pos, InputIt first, InputIt last)
+	constexpr iterator insert(const_iterator pos, InputIt first, InputIt last)
 	{
 		if (pos > cend())
+		{
 			throw std::out_of_range("[ERROR] Index out of bounds, you will leave some indices unset -> this might cause issues");
+		}
 
 		if (first == last)
+		{
 			return makeIterator(pos.m_Ptr);
+		}
 
 		iterator returnedIt = makeIterator(pos.m_Ptr);
 		if (pos == cend())
@@ -430,12 +469,12 @@ public:
 		return returnedIt;
 	}
 
-	iterator insert(const_iterator pos, std::initializer_list<T> ilist)
+	constexpr iterator insert(const_iterator pos, std::initializer_list<T> ilist)
 	{
 		return insert(pos, ilist.begin(), ilist.end());
 	}
 
-	T& at(const size_type index)
+	constexpr T& at(const size_type index)
 	{
 		if (m_Size <= 0)
 			throw std::runtime_error("[ERROR] Trying to access empty container");
@@ -444,7 +483,7 @@ public:
 		return m_Buffer[index];
 	}
 
-	const T& at(const size_type index) const
+	constexpr const T& at(const size_type index) const
 	{
 		if (m_Size <= 0)
 			throw std::runtime_error("[ERROR] Trying to access empty container");
@@ -473,7 +512,9 @@ public:
 	iterator erase(iterator pos)
 	{
 		if (pos > end())
+		{
 			throw std::out_of_range("[ERROR] Index out of bounds");
+		}
 
 		const pointer ptr = pos.m_Ptr;
 
@@ -529,24 +570,24 @@ public:
 		return makeIterator(ptr);
 	}
 
-	inline const T& front() const { return m_Size > 0 ? this->m_Buffer[0] : throw std::runtime_error("[ERROR] Trying to access empty container"); }
-	inline T& front() { return m_Size > 0 ? this->m_Buffer[0] : throw std::runtime_error("[ERROR] Trying to access empty container"); }
-	inline const T& back() const { return m_Size > 0 ? this->m_Buffer[m_Size - 1] : throw std::runtime_error("[ERROR] Trying to access empty container"); }
-	inline T& back() { return m_Size > 0 ? this->m_Buffer[m_Size - 1] : throw std::runtime_error("[ERROR] Trying to access empty container"); }
-	inline const T* data() const { return m_Buffer; }
-	inline T* data() { return m_Buffer; }
-	inline size_type size() const { return m_Size; }
-	inline size_type max_size() const { return std::numeric_limits<size_t>::max(); }
-	inline size_type capacity() const { return m_Capacity; }
-	inline bool empty() const { return m_Size == 0; }
-	inline iterator begin() { return iterator(m_Buffer); }
-	inline const_iterator cbegin() const { return const_iterator(m_Buffer); }
-	inline reverse_iterator rbegin() { return reverse_iterator(end()); }
-	inline const_reverse_iterator crbegin() const { return const_reverse_iterator(cend()); }
-	inline iterator end() { return iterator(m_Buffer + m_Size); }
-	inline const_iterator cend() const { return const_iterator(m_Buffer + m_Size); }
-	inline reverse_iterator rend() { return reverse_iterator(begin()); }
-	inline const_reverse_iterator crend() const { return const_reverse_iterator(cbegin()); }
+	inline constexpr const T& front() const { return m_Size > 0 ? this->m_Buffer[0] : throw std::runtime_error("[ERROR] Trying to access empty container"); }
+	inline constexpr T& front() { return m_Size > 0 ? this->m_Buffer[0] : throw std::runtime_error("[ERROR] Trying to access empty container"); }
+	inline constexpr const T& back() const { return m_Size > 0 ? this->m_Buffer[m_Size - 1] : throw std::runtime_error("[ERROR] Trying to access empty container"); }
+	inline constexpr T& back() { return m_Size > 0 ? this->m_Buffer[m_Size - 1] : throw std::runtime_error("[ERROR] Trying to access empty container"); }
+	inline constexpr const T* data() const noexcept { return m_Buffer; }
+	inline constexpr T* data() noexcept { return m_Buffer; }
+	inline constexpr size_type size() const noexcept { return m_Size; }
+	inline constexpr size_type max_size() const noexcept { return std::numeric_limits<size_t>::max(); }
+	inline constexpr size_type capacity() const noexcept { return m_Capacity; }
+	[[nodiscard]] inline constexpr bool empty() const noexcept { return m_Size == 0; }
+	inline constexpr iterator begin() noexcept { return iterator(m_Buffer); }
+	inline constexpr const_iterator cbegin() const noexcept { return const_iterator(m_Buffer); }
+	inline constexpr reverse_iterator rbegin() noexcept { return reverse_iterator(end()); }
+	inline constexpr const_reverse_iterator crbegin() const noexcept { return const_reverse_iterator(cend()); }
+	inline constexpr iterator end() noexcept { return iterator(m_Buffer + m_Size); }
+	inline constexpr const_iterator cend() const noexcept { return const_iterator(m_Buffer + m_Size); }
+	inline constexpr reverse_iterator rend() noexcept { return reverse_iterator(begin()); }
+	inline constexpr const_reverse_iterator crend() const noexcept { return const_reverse_iterator(cbegin()); }
 
 	// Copy assign
 	Vector& operator=(const Vector& other)
@@ -595,18 +636,18 @@ public:
 		return *this;
 	}
 
-	T& operator[](size_type pos)
+	constexpr T& operator[](size_type pos)
 	{
 		return m_Size > 0 ? m_Buffer[pos] : throw std::runtime_error("[ERROR] Trying to access empty container");
 	}
 
-	const T& operator[](size_type pos) const
+	constexpr const T& operator[](size_type pos) const
 	{
 		return m_Size > 0 ? m_Buffer[pos] : throw std::runtime_error("[ERROR] Trying to access empty container");
 	}
 
 	// resize and move data from old position to new
-	void resize(size_type count)
+	constexpr void resize(size_type count)
 	{
 		if (count < m_Size)
 		{
@@ -618,7 +659,7 @@ public:
 		reserve(count);
 	}
 
-	void resize(size_type count, const T& value)
+	constexpr void resize(size_type count, const T& value)
 	{
 		if (count < m_Size)
 		{
@@ -638,10 +679,12 @@ public:
 	}
 
 	// If size is greater than the current capacity, new storage is allocated, otherwise the function does nothing. -> cppreference
-	void reserve(size_type count)
+	constexpr void reserve(size_type count)
 	{
 		if (count <= m_Capacity)
+		{
 			return;
+		}
 		else
 		{
 			m_Capacity = count;
@@ -649,7 +692,9 @@ public:
 
 			// We handle the case where we resize to a lower size than current size by discarding overflowing elements
 			if (m_Capacity < m_Size)
+			{
 				m_Size = m_Capacity;
+			}
 
 			for (size_type i = 0; i < m_Size; i++)
 			{
@@ -661,7 +706,7 @@ public:
 	}
 
 	// Reduces capacity to size
-	void shrink_to_fit()
+	constexpr void shrink_to_fit()
 	{
 		T* newBuffer = new T[m_Size];
 		memcpy_s(newBuffer, sizeof(T) * m_Size, m_Buffer, sizeof(T) * m_Size);

@@ -30,10 +30,10 @@ TEST(ArrayTest, ArrayAt)
 	EXPECT_EQ(testArray.at(testArray.size() - 1), testArray.back());
 
 	// Test for negative index
-	EXPECT_THROW(testArray.at(-1), std::exception);
+	EXPECT_THROW(testArray.at(-1), std::out_of_range);
 
 	// Test for negative overflowing index
-	EXPECT_THROW(testArray.at(testArray.size()), std::exception);
+	EXPECT_THROW(testArray.at(testArray.size()), std::out_of_range);
 
 	EXPECT_TRUE(std::is_sorted(testArray.begin(), testArray.end()) == true);
 }
@@ -57,7 +57,9 @@ TEST(ArrayTest, ArrayFill)
 	testArray.fill(12);
 
 	for (unsigned int i = 0; i < testArray.size(); i++)
+	{
 		EXPECT_EQ(testArray.at(i), 12);
+	}
 }
 
 TEST(ArrayTest, Assignment)

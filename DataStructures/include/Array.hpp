@@ -203,55 +203,63 @@ struct Array
 
 	T values[N];
 
-	T& operator[](size_t index)
+	constexpr T& operator[](size_t index)
 	{
 		if (index >= N)
+		{
 			throw std::out_of_range("[ERROR] Index out of bounds");
+		}
 
 		return values[index];
 	}
 
-	const T& operator[](size_t index) const
+	constexpr const T& operator[](size_t index) const
 	{
 		if (index >= N)
+		{
 			throw std::out_of_range("[ERROR] Index out of bounds");
+		}
 
 		return values[index];
 	}
 
-	inline const T& at(const size_t index) const 
+	inline constexpr const T& at(const size_t index) const 
 	{
 		if (index >= N)
+		{
 			throw std::out_of_range("[ERROR] Index out of bounds");
+		}
 
 		return values[index];
 	}
 
-	inline T& at(const size_t index)
+	inline constexpr T& at(const size_t index)
 	{
 		if (index >= N)
+		{
 			throw std::out_of_range("[ERROR] Index out of bounds");
+		}
 
 		return values[index];
 	}
 
-	inline size_t size() const { return N; }
-	inline size_t max_size() const { return N; }
-	inline bool empty() const { return N == 0; }
-	inline const T& front() const { return values[0]; }
-	inline T& front() { return values[0]; }
-	inline const T& back() const { return values[N - 1]; }
-	inline T& back() { return values[N - 1]; }
-	inline T* data() { return values; }
-	inline const T* data() const { return values; }
-	inline iterator begin() { return iterator(values); }
-	inline const_iterator cbegin() const { return const_iterator(values); }
-	inline reverse_iterator rbegin() { return reverse_iterator(end()); }
-	inline const_reverse_iterator crbegin() const { return const_reverse_iterator(cend()); }
-	inline iterator end() { return iterator(values, size()); }
-	inline const_iterator cend() const { return const_iterator(values, size()); }
-	inline reverse_iterator rend() { return reverse_iterator(begin()); }
-	inline const_reverse_iterator crend() const { return const_reverse_iterator(cbegin()); }
+	inline constexpr size_t size() const noexcept { return N; }
+	inline constexpr size_t max_size() const noexcept { return N; }
+	[[nodiscard]] inline constexpr bool empty() const noexcept { return N == 0; }
+	inline constexpr const T& front() const { return values[0]; }
+	inline constexpr T& front() { return values[0]; }
+	inline constexpr const T& back() const { return values[N - 1]; }
+	inline constexpr T& back() { return values[N - 1]; }
+	inline constexpr T* data() noexcept { return values; }
+	inline constexpr const T* data() const noexcept { return values; }
+	inline constexpr iterator begin() noexcept { return iterator(values); }
+	inline constexpr const_iterator cbegin() const noexcept { return const_iterator(values); }
+	inline constexpr reverse_iterator rbegin() noexcept { return reverse_iterator(end()); }
+	inline constexpr const_reverse_iterator crbegin() const noexcept { return const_reverse_iterator(cend()); }
+	inline constexpr iterator end() noexcept { return iterator(values, size()); }
+	inline constexpr const_iterator cend() const noexcept { return const_iterator(values, size()); }
+	inline constexpr reverse_iterator rend() noexcept { return reverse_iterator(begin()); }
+	inline constexpr const_reverse_iterator crend() const noexcept { return const_reverse_iterator(cbegin()); }
 
 	constexpr void fill(const T& val)
 	{
@@ -261,11 +269,8 @@ struct Array
 		}
 	}
 
-	constexpr void swap(Array& other)
+	constexpr void swap(Array& other) noexcept(std::is_nothrow_swappable_v<T>)
 	{
-		if (other.size() != size())
-			throw std::runtime_error("[ERROR] Trying to swap data through arrays of different sizes, this would cause out of bounds errors");
-		
 		for (size_t i = 0; i < size(); i++)
 		{
 			T temp = other[i];

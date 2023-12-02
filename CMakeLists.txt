@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.26)
+cmake_minimum_required(VERSION 3.28)
 project(Libraries CXX)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -20,6 +20,7 @@ add_subdirectory(TST_DataStructures)
 
 add_executable(Libraries
 TST_DataStructures/test.cpp
+TST_DataStructures/HelperFuncs.hpp
 TST_DataStructures/ContainerTests/ArrayTest.hpp
 TST_DataStructures/ContainerTests/DequeTest.hpp
 TST_DataStructures/ContainerTests/FListTest.hpp
@@ -45,3 +46,5 @@ include(GoogleTest)
 
 target_include_directories(Libraries INTERFACE DataStructures/include)
 target_include_directories(Libraries INTERFACE Algorithms/include)
+
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Libraries)
