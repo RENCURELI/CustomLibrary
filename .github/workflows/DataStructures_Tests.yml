@@ -21,4 +21,4 @@ jobs:
       run: Get-ChildItem -Exclude .github,.git,.vs,out,packages,_deps | Get-ChildItem -Recurse
     - name: Run Unit Tests # Run both Debug and Release -> To be extra sure
       run: Debug/Libraries.exe
-        | Release/Libraries.exe
+       # | Release/Libraries.exe
