@@ -12,10 +12,8 @@ jobs:
     - name: CMake Configure
       run: cmake -DCMAKE_CXX_COMPILER=g++ -DCMAKE_C_COMPILER=gcc . # This still doesn't work...
     - name: CMake Build # Build for Debug and Release -> to check for possible compilation errors
-      run: mkdir Debug
-        | cmake -DCMAKE_BUILD_TYPE=Debug .
+      run: cmake -DCMAKE_BUILD_TYPE=Debug .
         | cmake --build .
-        | mkdir Release
         | cmake -DCMAKE_BUILD_TYPE=Release
         | cmake --build .
     - name: List Files
