@@ -12,10 +12,11 @@ jobs:
     - name: CMake Configure
       run: cmake -DCMAKE_CXX_COMPILER=g++ -DCMAKE_C_COMPILER=gcc . # This still doesn't work...
     - name: CMake Build # Build for Debug and Release -> to check for possible compilation errors
-      run: cmake -DCMAKE_BUILD_TYPE=Debug .
-        | cmake --build .
-        | cmake -DCMAKE_BUILD_TYPE=Release
-        | cmake --build .
+      run: cmake --build .
+      #cmake -DCMAKE_BUILD_TYPE=Debug .
+        #| cmake --build .
+        #| cmake -DCMAKE_BUILD_TYPE=Release
+        #| cmake --build .
     - name: List Files
       run: Get-ChildItem -Exclude .github,.git,.vs,out,packages,_deps | Get-ChildItem -Recurse
     - name: Run Unit Tests # Run both Debug and Release -> To be extra sure
