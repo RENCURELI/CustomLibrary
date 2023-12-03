@@ -9,13 +9,17 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Configure
-      run: cmake -DCMAKE_CXX_COMPILER=g++-4.2 -DCMAKE_C_COMPILER=gcc-4.2 .
-    #- name: cmake build
-   #   run: cmake .
-    - name: cmake make
-      run: cmake --build . --target ALL_BUILD
+    - name: CMake Configure
+      run: cmake -DCMAKE_CXX_COMPILER=g++-4.2 -DCMAKE_C_COMPILER=gcc-4.2 . # This still doesn't work...
+    - name: CMake Build # Build for Debug and Release -> to check for possible compilation errors
+      run: cd Debug
+        | cmake -DCMAKE_BUILD_TYPE=Debug ..
+        | cmake --build .
+        | cd ../Release
+        | cmake -DCMAKE_BUILD_TYPE=Release
+        | cmake --build .
     - name: List Files
       run: Get-ChildItem -Exclude .github,.git,.vs,out,packages,_deps | Get-ChildItem -Recurse
-    - name: run Unit Tests
+    - name: Run Unit Tests # Run both Debug and Release -> To be extra sure
       run: Debug/Libraries.exe
+        | Release/Libraries.exe
