@@ -40,6 +40,12 @@ TEST(VectorTest, VectorConstructor)
 	EXPECT_EQ(moveConstructor.capacity(), 3);
 	EXPECT_EQ(moveConstructor.front(), 1);
 	EXPECT_EQ(moveConstructor.back(), 3);
+
+	Vector<int> iteratorConstructor = Vector<int>(moveConstructor.begin(), moveConstructor.end());
+	EXPECT_EQ(moveConstructor.size(), 3);
+	EXPECT_EQ(moveConstructor.capacity(), 3);
+	EXPECT_EQ(moveConstructor.front(), 1);
+	EXPECT_EQ(moveConstructor.back(), 3);
 }
 
 // These tests are for at, first, last, and [] operator
@@ -110,21 +116,34 @@ TEST(VectorTest, Resizing)
 	EXPECT_EQ(testVec.capacity(), 5);
 }
 
-TEST(VectorTest, Insertion)
+TEST(VectorTest, PushBack)
 {
 	Vector<int> testVec = { 1, 2, 3, 4, 5 };
 
 	testVec.push_back(6);
 	EXPECT_EQ(testVec.size(), 6);
+	EXPECT_TRUE(std::find(testVec.begin(), testVec.end(), 6) != testVec.end());
 	EXPECT_EQ(testVec.capacity(), 10);
+
+	// Push_back move
+	testVec.push_back(std::move(15));
+	EXPECT_EQ(testVec.size(), 7);
+	EXPECT_TRUE(std::find(testVec.begin(), testVec.end(), 15) != testVec.end());
+	EXPECT_EQ(testVec.capacity(), 10);
+}
+
+TEST(VectorTest, Insertion)
+{
+	Vector<int> testVec = { 1, 2, 3, 4, 5 };
 
 	auto it = testVec.cbegin();
 	testVec.insert(std::next(it, 3), 12);
-	EXPECT_EQ(testVec.size(), 7);
+	EXPECT_EQ(testVec.size(), 6);
 	EXPECT_EQ(testVec.capacity(), 10);
 	EXPECT_EQ(testVec[3], 12);
 	EXPECT_THROW(testVec.insert(testVec.end() + testVec.capacity(), 51), std::out_of_range);
 
+	it = testVec.cbegin();
 	testVec.insert(it + 6, 14);
 	EXPECT_EQ(testVec[6], 14);
 
@@ -141,8 +160,8 @@ TEST(VectorTest, Insertion)
 	EXPECT_EQ(*testVec.begin(), 100);
 	EXPECT_EQ(*(testVec.begin() + 4), 100);
 	EXPECT_EQ(*(testVec.begin() + 5), 1);
-	EXPECT_EQ(testVec.size(), 15);
-	EXPECT_EQ(testVec.capacity(), 15);
+	EXPECT_EQ(testVec.size(), 14);
+	EXPECT_EQ(testVec.capacity(), 14);
 
 	Vector<int> secondVec = { 10, 20, 30, 40, 50 };
 	returnedIt = testVec.insert(testVec.begin() + 5, secondVec.begin() + 1, secondVec.end() - 1);
@@ -150,20 +169,20 @@ TEST(VectorTest, Insertion)
 	EXPECT_EQ(*(testVec.begin() + 5), 20);
 	EXPECT_EQ(*(testVec.begin() + 7), 40);
 	EXPECT_EQ(*(testVec.begin() + 8), 1);
-	EXPECT_EQ(testVec.size(), 18);
-	EXPECT_EQ(testVec.capacity(), 36);
+	EXPECT_EQ(testVec.size(), 17);
+	EXPECT_EQ(testVec.capacity(), 34);
 
 	returnedIt = testVec.insert(testVec.begin(), secondVec.begin(), secondVec.begin());
 	EXPECT_TRUE(returnedIt == testVec.begin());
 	EXPECT_EQ(*testVec.begin(), 100);
-	EXPECT_EQ(testVec.size(), 18);
-	EXPECT_EQ(testVec.capacity(), 36);
+	EXPECT_EQ(testVec.size(), 17);
+	EXPECT_EQ(testVec.capacity(), 34);
 
 	returnedIt = testVec.insert(testVec.begin(), { 0, 1, 2, 3 });
 	EXPECT_TRUE(returnedIt == testVec.begin());
 	EXPECT_EQ(*testVec.begin(), 0);
-	EXPECT_EQ(testVec.size(), 22);
-	EXPECT_EQ(testVec.capacity(), 36);
+	EXPECT_EQ(testVec.size(), 21);
+	EXPECT_EQ(testVec.capacity(), 34);
 }
 
 TEST(VectorTest, Deletion)

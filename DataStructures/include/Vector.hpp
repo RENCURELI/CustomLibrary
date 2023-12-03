@@ -9,6 +9,7 @@
 #include <memory>
 #include <iterator>
 #include <limits>
+#include <utility>
 
 #pragma region ConstIterator
 template<typename Vector>
@@ -270,11 +271,12 @@ public:
 		memset(m_Buffer, 0, sizeof(T) * m_Capacity);
 	}
 
-	// Must write test cases
 	template<std::input_iterator InputIt>
 	constexpr Vector(InputIt first, InputIt last)
 	{
-		reserve(static_cast<size_t>(std::distance(first, last)));
+		m_Capacity = static_cast<size_t>(std::distance(first, last));
+		m_Buffer = new T[m_Capacity];
+		memset(m_Buffer, 0, sizeof(T) * m_Capacity);
 
 		for (; first != last; ++first)
 		{
@@ -294,7 +296,6 @@ public:
 		delete[] m_Buffer;
 	}
 
-	// TODO add move version
 	constexpr void push_back(const T& value)
 	{
 		if (m_Size == m_Capacity)
@@ -302,6 +303,16 @@ public:
 			reserve(m_Capacity * 2);
 		}
 		m_Buffer[m_Size] = value;
+		m_Size++;
+	}
+
+	constexpr void push_back(T&& value)
+	{
+		if (m_Size == m_Capacity)
+		{
+			reserve(m_Capacity * 2);
+		}
+		std::construct_at(end().m_Ptr, std::forward<T>(value));
 		m_Size++;
 	}
 	
@@ -339,7 +350,10 @@ public:
 			// We resize if needed
 			if (m_Size + 1 > m_Capacity)
 			{
+				size_type offset = pos - cbegin();
 				reserve(m_Capacity * 2);
+				// After reserve, "pos" is invalidated
+				pos = cbegin() + offset;
 			}
 
 			// We move the data after pos
@@ -383,10 +397,10 @@ public:
 		}
 		else
 		{
-			size_type posOffset = pos - begin();
 			size_type newSize = m_Size + count;
 			if (newSize > m_Capacity)
 			{
+				size_type posOffset = pos - begin();
 				reserve(newSize);
 
 				// After reserve, "pos" is invalidated
@@ -477,18 +491,26 @@ public:
 	constexpr T& at(const size_type index)
 	{
 		if (m_Size <= 0)
+		{
 			throw std::runtime_error("[ERROR] Trying to access empty container");
+		}
 		else if (index >= m_Size)
+		{
 			throw std::out_of_range("[ERROR] Index out of bounds");
+		}
 		return m_Buffer[index];
 	}
 
 	constexpr const T& at(const size_type index) const
 	{
 		if (m_Size <= 0)
+		{
 			throw std::runtime_error("[ERROR] Trying to access empty container");
-		else if (index > m_Size)
+		}
+		else if (index >= m_Size)
+		{
 			throw std::out_of_range("[ERROR] Index out of bounds");
+		}
 		return m_Buffer[index];
 	}
 
@@ -538,7 +560,9 @@ public:
 	{
 		// Error handling
 		if (first > last)
+		{
 			throw std::runtime_error("[ERROR] First is greater than Last -> infinite loop");
+		}
 		else if (last > end())
 		{
 			std::string errorMessage = "[ERROR] Index out of bound, first = " + std::to_string(*first)
@@ -593,7 +617,9 @@ public:
 	Vector& operator=(const Vector& other)
 	{
 		if (this == &other)
+		{
 			return *this;
+		}
 
 		if (other.capacity() > m_Capacity)
 		{
@@ -723,8 +749,8 @@ private:
 	}
 
 private:
-	size_type m_Capacity; // The capacity of the vector
-	size_type m_Size; // The number of elements stored in vector
+	size_type m_Capacity{ 0 }; // The capacity of the vector
+	size_type m_Size{ 0 }; // The number of elements stored in vector
 
 	T* m_Buffer; // pointer to the currently allocated array
 };
