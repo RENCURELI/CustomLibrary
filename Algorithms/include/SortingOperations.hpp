@@ -5,6 +5,44 @@
 #include <algorithm>
 #include <iterator>
 
+
+inline constexpr int ISORT_MAX{ 32 }; // Max size for Insertion Sort
+
+template<std::bidirectional_iterator BidIt, class Compare>
+constexpr BidIt InsertionSort(const BidIt first, const BidIt last, Compare comp)
+{
+	if (first != last)
+	{
+		// Cycle over the collection
+		for (BidIt mid = first; ++mid != last;)
+		{
+			BidIt hole = mid; // We copy mid for the inner loop
+			typename BidIt::value_type val = *mid; // Save a copy of the value currently evaluated
+
+			// This ensures we don't move backwards to an iterator < first -> which we can't check in BidIt -> no implementation of <=>
+			if (comp(*mid, *first))
+			{
+				// Move backward -> push values to the right
+				std::move_backward(first, mid, ++hole); // ++hole is valid as std::move_backwards moves [first, last)
+				*first = std::move(val); // Replace the value of first with the evaluated value
+			}
+			else
+			{
+				// Go backwards from the evaluated entry to the beginning, until comp evaluates to false
+				for (BidIt prev = hole; comp(val, *--prev); hole = prev) // Hole takes prev -> Move iterator down by one
+				{
+					*hole = std::move(*prev); // We move / copy the value pointed to by prev into hole
+				}
+
+				*hole = std::move(val); // We move the evaluated value to the position pointed to by hole
+			}
+		}
+	}
+
+	return last;
+}
+
+
 // ======================================
 // ==============   SORT   ==============
 // ======================================
@@ -14,6 +52,13 @@
 template<std::random_access_iterator RandomIt, class Compare>
 void Sort(RandomIt first, RandomIt last, Compare comp)
 {
+	// Small enough to use insertion sort
+	if (std::distance(first, last) <= ISORT_MAX)
+	{
+		InsertionSort(first, last, comp);
+		return;
+	}
+
 	std::make_heap(first, last, comp);
 
 	for (; first != last; --last)
@@ -119,5 +164,5 @@ void NthElement(RandomIt first, RandomIt nth, RandomIt last, Compare comp)
 template<std::random_access_iterator RandomIt>
 void NthElement(RandomIt first, RandomIt nth, RandomIt last)
 {
-
+	NthElement(first, nth, last, std::less<>{});
 }
