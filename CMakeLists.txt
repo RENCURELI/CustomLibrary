@@ -18,8 +18,9 @@ add_subdirectory(Algorithms)
 #add_subdirectory(Maths)
 add_subdirectory(TST_DataStructures)
 
-add_executable(Libraries
-TST_DataStructures/test.cpp
+add_executable(Libraries)
+target_sources(Libraries PUBLIC TST_DataStructures/test.cpp
+PUBLIC FILE_SET HEADERS FILES
 TST_DataStructures/HelperFuncs.hpp
 TST_DataStructures/ContainerTests/ArrayTest.hpp
 TST_DataStructures/ContainerTests/DequeTest.hpp
@@ -30,6 +31,7 @@ TST_DataStructures/ContainerTests/PriorityQueueTest.hpp
 TST_DataStructures/ContainerTests/StackTest.hpp
 TST_DataStructures/ContainerTests/VectorTest.hpp
 TST_DataStructures/NMSequenceOperationsTests/FindTest.hpp
+TST_DataStructures/SortingOperationsTests/HeapTest.hpp
 TST_DataStructures/SortingOperationsTests/SortTest.hpp
 )
 

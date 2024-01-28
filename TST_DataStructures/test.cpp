@@ -16,6 +16,7 @@
 #include "NMSequenceOperationsTests/FindTest.hpp"
 
 #include "SortingOperationsTests/SortTest.hpp"
+#include "SortingOperationsTests/HeapTest.hpp"
 
 int main(int argc, char** argv)
 {

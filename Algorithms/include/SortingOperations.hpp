@@ -5,6 +5,10 @@
 #include <algorithm>
 #include <iterator>
 
+//export module sorting_operations;
+
+//export import <algorithm>
+//export import <iterator>
 
 inline constexpr int ISORT_MAX{ 32 }; // Max size for Insertion Sort
 
