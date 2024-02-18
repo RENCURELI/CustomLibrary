@@ -12,6 +12,7 @@ include/List.hpp
 include/ListNode.hpp
 include/Queue.hpp
 include/PriorityQueue.hpp
+include/Span.hpp
 include/Stack.hpp
 include/Vector.hpp
 )
