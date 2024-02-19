@@ -10,6 +10,38 @@
 #include <iterator>
 
 template<std::random_access_iterator RandomIt, class Compare>
+constexpr void SiftUp(RandomIt first, RandomIt last, Compare comp, typename std::_Iter_diff_t<RandomIt> len)
+{
+	using value_type = std::_Iter_value_t<RandomIt>;
+	// 1 element or less, nothing to do
+	if (len > 1)
+	{
+		len = (len - 2) >> 1; // -2 because len is based on iterator Last, which is one step behind element to insert
+		RandomIt ptr = first + len; // get temp parent of newly inserted value ( fake it as being part of the heap )
+
+		// Should newly inserted value replace its parent?
+		if (comp(*ptr, *(--last)))
+		{
+			value_type temp(std::move(*last));
+			do
+			{
+				// Do while with break to avoid duplicating the next 2 lines
+				*last = std::move(*ptr);
+				last = ptr;
+				if (len == 0)
+				{
+					break;
+				}
+
+				len = (len - 1) >> 1;
+				ptr = first + len;
+			} while (comp(*ptr, temp));
+			*last = std::move(temp);
+		}
+	}
+}
+
+template<std::random_access_iterator RandomIt, class Compare>
 constexpr void SiftDown(RandomIt first, Compare comp, typename std::_Iter_diff_t<RandomIt> len, RandomIt start)
 {
 	using value_type = std::_Iter_value_t<RandomIt>;
@@ -82,4 +114,18 @@ template<std::random_access_iterator RandomIt>
 constexpr void MakeHeap(RandomIt first, RandomIt last)
 {
 	MakeHeap(first, last, std::less<>{});
+}
+
+
+template<std::random_access_iterator RandomIt, class Compare>
+constexpr void PushHeap(RandomIt first, RandomIt last, Compare comp)
+{
+	typename std::_Iter_diff_t<RandomIt> len = last - first;
+	SiftUp(first, last, comp, len);
+}
+
+template<std::random_access_iterator RandomIt>
+constexpr void PushHeap(RandomIt first, RandomIt last)
+{
+	PushHeap(first, last, std::less<>{});
 }
