@@ -47,3 +47,24 @@ TEST(PushHeapTest, DefaultPredicate)
 }
 
 #pragma endregion PushHeapTests
+
+#pragma region PopHeapTests
+// ================================================
+// ============   POP HEAP TESTS   ================
+// ================================================
+
+TEST(PopHeapTest, DefaultPredicate)
+{
+	std::vector<int> testVec = { 12, 0, 9, 5, 4, 10 };
+	std::make_heap(testVec.begin(), testVec.end());
+
+	EXPECT_TRUE(std::is_heap(testVec.begin(), testVec.end()) == true);
+
+	PopHeap(testVec.begin(), testVec.end());
+	testVec.pop_back(); // We can delete the last element, it is no longer part of the heap
+
+	EXPECT_TRUE(std::is_heap(testVec.begin(), testVec.end()) == true);
+	EXPECT_EQ(testVec[0], 10);
+}
+
+#pragma endregion PopHeapTests

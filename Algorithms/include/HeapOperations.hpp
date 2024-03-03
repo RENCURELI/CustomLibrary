@@ -99,6 +99,37 @@ constexpr void SiftDown(RandomIt first, Compare comp, typename std::_Iter_diff_t
 }
 
 template<std::random_access_iterator RandomIt, class Compare>
+[[nodiscard]] RandomIt FloydSiftDown(RandomIt first, Compare comp, typename std::_Iter_diff_t<RandomIt> len)
+{
+	using difference_type = typename std::_Iter_diff_t<RandomIt>;
+
+	RandomIt hole = first;
+	RandomIt childIt = first;
+	difference_type child = 0;
+
+	// We will loop until we return a value -> Hole moved down to becoming a leaf node
+	while (true)
+	{
+		childIt += child + 1; // Get left child of current index
+		child = 2 * child + 1;
+
+		if ((child + 1) < len && comp(*childIt, *(childIt + 1)))
+		{
+			++childIt;
+			++child;
+		}
+
+		*hole = std::move(*childIt); // Put the value of Child It in the current address of Hole
+		hole = childIt; // Move hole down
+
+		if (child > (len >> 1) - 1)
+		{
+			return hole;
+		}
+	}
+}
+
+template<std::random_access_iterator RandomIt, class Compare>
 constexpr void MakeHeap(RandomIt first, RandomIt last, Compare comp)
 {
 	std::ptrdiff_t bottom = last - first;
@@ -128,4 +159,37 @@ template<std::random_access_iterator RandomIt>
 constexpr void PushHeap(RandomIt first, RandomIt last)
 {
 	PushHeap(first, last, std::less<>{});
+}
+
+template<std::random_access_iterator RandomIt, class Compare>
+constexpr void PopHeap(RandomIt first, RandomIt last, Compare comp)
+{
+	typename std::_Iter_diff_t<RandomIt> len = last - first;
+	using value_type = typename std::_Iter_value_t<RandomIt>;
+	// A length of 1 or less is basically no operation
+	if (len > 1)
+	{
+		value_type top(std::move(*first));
+		RandomIt hole = FloydSiftDown(first, comp, len);
+		--last; // subtract 1 from last as last is "outside" of the range we work on
+
+		if (hole == last)
+		{
+			*hole = std::move(top); // heap property is maintained through the sift down process
+		}
+		// In case, after floyd sift down, hole is not right most leaf
+		else
+		{
+			*hole = std::move(*last); // Put value from last where hole points to
+			++hole; // increment hole to be at index of last
+			*last = std::move(top); // move top to where last points to ( last was not moved )
+			SiftUp(first, hole, comp, hole - first); // Sift up in the range (first, hole] -> hole is excluded to ensure we maintain heap property
+		}
+	}
+}
+
+template<std::random_access_iterator RandomIt>
+constexpr void PopHeap(RandomIt first, RandomIt last)
+{
+	PopHeap(first, last, std::less<>{});
 }
