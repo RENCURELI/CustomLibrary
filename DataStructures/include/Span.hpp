@@ -1,14 +1,16 @@
 #pragma once
 
+#include <cassert>
+#include <initializer_list>
 #include <iterator>
-#include <span>
+#include <type_traits>
 
 #pragma region Iterator
 template<class T>
 struct SpanIterator
 {
 	using iterator_concept = std::contiguous_iterator_tag;
-	using value_type = remove_cv_t<T>;
+	using value_type = std::remove_cv_t<T>;
 	using difference_type = std::ptrdiff_t;
 	using pointer = T*;
 	using reference = T&;
@@ -95,9 +97,11 @@ struct SpanIterator
 
 #pragma endregion Iterator
 
-template<class T, std::size_t Extent = std::dynamic_extent>
+template<class T, std::size_t Extent>
 class Span
 {
+public:
+	using element_type = T;
 	using value_type = std::remove_cv_t<T>;
 	using size_type = std::size_t;
 	using difference_type = std::ptrdiff_t;
@@ -105,6 +109,51 @@ class Span
 	using const_pointer = const T*;
 	using reference = T&;
 	using const_reference = const T&;
-	using iterator = SpanIterator;
+	using iterator = SpanIterator<T>;
+	using reverse_iterator = std::reverse_iterator<iterator>;
 	//using const_iterator -> requires c++ 23 ( std::const_iterator<iterator> )
+
+	static constexpr size_type extent = Extent;
+
+	constexpr Span() noexcept requires (Extent == 0) : m_Data{ nullptr } {}
+	constexpr explicit Span(std::initializer_list<value_type> initList) requires std::is_const_v<element_type> : m_Data{ initList.begin() }
+	{
+		static_assert(Extent == initList.size(), "[ERROR] Size mismatch in span's constructor Extent != initList.size()");
+	}
+	
+	template<std::_Span_compatible_iterator It>
+	constexpr Span(It first, size_type count) : m_Data{ std::to_address(first) }
+	{
+		(void)count;
+		static_assert(Extent == count, "[ERROR] Size mismatch in span constructor (iterator, len)");
+	}
+
+	template <size_t _Size>
+	constexpr Span(std::type_identity_t<element_type>(&arr)[_Size]) noexcept : m_Data{arr} {}
+
+private:
+	pointer m_Data;
 };
+
+//	template<class T>
+//	class Span<T, std::dynamic_extent>
+//	{
+//	public:
+//		using element_type = T;
+//		using value_type = std::remove_cv_t<T>;
+//		using size_type = std::size_t;
+//		using difference_type = std::ptrdiff_t;
+//		using pointer = T*;
+//		using const_pointer = const T*;
+//		using reference = T&;
+//		using const_reference = const T&;
+//		using iterator = SpanIterator<T>;
+//		using reverse_iterator = std::reverse_iterator<iterator>;
+//		//using const_iterator -> requires c++ 23 ( std::const_iterator<iterator> )
+//	
+//		static constexpr size_type extent = std::dynamic_extent;
+//	
+//	private:
+//		pointer m_Data;
+//		size_type m_Size;
+//	};

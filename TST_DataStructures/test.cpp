@@ -7,6 +7,7 @@
 #include "ContainerTests/ArrayTest.hpp"
 #include "ContainerTests/FListTest.hpp"
 #include "ContainerTests/ListTest.hpp"
+#include "ContainerTests/SpanTest.hpp"
 #include "ContainerTests/StackTest.hpp"
 #include "ContainerTests/PriorityQueueTest.hpp"
 #include "ContainerTests/QueueTest.hpp"
