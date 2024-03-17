@@ -13,7 +13,7 @@
 
 TEST(SpanTest, Constructor)
 {
-	int myArray[]{1, 2, 3, 4, 5};
+	int myArray[]{10, 20, 30, 40, 50};
 	Span<int, 5> testSpan(myArray);
 
 	std::vector<int> vec = { 1, 2, 3, 4, 5 };
@@ -22,6 +22,12 @@ TEST(SpanTest, Constructor)
 
 	std::array<int, 5> tstArray{ 1, 2, 3, 4, 5 };
 	Span<int, 5> arraySpan(tstArray);
+
+	// Copy constructor
+	Span<int, 5> spanConstructed(arraySpan);
+
+	// Copy assign
+	spanConstructed = testSpan;
 }
 
 #pragma endregion SpanConstructorTests

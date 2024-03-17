@@ -121,6 +121,9 @@ public:
 
 	static constexpr size_type extent = Extent;
 
+	constexpr Span(const Span&) noexcept = default;
+	constexpr Span& operator=(const Span&) noexcept = default;
+
 	constexpr Span() noexcept requires (Extent == 0) : m_Data{ nullptr } {}
 	// Might require CXX 26
 // 	constexpr explicit Span(std::initializer_list<value_type> initList) requires std::is_const_v<element_type> : m_Data{initList.begin()}
@@ -149,25 +152,25 @@ private:
 	pointer m_Data;
 };
 
-	template<class T>
-	class Span<T, std::dynamic_extent>
-	{
-	public:
-		using element_type = T;
-		using value_type = std::remove_cv_t<T>;
-		using size_type = std::size_t;
-		using difference_type = std::ptrdiff_t;
-		using pointer = T*;
-		using const_pointer = const T*;
-		using reference = T&;
-		using const_reference = const T&;
-		using iterator = SpanIterator<T>;
-		using reverse_iterator = std::reverse_iterator<iterator>;
-		//using const_iterator -> requires c++ 23 ( std::const_iterator<iterator> )
-	
-		static constexpr size_type extent = std::dynamic_extent;
-	
-	private:
-		pointer m_Data;
-		size_type m_Size;
-	};
+template<class T>
+class Span<T, std::dynamic_extent>
+{
+public:
+	using element_type = T;
+	using value_type = std::remove_cv_t<T>;
+	using size_type = std::size_t;
+	using difference_type = std::ptrdiff_t;
+	using pointer = T*;
+	using const_pointer = const T*;
+	using reference = T&;
+	using const_reference = const T&;
+	using iterator = SpanIterator<T>;
+	using reverse_iterator = std::reverse_iterator<iterator>;
+	//using const_iterator -> requires c++ 23 ( std::const_iterator<iterator> )
+
+	static constexpr size_type extent = std::dynamic_extent;
+
+private:
+	pointer m_Data;
+	size_type m_Size;
+};
