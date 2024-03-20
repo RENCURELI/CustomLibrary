@@ -148,6 +148,21 @@ public:
 	template<_Span_array_convertible<element_type> U, std::size_t N> // U's type will be inferred and set as first argument of concept
 	constexpr Span(const std::array<U, N>& arr) noexcept : m_Data{ arr.data() } {}
 
+	constexpr pointer data() const noexcept { return m_Data; }
+
+	// Could reinforce using static_assert
+	constexpr reference operator[](size_type idx) const noexcept { return m_Data[idx]; }
+	constexpr reference back() const { return m_Data[extent - 1]; }
+	constexpr reference front() const { return m_Data[0]; }
+	constexpr size_type size() const noexcept { return extent; }
+	constexpr size_type size_bytes() const noexcept { return extent * sizeof(element_type); }
+	[[nodicard]] constexpr bool empty() const noexcept { return extent == 0; }
+
+	constexpr iterator begin() const noexcept { return iterator(m_Data); }
+	constexpr iterator end() const noexcept { return iterator(m_Data + extent); }
+	constexpr reverse_iterator rbegin() const noexcept { return reverse_iterator(end()); }
+	constexpr reverse_iterator rend() const noexcept { return reverse_iterator(begin()); }
+
 private:
 	pointer m_Data;
 };
