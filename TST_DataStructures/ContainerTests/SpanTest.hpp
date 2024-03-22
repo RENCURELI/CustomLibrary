@@ -47,7 +47,14 @@ TEST(SpanTest, Iterators)
 
 TEST(SpanTest, Accessors)
 {
+	std::array<int, 7> tstArray{ 10, 15, 12, 54, 36, -15, 99 };
+	Span<int, 7> testSpan(tstArray);
 
+	EXPECT_EQ(testSpan.size(), 7);
+	EXPECT_EQ(testSpan.size_bytes(), 28);
+	EXPECT_EQ(testSpan.back(), 99);
+	EXPECT_EQ(testSpan.front(), 10);
+	EXPECT_EQ(testSpan[2], 12);
 }
 
 #pragma endregion SpanConstructorTests
