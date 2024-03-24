@@ -139,6 +139,14 @@ public:
 		assert(Extent == count);
 	}
 
+	template<std::_Span_compatible_iterator<element_type> It>
+	constexpr Span(It first, It last) : m_Data{ std::to_address(first) }
+	{
+		[[maybe_unused]] auto dist = last - first; // [[maybe_unused]] because "dist" is only used for assertion -> should be static assert
+		assert(dist >= 0);
+		assert(dist == extent);
+	}
+
 	template <size_t _Size>
 	constexpr Span(std::type_identity_t<element_type>(&arr)[_Size]) noexcept : m_Data{arr} {}
 
@@ -184,6 +192,44 @@ public:
 	//using const_iterator -> requires c++ 23 ( std::const_iterator<iterator> )
 
 	static constexpr size_type extent = std::dynamic_extent;
+
+	constexpr Span() noexcept : m_Data{ nullptr }, m_Size{ 0 } {}
+
+	constexpr Span(const Span& other) noexcept = default; // Implicitly defined
+	constexpr Span& operator=(const Span& other) noexcept = default; // Implicitly defined
+
+	template<std::_Span_compatible_iterator<element_type> It>
+	constexpr Span(It first, size_type count) : m_Data{ std::to_address(first) }, m_Size{ count } {}
+
+	template<std::_Span_compatible_iterator<element_type> It>
+	constexpr Span(It first, It last) : m_Data{ std::to_address(first) }, m_Size{ last - first }
+	{
+		assert(last - first >= 0);
+	}
+
+	template<std::size_t S>
+	constexpr Span(std::type_identity_t<element_type>(&arr)[S]) noexcept : m_Data{ arr }, m_Size{ S } {}
+
+	template<_Span_array_convertible<element_type> U, std::size_t S>
+	constexpr Span(std::array<U, S>& arr) noexcept : m_Data{ arr.data() }, m_Size{ S } {}
+	
+	template<_Span_array_convertible<element_type> U, std::size_t S>
+	constexpr Span(const std::array<U, S>& arr) noexcept : m_Data{ arr.data() }, m_Size{ S } {}
+
+	constexpr pointer data() const noexcept { return m_Data; }
+
+	// Could reinforce using static_assert
+	constexpr reference operator[](size_type idx) const noexcept { return m_Data[idx]; }
+	constexpr reference back() const { return m_Data[extent - 1]; }
+	constexpr reference front() const { return m_Data[0]; }
+	constexpr size_type size() const noexcept { return extent; }
+	constexpr size_type size_bytes() const noexcept { return extent * sizeof(element_type); }
+	[[nodicard]] constexpr bool empty() const noexcept { return extent == 0; }
+
+	constexpr iterator begin() const noexcept { return iterator(m_Data); }
+	constexpr iterator end() const noexcept { return iterator(m_Data + extent); }
+	constexpr reverse_iterator rbegin() const noexcept { return reverse_iterator(end()); }
+	constexpr reverse_iterator rend() const noexcept { return reverse_iterator(begin()); }
 
 private:
 	pointer m_Data;
