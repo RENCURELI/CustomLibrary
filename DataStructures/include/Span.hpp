@@ -167,7 +167,7 @@ public:
 	constexpr reference front() const { return m_Data[0]; }
 	constexpr size_type size() const noexcept { return extent; }
 	constexpr size_type size_bytes() const noexcept { return extent * sizeof(element_type); }
-	[[nodicard]] constexpr bool empty() const noexcept { return extent == 0; }
+	[[nodiscard]] constexpr bool empty() const noexcept { return extent == 0; }
 
 	constexpr iterator begin() const noexcept { return iterator(m_Data); }
 	constexpr iterator end() const noexcept { return iterator(m_Data + extent); }
@@ -227,7 +227,7 @@ public:
 	constexpr reference front() const { return m_Data[0]; }
 	constexpr size_type size() const noexcept { return m_Size; }
 	constexpr size_type size_bytes() const noexcept { return m_Size * sizeof(element_type); }
-	[[nodicard]] constexpr bool empty() const noexcept { return m_Size == 0; }
+	[[nodiscard]] constexpr bool empty() const noexcept { return m_Size == 0; }
 
 	constexpr iterator begin() const noexcept { return iterator(m_Data); }
 	constexpr iterator end() const noexcept { return iterator(m_Data + m_Size); }
