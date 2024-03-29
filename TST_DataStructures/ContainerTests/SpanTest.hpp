@@ -6,9 +6,9 @@
 #include <span>
 #include <vector>
 
-#pragma region SpanConstructorTests
+#pragma region SpanTests
 // ================================================
-// ===========   CONSTRUCTOR TESTS   ==============
+// ==============   SPAN TESTS   ==================
 // ================================================
 
 TEST(SpanTest, Constructor)
@@ -33,6 +33,15 @@ TEST(SpanTest, Constructor)
 	// Copy assign
 	spanConstructed = testSpan; // Should be shallow copy
 	EXPECT_EQ(spanConstructed.data(), testSpan.data());
+
+	// Dynamic extent
+	Span<int, std::dynamic_extent> tstDynamic(tstArray);
+	EXPECT_EQ(tstDynamic.data(), tstArray.data());
+	EXPECT_EQ(tstDynamic.size(), 5);
+
+	std::vector<int> tstVec{ 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 };
+	Span<int, std::dynamic_extent> vecSpanDynamic(tstVec.begin(), tstVec.end());
+	EXPECT_EQ(vecSpanDynamic.data(), std::to_address(tstVec.begin()));
 }
 
 TEST(SpanTest, Iterators)
@@ -57,4 +66,4 @@ TEST(SpanTest, Accessors)
 	EXPECT_EQ(testSpan[2], 12);
 }
 
-#pragma endregion SpanConstructorTests
+#pragma endregion SpanTests
