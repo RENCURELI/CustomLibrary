@@ -19,22 +19,23 @@ add_subdirectory(Maths)
 add_subdirectory(TST_DataStructures)
 
 add_executable(Libraries)
-target_sources(Libraries PUBLIC TST_DataStructures/test.cpp
-PUBLIC FILE_SET HEADERS FILES
-TST_DataStructures/HelperFuncs.hpp
-TST_DataStructures/ContainerTests/ArrayTest.hpp
-TST_DataStructures/ContainerTests/DequeTest.hpp
-TST_DataStructures/ContainerTests/FListTest.hpp
-TST_DataStructures/ContainerTests/ListTest.hpp
-TST_DataStructures/ContainerTests/QueueTest.hpp
-TST_DataStructures/ContainerTests/PriorityQueueTest.hpp
-TST_DataStructures/ContainerTests/SpanTest.hpp
-TST_DataStructures/ContainerTests/StackTest.hpp
-TST_DataStructures/ContainerTests/VectorTest.hpp
-TST_DataStructures/NMSequenceOperationsTests/FindTest.hpp
-TST_DataStructures/SortingOperationsTests/HeapTest.hpp
-TST_DataStructures/SortingOperationsTests/SortTest.hpp
+set(target_sources
+	HelperFuncs.hpp
+	ContainerTests/ArrayTest.hpp
+	ContainerTests/DequeTest.hpp
+	ContainerTests/FListTest.hpp
+	ContainerTests/ListTest.hpp
+	ContainerTests/QueueTest.hpp
+	ContainerTests/PriorityQueueTest.hpp
+	ContainerTests/SpanTest.hpp
+	ContainerTests/StackTest.hpp
+	ContainerTests/VectorTest.hpp
+	NMSequenceOperationsTests/FindTest.hpp
+	SortingOperationsTests/HeapTest.hpp
+	SortingOperationsTests/SortTest.hpp
 )
+list(TRANSFORM target_sources PREPEND "TST_DataStructures/")
+target_sources(Libraries PUBLIC TST_DataStructures/test.cpp PUBLIC FILE_SET HEADERS FILES)
 
 set_target_properties(DataStructures PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(Libraries PUBLIC DataStructures)

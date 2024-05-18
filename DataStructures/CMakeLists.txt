@@ -3,18 +3,21 @@ cmake_minimum_required(VERSION 3.27)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-add_library(DataStructures INTERFACE 
-include/Array.hpp
-include/DeQue.hpp
-include/FList.hpp
-include/FListNode.hpp
-include/List.hpp
-include/ListNode.hpp
-include/Queue.hpp
-include/PriorityQueue.hpp
-include/Span.hpp
-include/Stack.hpp
-include/Vector.hpp
+set(target_sources
+	Array.hpp
+	DeQue.hpp
+	FList.hpp
+	FListNode.hpp
+	List.hpp
+	ListNode.hpp
+	Queue.hpp
+	PriorityQueue.hpp
+	Span.hpp
+	Stack.hpp
+	Vector.hpp
 )
+list(TRANSFORM target_sources PREPEND "include/")
+
+add_library(DataStructures INTERFACE ${target_sources})
 
 target_include_directories(DataStructures INTERFACE include)
