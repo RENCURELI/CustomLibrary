@@ -136,7 +136,7 @@ public:
 		}
 	}
 
-	FList(FList<T>&& other)
+	FList(FList<T>&& other) noexcept
 	{
 		std::swap(this->m_Head, other.m_Head);
 		std::swap(this->m_Size, other.m_Size);
@@ -386,7 +386,7 @@ public:
 	}
 
 	// Move
-	FList<T>& operator=(FList<T>&& other)
+	FList<T>& operator=(FList<T>&& other) noexcept
 	{
 		clear();
 

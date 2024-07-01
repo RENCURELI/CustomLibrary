@@ -284,7 +284,7 @@ public:
 		}
 	}
 
-	constexpr Vector(Vector&& other)
+	constexpr Vector(Vector&& other) noexcept
 		: m_Buffer{ std::exchange(other.m_Buffer, nullptr) }
 	{
 		m_Capacity = other.capacity();
@@ -649,7 +649,7 @@ public:
 		return *this;
 	}
 
-	constexpr Vector& operator=(Vector&& other)
+	constexpr Vector& operator=(Vector&& other) noexcept
 	{
 		if (this == &other)
 		{

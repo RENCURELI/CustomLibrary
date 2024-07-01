@@ -304,7 +304,7 @@ public:
 		memcpy_s(m_Map, sizeof(pointer) * m_MapSize, other.m_Map, sizeof(T) * other.m_MapSize);
 	}
 
-	DeQue(DeQue&& other)
+	DeQue(DeQue&& other) noexcept
 	{
 		TakeContents(other);
 	}
@@ -618,7 +618,7 @@ public:
 			return makeIterator(this, last.m_Offset);
 		}
 
-		size_t offset = first - cbegin();
+		ptrdiff_t offset = first - cbegin();
 		size_t range = last - first;
 
 		// Closer to front -> Less data to erase afterwards
@@ -787,7 +787,7 @@ public:
 		return *this;
 	}
 
-	DeQue& operator=(DeQue&& other)
+	DeQue& operator=(DeQue&& other) noexcept
 	{
 		if (this == std::addressof(other))
 		{

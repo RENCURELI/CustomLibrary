@@ -29,8 +29,11 @@ TEST(ArrayTest, ArrayAt)
 	EXPECT_EQ(testArray.at(0), testArray.front());
 	EXPECT_EQ(testArray.at(testArray.size() - 1), testArray.back());
 
+#pragma warning(push) // Suppress warning convert from int to size_t signed to unsigned conversion
+#pragma warning(disable : 4245)
 	// Test for negative index
 	EXPECT_THROW(testArray.at(-1), std::out_of_range);
+#pragma warning(pop)
 
 	// Test for negative overflowing index
 	EXPECT_THROW(testArray.at(testArray.size()), std::out_of_range);
@@ -40,7 +43,10 @@ TEST(ArrayTest, ArrayAt)
 
 TEST(ArrayTest, ArraySize)
 {
+#pragma warning(push) // Suppress warning zero-sized array in stack object will have no elements
+#pragma warning(disable : 4815)
 	Array<int, 0> emptyArray;
+#pragma warning(pop)
 
 	EXPECT_EQ(emptyArray.empty(), true);
 	EXPECT_EQ(emptyArray.size(), 0);

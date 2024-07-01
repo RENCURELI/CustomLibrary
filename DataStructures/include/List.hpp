@@ -171,7 +171,7 @@ public:
 		}
 	}
 
-	List(List<T>&& other)
+	List(List<T>&& other) noexcept
 	{
 		std::swap(this->m_Head, other.m_Head);
 		std::swap(this->m_Tail, other.m_Tail);
@@ -825,7 +825,7 @@ public:
 	}
 
 	// Move
-	List<T>& operator=(List<T>&& other)
+	List<T>& operator=(List<T>&& other) noexcept
 	{
 		if (this == std::addressof(other))
 		{

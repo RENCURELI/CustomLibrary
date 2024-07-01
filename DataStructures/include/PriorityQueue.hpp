@@ -33,7 +33,7 @@ public:
 	// For Priority queue copy and Priority queue move, constructors are implicitly declared
 
 	template<std::input_iterator InputIt>
-	PriorityQueue(InputIt first, InputIt last, const Compare& compare = Compare())
+	PriorityQueue(InputIt first, InputIt last, const Compare& compare = Compare()) : m_Compare(compare)
 	{
 		m_Container.insert(m_Container.cend(), first, last);
 		std::make_heap(m_Container.begin(), m_Container.end(), m_Compare);

@@ -8,12 +8,14 @@ set(target_sources
 	DeQue.hpp
 	FList.hpp
 	FListNode.hpp
+	HashTable.hpp
 	List.hpp
 	ListNode.hpp
-	Queue.hpp
 	PriorityQueue.hpp
+	Queue.hpp
 	Span.hpp
 	Stack.hpp
+	UnorderedMap.hpp
 	Vector.hpp
 )
 list(TRANSFORM target_sources PREPEND "include/")
