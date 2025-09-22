@@ -34,6 +34,7 @@ TODO Data Structures :
   - Tuple
   - Graphs ( Binary tree, Heap, etc... )
   - Radix Trie
+  - Skip List
 
 TODO Algorithms :
   - Dijkstra
