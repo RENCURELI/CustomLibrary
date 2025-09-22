@@ -21,6 +21,8 @@ In Progress :
     - Merge
     - Sort
     - Unique
+  - List Reverse
+  - FList reverse
 
 TODO Data Structures :
   - Allocators ( yes, I'm starting to get sidetracked, but I'm curious )
@@ -31,6 +33,7 @@ TODO Data Structures :
   - Unordered_Map
   - Tuple
   - Graphs ( Binary tree, Heap, etc... )
+  - Radix Trie
 
 TODO Algorithms :
   - Dijkstra
@@ -40,6 +43,8 @@ TODO Algorithms :
   - Remove
   - Is_Sorted
   - Is_Heap
+  - Radix Sort
+  - Counting Sort
   
 TODO Maths :
   - Vector ( 2, 3 and 4 )
